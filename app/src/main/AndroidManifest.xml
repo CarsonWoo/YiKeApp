@@ -3,11 +3,11 @@
     package="com.example.carson.yikeapp">
 
     <supports-screens
+        android:anyDensity="true"
+        android:largeScreens="true"
         android:normalScreens="true"
         android:smallScreens="true"
-        android:largeScreens="true"
-        android:xlargeScreens="true"
-        android:anyDensity="true" />
+        android:xlargeScreens="true" />
 
     <application
         android:allowBackup="true"
@@ -24,9 +24,14 @@
             </intent-filter>
         </activity>
         <activity android:name=".Views.MainActivity" />
-        <activity android:name=".Views.RegisterActivity"
-            android:theme="@style/register_toolbar_theme"
-            android:label="注册"></activity>
+        <activity
+            android:name=".Views.RegisterActivity"
+            android:label="注册"
+            android:theme="@style/register_toolbar_theme" />
+        <activity
+            android:name=".Views.HomeActivity"
+            android:label="@string/title_activity_home"
+            android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
 </manifest>
