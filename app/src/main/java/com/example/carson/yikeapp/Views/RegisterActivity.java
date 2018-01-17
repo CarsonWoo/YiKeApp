@@ -14,8 +14,20 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.carson.yikeapp.R;
+import com.example.carson.yikeapp.Utils.ConstantValues;
+import com.example.carson.yikeapp.Utils.HttpUtils;
+
+import java.io.IOException;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.FormBody;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class RegisterActivity extends AppCompatActivity implements View.OnClickListener,
         Toolbar.OnMenuItemClickListener {
@@ -71,10 +83,38 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                 break;
             case R.id.tv_to_login:
                 //跳转到登陆界面
+                startActivity(new Intent(RegisterActivity.this,
+                        LoginActivity.class));
+                finish();
                 break;
             case R.id.btn_send_check_number:
-                int phoneNum = Integer.parseInt(etPhone.getText().toString());
-                //发送给后台
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+//                        int phoneNum = Integer.parseInt(etPhone.getText().toString());
+                        //发送给后台
+                        FormBody.Builder builder = new FormBody.Builder();
+                        builder.add("phone", etPhone.getText().toString());
+                        builder.build();
+                        HttpUtils.sendRequest(ConstantValues.PHONE_REQUEST_URL, builder, new Callback() {
+                            @Override
+                            public void onFailure(Call call, IOException e) {
+                                Snackbar.make(btnRegis, e.toString(),
+                                        Snackbar.LENGTH_SHORT).show();
+                                e.printStackTrace();
+                            }
+
+                            @Override
+                            public void onResponse(Call call, Response response) throws IOException {
+                                if (response.body().toString().equals("200")) {
+                                    //发送成功
+                                    Toast.makeText(getApplicationContext(), "发送成功",
+                                            Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
+                    }
+                }).start();
                 break;
             case R.id.btn_register:
                 if (!rbtnShoper.isChecked() && !rbtnWorker.isChecked()) {
@@ -104,9 +144,62 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                                     }
                                 }).show();
                     }
-                    String name = etName.getText().toString();
-                    String pwd = etPwd.getText().toString();
+                    final String name = etName.getText().toString();
+                    final String pwd = etPwd.getText().toString();
+                    final String pwdChecked = etPwdCheck.getText().toString();
+                    final int userType;
+                    if (rbtnShoper.isChecked()) {
+                        userType = 2;
+                    } else {
+                        userType = 1;
+                    }
+                    final String code = etCode.getText().toString();
+                    final int serviceSelected;
+                    if (checkBox.isChecked()) {
+                        serviceSelected = 1;
+                    } else {
+                        serviceSelected = 2;
+                    }
                     //发送给后台
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            FormBody.Builder builder1 = new FormBody.Builder();
+                            builder1.add("usertype", String.valueOf(userType));
+                            builder1.add("username", name);
+                            builder1.add("password", pwd);
+                            builder1.add("password2", pwdChecked);
+                            builder1.add("phonenumber", etPhone.getText().toString());
+                            builder1.add("phone_code", code);
+                            builder1.add("select", String.valueOf(serviceSelected));
+                            builder1.build();
+                            HttpUtils.sendRequest(ConstantValues.REGISTER_URL, builder1,
+                                    new Callback() {
+                                @Override
+                                public void onFailure(Call call, IOException e) {
+
+                                }
+
+                                @Override
+                                public void onResponse(Call call, Response response)
+                                        throws IOException {
+                                    if (response.header("code").equals("200")) {
+                                        startActivity(new Intent(RegisterActivity.this,
+                                                LoginActivity.class));
+                                        Toast.makeText(getApplicationContext(),
+                                                response.header("msg").toString(),
+                                                Toast.LENGTH_SHORT).show();
+                                        finish();
+                                    } else {
+                                        Toast.makeText(getApplicationContext(),
+                                                response.header("msg").toString(),
+                                                Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            });
+                        }
+                    }).start();
+
                 }
                 break;
         }

@@ -30,11 +30,12 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.ib_to_login:
-                startActivity(new Intent(StartActivity.this, MainActivity.class));
+                startActivity(new Intent(StartActivity.this, LoginActivity.class));
                 finish();
                 break;
             case R.id.ib_to_regis:
                 startActivity(new Intent(StartActivity.this, RegisterActivity.class));
+                finish();
                 break;
         }
     }
