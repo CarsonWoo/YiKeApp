@@ -101,7 +101,6 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                             public void onFailure(Call call, IOException e) {
                                 Snackbar.make(btnRegis, e.toString(),
                                         Snackbar.LENGTH_SHORT).show();
-                                e.printStackTrace();
                             }
 
                             @Override
