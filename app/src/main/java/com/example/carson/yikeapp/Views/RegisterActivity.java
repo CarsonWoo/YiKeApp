@@ -21,10 +21,13 @@ import com.example.carson.yikeapp.Utils.ConstantValues;
 import com.example.carson.yikeapp.Utils.HttpUtils;
 
 import java.io.IOException;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
 
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.FormBody;
+import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
@@ -96,7 +99,15 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                         FormBody.Builder builder = new FormBody.Builder();
                         builder.add("phone", etPhone.getText().toString());
                         builder.build();
-                        HttpUtils.sendRequest(ConstantValues.PHONE_REQUEST_URL, builder, new Callback() {
+                        OkHttpClient client = null;
+                        try {
+                            client = HttpUtils.getUnsafeOkHttpClient();
+                        } catch (NoSuchAlgorithmException e) {
+                            e.printStackTrace();
+                        } catch (KeyManagementException e) {
+                            e.printStackTrace();
+                        }
+                        HttpUtils.sendRequest(client, ConstantValues.PHONE_REQUEST_URL, builder, new Callback() {
                             @Override
                             public void onFailure(Call call, IOException e) {
                                 Snackbar.make(btnRegis, e.toString(),
@@ -122,10 +133,10 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                 } else if (!checkBox.isChecked()) {
                     Snackbar.make(btnRegis, "请先阅读服务条款",
                             Snackbar.LENGTH_SHORT).show();
-                } else if (etName.getText().toString().equals(null) ||
-                        etPwd.getText().toString().equals(null) || etPwdCheck.getText().toString().
-                        equals(null) || etPhone.getText().toString().equals(null) || etCode.getText().
-                        toString().equals(null)) {
+                } else if (etName.getText().toString().equals("") ||
+                        etPwd.getText().toString().equals("") || etPwdCheck.getText().toString().
+                        equals("") || etPhone.getText().toString().equals("") || etCode.getText().
+                        toString().equals("")) {
                     Snackbar.make(btnRegis, "请完善全部注册信息",
                             Snackbar.LENGTH_SHORT).show();
                 } //else if () {
@@ -142,63 +153,72 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                                         etPwdCheck.setText(null);
                                     }
                                 }).show();
-                    }
-                    final String name = etName.getText().toString();
-                    final String pwd = etPwd.getText().toString();
-                    final String pwdChecked = etPwdCheck.getText().toString();
-                    final int userType;
-                    if (rbtnShoper.isChecked()) {
-                        userType = 2;
                     } else {
-                        userType = 1;
-                    }
-                    final String code = etCode.getText().toString();
-                    final int serviceSelected;
-                    if (checkBox.isChecked()) {
-                        serviceSelected = 1;
-                    } else {
-                        serviceSelected = 2;
-                    }
-                    //发送给后台
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            FormBody.Builder builder1 = new FormBody.Builder();
-                            builder1.add("usertype", String.valueOf(userType));
-                            builder1.add("username", name);
-                            builder1.add("password", pwd);
-                            builder1.add("password2", pwdChecked);
-                            builder1.add("phonenumber", etPhone.getText().toString());
-                            builder1.add("phone_code", code);
-                            builder1.add("select", String.valueOf(serviceSelected));
-                            builder1.build();
-                            HttpUtils.sendRequest(ConstantValues.REGISTER_URL, builder1,
-                                    new Callback() {
-                                @Override
-                                public void onFailure(Call call, IOException e) {
-
-                                }
-
-                                @Override
-                                public void onResponse(Call call, Response response)
-                                        throws IOException {
-                                    if (response.header("code").equals("200")) {
-                                        startActivity(new Intent(RegisterActivity.this,
-                                                LoginActivity.class));
-                                        Toast.makeText(getApplicationContext(),
-                                                response.header("msg").toString(),
-                                                Toast.LENGTH_SHORT).show();
-                                        finish();
-                                    } else {
-                                        Toast.makeText(getApplicationContext(),
-                                                response.header("msg").toString(),
-                                                Toast.LENGTH_SHORT).show();
-                                    }
-                                }
-                            });
+                        final String name = etName.getText().toString();
+                        final String pwd = etPwd.getText().toString();
+                        final String pwdChecked = etPwdCheck.getText().toString();
+                        final int userType;
+                        if (rbtnShoper.isChecked()) {
+                            userType = 2;
+                        } else {
+                            userType = 1;
                         }
-                    }).start();
+                        final String code = etCode.getText().toString();
+                        final int serviceSelected;
+                        if (checkBox.isChecked()) {
+                            serviceSelected = 1;
+                        } else {
+                            serviceSelected = 2;
+                        }
+                        //发送给后台
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                FormBody.Builder builder1 = new FormBody.Builder();
+                                builder1.add("usertype", String.valueOf(userType));
+                                builder1.add("username", name);
+                                builder1.add("password", pwd);
+                                builder1.add("password2", pwdChecked);
+                                builder1.add("phonenumber", etPhone.getText().toString());
+                                builder1.add("phone_code", code);
+                                builder1.add("select", String.valueOf(serviceSelected));
+                                builder1.build();
+                                OkHttpClient client = null;
+                                try {
+                                    client = HttpUtils.getUnsafeOkHttpClient();
+                                } catch (NoSuchAlgorithmException e) {
+                                    e.printStackTrace();
+                                } catch (KeyManagementException e) {
+                                    e.printStackTrace();
+                                }
+                                HttpUtils.sendRequest(client, ConstantValues.REGISTER_URL, builder1,
+                                        new Callback() {
+                                            @Override
+                                            public void onFailure(Call call, IOException e) {
 
+                                            }
+
+                                            @Override
+                                            public void onResponse(Call call, Response response)
+                                                    throws IOException {
+//                                                if (response.body().string().equals("200")) {
+//                                                    startActivity(new Intent(RegisterActivity.this,
+//                                                            LoginActivity.class));
+//                                                    Toast.makeText(getApplicationContext(),
+//                                                            response.header("msg").toString(),
+//                                                            Toast.LENGTH_SHORT).show();
+//                                                    finish();
+//                                                } else {
+//                                                    Toast.makeText(getApplicationContext(),
+//                                                            response.header("msg").toString(),
+//                                                            Toast.LENGTH_SHORT).show();
+//                                                }
+                                                Log.i("registerResponse>>>>", response.body().toString());
+                                            }
+                                        });
+                            }
+                        }).start();
+                    }
                 }
                 break;
         }

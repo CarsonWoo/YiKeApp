@@ -10,6 +10,6 @@ public class ConstantValues {
 
     public static final String LOGIN_URL = "https://www.yiluzou.cn/yike/public/index.php/login";
 
-    public static final String REGISTER_URL = "https://www.tluneko.cn/yike/public/index.php/register";
+    public static final String REGISTER_URL = "https://www.yiluzou.cn/yike/public/index.php/register";
 
 }

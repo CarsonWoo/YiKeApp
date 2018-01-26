@@ -17,10 +17,13 @@ import com.example.carson.yikeapp.Utils.ConstantValues;
 import com.example.carson.yikeapp.Utils.HttpUtils;
 
 import java.io.IOException;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
 
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.FormBody;
+import okhttp3.OkHttpClient;
 import okhttp3.Response;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
@@ -88,7 +91,16 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         builder.add("username", name);
                         builder.add("password", pwd);
                         builder.build();
-                        HttpUtils.sendRequest(ConstantValues.LOGIN_URL, builder, new Callback() {
+                        OkHttpClient client = null;
+                        try {
+                            client = HttpUtils.getUnsafeOkHttpClient();
+                        } catch (NoSuchAlgorithmException e) {
+                            e.printStackTrace();
+                        } catch (KeyManagementException e) {
+                            e.printStackTrace();
+                        }
+                        HttpUtils.sendRequest(client, ConstantValues.LOGIN_URL, builder,
+                                new Callback() {
                             @Override
                             public void onFailure(Call call, IOException e) {
                                 Snackbar.make(btnLogin, "登录失败" + e.toString(),
