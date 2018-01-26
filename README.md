@@ -17,3 +17,18 @@ item的内容格式用的是新写的虚拟项目类-HomeContent。
 将常量（如网络url）写进了ConstantValues类中，以后常量也放在这个类当中
 
 网络请求中存在该接口文档所指向的地址证书不受认证的问题，需要修复。
+
+
+update 2018.1.26-20：54.
+
+修复了关于域名证书的bug
+
+在HttpUtils的工具类当中重写了一个名为getUnsafeOkHttpClient()的静态方法，由于后台的域名是开启https，故访问时需要先定义一个OkHttpCient对象（例：OkHttpClient client = null;
+try {
+  client = HttpUtils.getUnsafeOkHttpClient();
+  } catch (Exception e) {
+    throw new RuntimeException(e);
+  }
+）
+
+由于后台返回的是json数据，需要定义一个bean类去保存，暂未完成。
