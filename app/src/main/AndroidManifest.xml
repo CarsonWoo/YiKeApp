@@ -25,7 +25,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Views.MainActivity" />
+        <activity
+            android:name=".Views.ChangePasswordActivity"
+            android:theme="@style/register_toolbar_theme"
+            />
         <activity
             android:name=".Views.RegisterActivity"
             android:label="注册"

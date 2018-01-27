@@ -86,9 +86,17 @@ public class HttpUtils {
 
     public static void sendRequest(OkHttpClient client, String url, FormBody.Builder builder,
                                    Callback callback) {
-        //okhttp的post方法请求
+        //okhttp的键值对post方法请求
 
         RequestBody body = builder.build();
+        Request request = new Request.Builder().url(url).post(body).build();
+        Call call = client.newCall(request);
+        call.enqueue(callback);
+    }
+
+    public static void sendRequest(OkHttpClient client, String url, RequestBody body,
+                                   Callback callback) {
+        //okhttp的json post方法请求
         Request request = new Request.Builder().url(url).post(body).build();
         Call call = client.newCall(request);
         call.enqueue(callback);

@@ -2,10 +2,13 @@ package com.example.carson.yikeapp.Views;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.CountDownTimer;
 import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,14 +19,21 @@ import com.example.carson.yikeapp.R;
 import com.example.carson.yikeapp.Utils.ConstantValues;
 import com.example.carson.yikeapp.Utils.HttpUtils;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
+import java.util.Timer;
 
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.FormBody;
+import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
+import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
@@ -79,14 +89,23 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 break;
             case R.id.tv_forget_pwd:
                 //跳转到忘记密码的页面
+                startActivity(new Intent(LoginActivity.this,
+                        ChangePasswordActivity.class));
+                finish();
                 break;
             case R.id.btn_login:
                 //交到后台处理
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        String name = etName.getText().toString();
-                        String pwd = etName.getText().toString();
+                        final String name = etName.getText().toString();
+                        final String pwd = etPwd.getText().toString();
+//                        final String data = "{\n" +
+//                                "    \'username\': " + "\'" + name + "\',\n" +
+//                                "    \'password\': " + "\'" + pwd + "\'\n" +
+//                                "}";
+//                        MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+//                        RequestBody body = RequestBody.create(JSON, data);
                         FormBody.Builder builder = new FormBody.Builder();
                         builder.add("username", name);
                         builder.add("password", pwd);
@@ -120,12 +139,32 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                 } else {
                                     editor.clear();
                                 }
-                                if (response.header("code").equals("200")) {
-                                    String token = response.header("msg");
-                                    startActivity(new Intent(LoginActivity.this,
-                                            HomeActivity.class));
-                                    finish();
+                                String responseData = response.body().string();
+                               // Log.i("login>>>>>>", responseData);
+                                try {
+                                    JSONObject object = new JSONObject(responseData);
+                                    String code = object.getString("code");
+                                    String msg = object.getString("msg");
+                                    if (!code.equals("200")) {
+                                        runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+//                                                AlertDialog.Builder dialog = new
+//                                                        AlertDialog.Builder(getApplicationContext());
+//                                                dialog.setView(R.layout.bg_alert_dialog)
+//                                                        .show();
+                                                Snackbar.make(btnLogin, "账号或密码错误 请重新输入",
+                                                        Snackbar.LENGTH_SHORT).show();
+                                            }
+                                        });
+                                    } else {
+                                        Log.i("token>>>>>", msg);
+                                    }
+
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
                                 }
+
 
                             }
                         });

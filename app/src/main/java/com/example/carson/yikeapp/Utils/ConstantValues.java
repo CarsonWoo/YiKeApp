@@ -12,4 +12,8 @@ public class ConstantValues {
 
     public static final String REGISTER_URL = "https://www.yiluzou.cn/yike/public/index.php/register";
 
+    public static final String CHANGE_PASSWORD_URL = "https://www.yiluzou.cn/yike/public/index.php/changepassword";
+
+    public static final String CHANGE_PHONE_REQUEST_URL = "https://www.yiluzou.cn/yike/public/index.php/changeSend";
+
 }

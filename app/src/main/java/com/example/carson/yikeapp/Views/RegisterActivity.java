@@ -1,6 +1,7 @@
 package com.example.carson.yikeapp.Views;
 
 import android.content.Intent;
+import android.os.Looper;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -19,6 +20,10 @@ import android.widget.Toast;
 import com.example.carson.yikeapp.R;
 import com.example.carson.yikeapp.Utils.ConstantValues;
 import com.example.carson.yikeapp.Utils.HttpUtils;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.security.KeyManagementException;
@@ -116,10 +121,21 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
                             @Override
                             public void onResponse(Call call, Response response) throws IOException {
-                                if (response.body().toString().equals("200")) {
-                                    //发送成功
-                                    Toast.makeText(getApplicationContext(), "发送成功",
-                                            Toast.LENGTH_SHORT).show();
+                                String codeData = response.body().string();
+                                try {
+                                    JSONObject jsonObject = new JSONObject(codeData);
+                                    String code = jsonObject.getString("code");
+                                    if (code.equals("200")) {
+                                        runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                Toast.makeText(getApplicationContext(), "发送成功",
+                                                        Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
+                                    }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
                                 }
                             }
                         });
@@ -145,8 +161,8 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                // }
                 else {
                     if (!etPwd.getText().toString().equals(etPwdCheck.getText().toString())) {
-                        Snackbar.make(btnRegis, "两次密码输入不一致", Snackbar.LENGTH_SHORT)
-                                .setAction("重置密码", new View.OnClickListener() {
+                        Snackbar.make(btnRegis, "两次密码输入不一致", Snackbar.LENGTH_LONG).
+                                setAction("重置密码", new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
                                         etPwd.setText(null);
@@ -201,21 +217,45 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                                             @Override
                                             public void onResponse(Call call, Response response)
                                                     throws IOException {
-//                                                if (response.body().string().equals("200")) {
-//                                                    startActivity(new Intent(RegisterActivity.this,
-//                                                            LoginActivity.class));
-//                                                    Toast.makeText(getApplicationContext(),
-//                                                            response.header("msg").toString(),
-//                                                            Toast.LENGTH_SHORT).show();
-//                                                    finish();
-//                                                } else {
-//                                                    Toast.makeText(getApplicationContext(),
-//                                                            response.header("msg").toString(),
-//                                                            Toast.LENGTH_SHORT).show();
-//                                                }
-                                                Log.i("registerResponse>>>>", response.body().toString());
+                                                String responseData = response.body().string();
+                                                try {
+                                                    final JSONObject object = new JSONObject(responseData);
+                                                    int code = object.getInt("code");
+                                                    if (code == 200) {
+                                                        runOnUiThread(new Runnable() {
+                                                            @Override
+                                                            public void run() {
+                                                                try {
+                                                                    Toast.makeText(getApplicationContext(),
+                                                                            object.getString("msg"),
+                                                                            Toast.LENGTH_SHORT).show();
+                                                                } catch (JSONException e) {
+                                                                    e.printStackTrace();
+                                                                }
+                                                            }
+                                                        });
+                                                        startActivity(new Intent(RegisterActivity.this,
+                                                                LoginActivity.class));
+                                                        finish();
+                                                    }
+                                                } catch (JSONException e) {
+                                                    e.printStackTrace();
+                                                }
+                                                Log.i("registerResponse>>>>", response.body().string());
                                             }
                                         });
+//                                HttpUtils.sendRequest(client, "https://www.yiluzou.cn/tttt.php",
+//                                        new Callback() {
+//                                            @Override
+//                                            public void onFailure(Call call, IOException e) {
+//
+//                                            }
+//
+//                                            @Override
+//                                            public void onResponse(Call call, Response response) throws IOException {
+//                                                Log.i("test.>>>>>>>>", response.body().string());
+//                                            }
+//                                        });
                             }
                         }).start();
                     }
