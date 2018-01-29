@@ -241,7 +241,6 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                                                 } catch (JSONException e) {
                                                     e.printStackTrace();
                                                 }
-                                                Log.i("registerResponse>>>>", response.body().string());
                                             }
                                         });
 //                                HttpUtils.sendRequest(client, "https://www.yiluzou.cn/tttt.php",

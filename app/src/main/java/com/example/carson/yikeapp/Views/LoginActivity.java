@@ -158,7 +158,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                             }
                                         });
                                     } else {
-                                        Log.i("token>>>>>", msg);
+                                        //需要传token
+//                                        Log.i("token>>>>>", msg);
+                                        Intent intent = new Intent(LoginActivity.this,
+                                                DetailActivity.class);
+                                        intent.putExtra("token", msg);
+                                        startActivity(intent);
+                                        finish();
                                     }
 
                                 } catch (JSONException e) {
@@ -173,4 +179,5 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 break;
         }
     }
+
 }

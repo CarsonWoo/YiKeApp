@@ -27,8 +27,7 @@
         </activity>
         <activity
             android:name=".Views.ChangePasswordActivity"
-            android:theme="@style/register_toolbar_theme"
-            />
+            android:theme="@style/register_toolbar_theme" />
         <activity
             android:name=".Views.RegisterActivity"
             android:label="注册"
@@ -37,9 +36,12 @@
             android:name=".Views.HomeActivity"
             android:label="@string/title_activity_home"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".Views.LoginActivity"
-            android:theme="@style/LoginActivityTheme">
-        </activity>
+        <activity
+            android:name=".Views.LoginActivity"
+            android:theme="@style/LoginActivityTheme"></activity>
+        <activity android:name=".Views.DetailActivity"
+            android:label=""
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>
