@@ -16,4 +16,10 @@ public class ConstantValues {
 
     public static final String CHANGE_PHONE_REQUEST_URL = "https://www.yiluzou.cn/yike/public/index.php/changeSend";
 
+    public static final String FILL_USER_INFO_URL = "https://www.yiluzou.cn/yike/public/index.php/filluserinfo";
+
+    public static final String FILL_HOTEL_INFO_URL = "https://www.yiluzou.cn/yike/public/index.php/fillhotelinfo";
+
+    public static final String CHANGE_ICON_URL = "https://www.yiluzou.cn/yike/public/index.php/change_icon";
+
 }

@@ -2,13 +2,11 @@ package com.example.carson.yikeapp.Views;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.CountDownTimer;
 import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -19,21 +17,17 @@ import com.example.carson.yikeapp.R;
 import com.example.carson.yikeapp.Utils.ConstantValues;
 import com.example.carson.yikeapp.Utils.HttpUtils;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
-import java.util.Timer;
 
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.FormBody;
-import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
-import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
@@ -44,6 +38,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private Button btnLogin;
     private TextView tvToForget, tvToRegis;
     private boolean isNameChecked = false, isPwdChecked = false;
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +63,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         btnLogin.setOnClickListener(this);
         tvToForget.setOnClickListener(this);
         tvToRegis.setOnClickListener(this);
+
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LoginActivity.this.finish();
+            }
+        });
     }
 
     private void initViews() {
@@ -78,6 +80,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         btnLogin = findViewById(R.id.btn_login);
         tvToForget = findViewById(R.id.tv_forget_pwd);
         tvToRegis = findViewById(R.id.tv_to_regis);
+
+        toolbar = findViewById(R.id.toolbar_login);
     }
 
     @Override
@@ -161,7 +165,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                         //需要传token
 //                                        Log.i("token>>>>>", msg);
                                         Intent intent = new Intent(LoginActivity.this,
-                                                DetailActivity.class);
+                                                UserDetailActivity.class);
                                         intent.putExtra("token", msg);
                                         startActivity(intent);
                                         finish();

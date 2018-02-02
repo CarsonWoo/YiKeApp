@@ -1,230 +1,256 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<android.support.design.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:textStyle="bold"
-        android:textSize="30dp"
-        android:layout_margin="15dp"
-        android:text="注册义客"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
-    <LinearLayout
-        android:background="@drawable/bg_underline"
-        android:orientation="horizontal"
-        android:layout_marginLeft="15dp"
-        android:layout_marginTop="120dp"
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar_regis"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/linearLayout1">
+        android:layout_height="?attr/actionBarSize"
+        android:theme="@style/AppTheme.NoActionBar"
+        android:background="#fff"
+        app:navigationIcon="@drawable/ic_back"
+        app:popupTheme="@style/AppTheme.PopupOverlay">
 
         <TextView
+            android:textSize="26sp"
+            android:text="返回"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
-            android:text="姓名    "
-            android:textSize="28dp"
+    </android.support.v7.widget.Toolbar>
+
+    <RelativeLayout
+        android:layout_marginTop="?attr/actionBarSize"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:textStyle="bold"
+            android:textSize="30dp"
+            android:layout_margin="15sp"
+            android:text="注册义客"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
-        <EditText
-            android:id="@+id/et_regis_username"
-            android:textSize="28dp"
-            android:background="@null"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:orientation="horizontal"
-        android:id="@+id/linearLayout2"
-        android:layout_below="@id/linearLayout1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <RadioGroup
-            android:layout_marginLeft="15dp"
+        <LinearLayout
             android:background="@drawable/bg_underline"
-            android:id="@+id/rg_regis"
             android:orientation="horizontal"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="100sp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:id="@+id/linearLayout1">
 
-            <RadioButton
-                android:textSize="25dp"
-                android:id="@+id/rb_worker"
-                android:text="换宿义工"
+            <TextView
+
+                android:text="姓名    "
+                android:textSize="28dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
-            <RadioButton
-                android:textSize="25dp"
-                android:id="@+id/rb_shop"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+            <EditText
+                android:id="@+id/et_regis_username"
+                android:textSize="28dp"
+                android:background="@null"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:id="@+id/linearLayout2"
+            android:layout_below="@id/linearLayout1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <RadioGroup
                 android:layout_marginLeft="15dp"
-                android:text="民宿店家" />
+                android:background="@drawable/bg_underline"
+                android:id="@+id/rg_regis"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-        </RadioGroup>
+                <RadioButton
+                    android:textSize="25dp"
+                    android:id="@+id/rb_worker"
+                    android:text="换宿义工"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
 
-    </LinearLayout>
+                <RadioButton
+                    android:textSize="25dp"
+                    android:id="@+id/rb_shop"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:text="民宿店家" />
 
-    <LinearLayout
-        android:layout_marginLeft="15dp"
-        android:background="@drawable/bg_underline"
-        android:orientation="horizontal"
-        android:id="@+id/linearLayout3"
-        android:layout_below="@id/linearLayout2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+            </RadioGroup>
 
-        <TextView
-            android:textSize="28dp"
-            android:text="密码    "
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+        </LinearLayout>
 
-        <EditText
-            android:id="@+id/et_regis_pwd"
-            android:textSize="28dp"
-            android:inputType="textPassword"
-            android:background="@null"
+        <LinearLayout
+            android:layout_marginLeft="15dp"
+            android:background="@drawable/bg_underline"
+            android:orientation="horizontal"
+            android:id="@+id/linearLayout3"
+            android:layout_below="@id/linearLayout2"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content">
 
-    </LinearLayout>
+            <TextView
+                android:textSize="28dp"
+                android:text="密码    "
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
 
-    <LinearLayout
-        android:layout_marginLeft="15dp"
-        android:background="@drawable/bg_underline"
-        android:orientation="horizontal"
-        android:id="@+id/linearLayout4"
-        android:layout_below="@id/linearLayout3"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+            <EditText
+                android:id="@+id/et_regis_pwd"
+                android:textSize="28dp"
+                android:inputType="textPassword"
+                android:background="@null"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
-        <TextView
-            android:textSize="28dp"
-            android:text="再次输入密码    "
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+        </LinearLayout>
 
-        <EditText
-            android:id="@+id/et_regis_pwd_check"
-            android:textSize="28dp"
-            android:inputType="textPassword"
-            android:background="@null"
+        <LinearLayout
+            android:layout_marginLeft="15dp"
+            android:background="@drawable/bg_underline"
+            android:orientation="horizontal"
+            android:id="@+id/linearLayout4"
+            android:layout_below="@id/linearLayout3"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content">
 
-    </LinearLayout>
+            <TextView
+                android:textSize="28dp"
+                android:text="再次输入密码    "
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
 
-    <LinearLayout
-        android:layout_marginLeft="15dp"
-        android:background="@drawable/bg_underline"
-        android:orientation="horizontal"
-        android:id="@+id/linearLayout5"
-        android:layout_below="@id/linearLayout4"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+            <EditText
+                android:id="@+id/et_regis_pwd_check"
+                android:textSize="28dp"
+                android:inputType="textPassword"
+                android:background="@null"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
-        <TextView
-            android:textSize="28dp"
-            android:text="手机    "
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+        </LinearLayout>
 
-        <EditText
-            android:id="@+id/et_regis_phone"
-            android:textSize="28dp"
-            android:inputType="number"
-            android:background="@null"
+        <LinearLayout
+            android:layout_marginLeft="15dp"
+            android:background="@drawable/bg_underline"
+            android:orientation="horizontal"
+            android:id="@+id/linearLayout5"
+            android:layout_below="@id/linearLayout4"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content">
 
-    </LinearLayout>
+            <TextView
+                android:textSize="28dp"
+                android:text="手机    "
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
 
-    <LinearLayout
-        android:layout_marginLeft="15dp"
-        android:background="@drawable/bg_underline"
-        android:orientation="horizontal"
-        android:id="@+id/linearLayout6"
-        android:layout_below="@id/linearLayout5"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+            <EditText
+                android:id="@+id/et_regis_phone"
+                android:textSize="28dp"
+                android:inputType="number"
+                android:background="@null"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
-        <TextView
-            android:textSize="28dp"
-            android:text="验证码    "
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+        </LinearLayout>
 
-        <EditText
-            android:id="@+id/et_regis_check_code"
-            android:textSize="28dp"
-            android:inputType="number"
-            android:background="@null"
-            android:layout_width="290dp"
-            android:layout_height="wrap_content" />
+        <LinearLayout
+            android:layout_marginLeft="15dp"
+            android:background="@drawable/bg_underline"
+            android:orientation="horizontal"
+            android:id="@+id/linearLayout6"
+            android:layout_below="@id/linearLayout5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:textSize="28dp"
+                android:text="验证码    "
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <EditText
+                android:id="@+id/et_regis_check_code"
+                android:textSize="28dp"
+                android:inputType="number"
+                android:background="@null"
+                android:layout_width="290dp"
+                android:layout_height="wrap_content" />
+
+            <Button
+                android:layout_marginLeft="10dp"
+                android:id="@+id/btn_send_check_number"
+                android:layout_width="140dp"
+                android:layout_height="50dp"
+                android:background="@drawable/bg_button_style1"
+                android:text="发送验证码"
+                android:textColor="#e26323"
+                android:textSize="18dp" />
+
+        </LinearLayout>
 
         <Button
-            android:layout_marginLeft="10dp"
-            android:id="@+id/btn_send_check_number"
-            android:layout_width="140dp"
-            android:layout_height="50dp"
-            android:background="@drawable/bg_button_style1"
-            android:text="发送验证码"
+            android:textColor="#fff"
+            android:layout_marginRight="15dp"
+            android:layout_marginLeft="15dp"
+            android:textSize="28dp"
+            android:text="注册"
+            android:background="@drawable/bg_button_style2"
+            android:id="@+id/btn_register"
+            android:layout_below="@id/linearLayout6"
+            android:layout_width="match_parent"
+            android:layout_height="70dp" />
+
+        <TextView
+            android:id="@+id/tv_to_login"
+            android:clickable="true"
+            android:text="登录已有账号"
+            android:layout_marginTop="10dp"
+            android:layout_alignRight="@id/btn_register"
+            android:layout_alignEnd="@id/btn_register"
+            android:layout_below="@id/btn_register"
+            android:textSize="20dp"
             android:textColor="#e26323"
-            android:textSize="18dp" />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
-    </LinearLayout>
+        <CheckBox
+            android:layout_marginLeft="15dp"
+            android:text="我已同意并阅读"
+            android:layout_below="@id/tv_to_login"
+            android:id="@+id/checkbox_service"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
-    <Button
-        android:textColor="#fff"
-        android:layout_marginRight="15dp"
-        android:layout_marginLeft="15dp"
-        android:textSize="28dp"
-        android:text="注册"
-        android:background="@drawable/bg_button_style2"
-        android:id="@+id/btn_register"
-        android:layout_below="@id/linearLayout6"
-        android:layout_width="match_parent"
-        android:layout_height="70dp" />
+        <TextView
+            android:id="@+id/tv_service"
+            android:clickable="true"
+            android:text="@string/service_and_privacy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/checkbox_service"
+            android:layout_alignBottom="@+id/checkbox_service"
+            android:layout_toRightOf="@+id/checkbox_service"
+            android:layout_toEndOf="@+id/checkbox_service" />
 
-    <TextView
-        android:id="@+id/tv_to_login"
-        android:clickable="true"
-        android:text="登录已有账号"
-        android:layout_marginTop="10dp"
-        android:layout_alignRight="@id/btn_register"
-        android:layout_alignEnd="@id/btn_register"
-        android:layout_below="@id/btn_register"
-        android:textSize="20dp"
-        android:textColor="#e26323"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+    </RelativeLayout>
 
-    <CheckBox
-        android:layout_marginLeft="15dp"
-        android:text="我已同意并阅读"
-        android:layout_below="@id/tv_to_login"
-        android:id="@+id/checkbox_service"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
 
-    <TextView
-        android:id="@+id/tv_service"
-        android:clickable="true"
-        android:text="@string/service_and_privacy"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/checkbox_service"
-        android:layout_alignBottom="@+id/checkbox_service"
-        android:layout_toRightOf="@+id/checkbox_service"
-        android:layout_toEndOf="@+id/checkbox_service" />
 
-</RelativeLayout>
+</android.support.design.widget.CoordinatorLayout>

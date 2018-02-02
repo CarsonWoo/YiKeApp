@@ -49,6 +49,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     private TextView tvToLogin;
     private EditText etName, etPwd, etPwdCheck, etPhone, etCode;
     private CheckBox checkBox;
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,23 +58,24 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
         initViews();
         initEvents();
-        Log.i("etname", etName.getText().toString());
     }
 
     public void initViews() {
-        radioGroup = (RadioGroup) findViewById(R.id.rg_regis);
-        rbtnShoper = (RadioButton) findViewById(R.id.rb_shop);
-        rbtnWorker = (RadioButton) findViewById(R.id.rb_worker);
-        etName = (EditText) findViewById(R.id.et_regis_username);
-        etPwd = (EditText) findViewById(R.id.et_regis_pwd);
-        etPwdCheck = (EditText) findViewById(R.id.et_regis_pwd_check);
-        etPhone = (EditText) findViewById(R.id.et_regis_phone);
-        etCode = (EditText) findViewById(R.id.et_regis_check_code);
-        tvService = (TextView) findViewById(R.id.tv_service);
-        tvToLogin = (TextView) findViewById(R.id.tv_to_login);
-        btnSendCheck = (Button) findViewById(R.id.btn_send_check_number);
-        btnRegis = (Button) findViewById(R.id.btn_register);
-        checkBox = (CheckBox) findViewById(R.id.checkbox_service);
+        radioGroup = findViewById(R.id.rg_regis);
+        rbtnShoper = findViewById(R.id.rb_shop);
+        rbtnWorker = findViewById(R.id.rb_worker);
+        etName = findViewById(R.id.et_regis_username);
+        etPwd = findViewById(R.id.et_regis_pwd);
+        etPwdCheck = findViewById(R.id.et_regis_pwd_check);
+        etPhone = findViewById(R.id.et_regis_phone);
+        etCode = findViewById(R.id.et_regis_check_code);
+        tvService = findViewById(R.id.tv_service);
+        tvToLogin = findViewById(R.id.tv_to_login);
+        btnSendCheck = findViewById(R.id.btn_send_check_number);
+        btnRegis = findViewById(R.id.btn_register);
+        checkBox = findViewById(R.id.checkbox_service);
+
+        toolbar = findViewById(R.id.toolbar_regis);
     }
 
     public void initEvents() {
@@ -81,6 +83,14 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         tvToLogin.setOnClickListener(this);
         btnSendCheck.setOnClickListener(this);
         btnRegis.setOnClickListener(this);
+
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(RegisterActivity.this, StartActivity.class));
+                finish();
+            }
+        });
     }
 
     @Override

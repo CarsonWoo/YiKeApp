@@ -39,7 +39,7 @@
         <activity
             android:name=".Views.LoginActivity"
             android:theme="@style/LoginActivityTheme"></activity>
-        <activity android:name=".Views.DetailActivity"
+        <activity android:name=".Views.UserDetailActivity"
             android:label=""
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
