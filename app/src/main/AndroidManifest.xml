@@ -10,6 +10,9 @@
         android:xlargeScreens="true" />
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -18,6 +21,17 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        
+        <provider
+            android:authorities="com.example.carson.yikeapp.fileprovider"
+            android:name="android.support.v4.content.FileProvider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_path" />
+        </provider>
+        
         <activity android:name=".Views.StartActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -38,10 +52,12 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".Views.LoginActivity"
-            android:theme="@style/LoginActivityTheme"></activity>
-        <activity android:name=".Views.UserDetailActivity"
+            android:theme="@style/LoginActivityTheme" />
+        <activity
+            android:name=".Views.UserDetailActivity"
             android:label=""
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".Views.ShopDetailActivity"></activity>
     </application>
 
 </manifest>

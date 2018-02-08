@@ -22,4 +22,10 @@ public class ConstantValues {
 
     public static final String CHANGE_ICON_URL = "https://www.yiluzou.cn/yike/public/index.php/change_icon";
 
+    public static final int CODE_TAKE_PHOTO = 1;
+
+    public static final int TYPE_TAKE_PHOTO = 1;
+
+    public static final int CODE_PICK_PHOTO = 2;
+
 }

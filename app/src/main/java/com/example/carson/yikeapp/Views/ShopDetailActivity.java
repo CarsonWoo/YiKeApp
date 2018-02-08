@@ -3,6 +3,7 @@ package com.example.carson.yikeapp.Views;
 import android.Manifest;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -24,8 +25,6 @@ import android.support.v7.widget.Toolbar;
 import android.text.InputType;
 import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -35,9 +34,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.PopupWindow;
-import android.widget.Spinner;
 import android.widget.Toast;
-
 
 import com.example.carson.yikeapp.R;
 import com.example.carson.yikeapp.Utils.ConstantValues;
@@ -56,6 +53,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
+import de.hdodenhof.circleimageview.*;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.FormBody;
@@ -66,68 +64,57 @@ import static com.example.carson.yikeapp.Utils.ConstantValues.CODE_PICK_PHOTO;
 import static com.example.carson.yikeapp.Utils.ConstantValues.CODE_TAKE_PHOTO;
 import static com.example.carson.yikeapp.Utils.ConstantValues.TYPE_TAKE_PHOTO;
 
-
-public class UserDetailActivity extends AppCompatActivity implements View.OnClickListener {
+public class ShopDetailActivity extends AppCompatActivity implements View.OnClickListener {
 
     private Toolbar toolbar;
-//    private Spinner spinner;
-    private String[] genders;
-    private EditText etName, etIDCard, etBirth, etArea, etInfo, etGender;
-    private Button btnSave, btnCancel;
-    private ListView listViewArea, listViewGender;
-    private ArrayList<String> areaList;
+    private EditText etName, etIDCard, etGender, etArea, etBirth, etInfo;
+    private Button btnSave, btnAdd, btnCancel;
     private PopupWindow windowArea, windowGender;
+    private ListView listViewArea, listViewGender;
     private de.hdodenhof.circleimageview.CircleImageView headView;
+    private ArrayList<String> areaList;
+    private String[] genders;
+    private String token;
 
     private Uri photoUri;
-//    private String gender;
-
-    private String token;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_user_detail);
+        setContentView(R.layout.activity_shop_detail);
 
-        toolbar = findViewById(R.id.toolbar_detail_user);
+        toolbar = findViewById(R.id.toolbar_detail_shop);
         setSupportActionBar(toolbar);
 
         Intent intent = getIntent();
         token = intent.getStringExtra("token");
 
-
         initViews();
         initEvents();
-
-//        Toast.makeText(getApplicationContext(), "token is " + token,
-//                Toast.LENGTH_LONG).show();
-
-
 
     }
 
     private void initEvents() {
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+        etGender.setInputType(InputType.TYPE_NULL);
+        etGender.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
-            public void onClick(View v) {
-                UserDetailActivity.this.finish();
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    windowGender.showAtLocation(v, Gravity.BOTTOM, 0, 0);
+                }
             }
         });
+        etGender.setOnClickListener(this);
 
-//        gender = "男";
-//        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//            @Override
-//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-//                gender = genders[position];
-//            }
-//
-//            @Override
-//            public void onNothingSelected(AdapterView<?> parent) {
-//
-//            }
-//        });
-
-
+        etArea.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    windowArea.showAtLocation(v, Gravity.BOTTOM, 0, 0);
+                }
+            }
+        });
+        etArea.setOnClickListener(this);
 
         etBirth.setInputType(InputType.TYPE_NULL);
         etBirth.setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -140,30 +127,13 @@ public class UserDetailActivity extends AppCompatActivity implements View.OnClic
         });
         etBirth.setOnClickListener(this);
 
-        etArea.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        listViewGender.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus) {
-                    //从底部弹出
-                    windowArea.showAtLocation(UserDetailActivity.this.findViewById(R.id.btn_detail_save),
-                            Gravity.BOTTOM, 0, 0);
-                }
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                etGender.setText(genders[position]);
+                windowGender.dismiss();
             }
         });
-
-        etArea.setOnClickListener(this);
-
-        etGender.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus) {
-                    windowGender.showAtLocation(UserDetailActivity.this.findViewById(R.id.btn_detail_save),
-                            Gravity.BOTTOM, 0, 0);
-                }
-            }
-        });
-
-        etGender.setOnClickListener(this);
 
         listViewArea.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -173,23 +143,14 @@ public class UserDetailActivity extends AppCompatActivity implements View.OnClic
             }
         });
 
-        listViewGender.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                etGender.setText(genders[position]);
-                windowGender.dismiss();
-            }
-        });
-
-        btnSave.setOnClickListener(this);
+        btnAdd.setOnClickListener(this);
         btnCancel.setOnClickListener(this);
-
-        headView.setOnClickListener(this);
+        btnSave.setOnClickListener(this);
     }
 
     private void showDateDialog() {
         Calendar c = Calendar.getInstance();
-        new DatePickerDialog(UserDetailActivity.this, new DatePickerDialog.OnDateSetListener() {
+        new DatePickerDialog(getApplicationContext(), new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                 etBirth.setText(year + "-" + (month + 1) + "-" + dayOfMonth);
@@ -198,60 +159,51 @@ public class UserDetailActivity extends AppCompatActivity implements View.OnClic
     }
 
     private void initViews() {
-//        spinner = findViewById(R.id.spinner_gender);
-//        genders = getResources().getStringArray(R.array.spinner_gender);
-//        ArrayAdapter<String> genderAdapter = new ArrayAdapter<String>(UserDetailActivity.this,
-//                R.layout.spinner_style, genders);
-//        genderAdapter.setDropDownViewResource(R.layout.spinner_style_text);
-//        spinner.setAdapter(genderAdapter);
+        etName = findViewById(R.id.et_true_name_shop);
+        etIDCard = findViewById(R.id.et_id_card_shop);
+        etGender = findViewById(R.id.et_gender_shop);
+        etArea = findViewById(R.id.et_area_shop);
+        etBirth = findViewById(R.id.et_birth_shop);
+        etInfo = findViewById(R.id.et_introduction_shop);
+
+        btnSave = findViewById(R.id.btn_detail_shop_save);
+        btnCancel = findViewById(R.id.btn_detail_shop_cancel);
+        btnAdd = findViewById(R.id.btn_add_photo_detail_shop);
+
+        headView = findViewById(R.id.civ_detail_change_shop);
 
         genders = new String[]{"男", "女"};
-
-        etName = findViewById(R.id.et_true_name);
-        etIDCard = findViewById(R.id.et_id_card);
-        etBirth = findViewById(R.id.et_birth);
-        etArea = findViewById(R.id.et_area);
-        etInfo = findViewById(R.id.et_introduction);
-        etGender = findViewById(R.id.et_gender);
-
-        btnSave = findViewById(R.id.btn_detail_save);
-        btnCancel = findViewById(R.id.btn_detail_cancel);
 
         areaList = new ArrayList<>();
         initList();
 
-        View viewArea = LayoutInflater.from(this)
-                .inflate(R.layout.activity_detail_area_item_list, null);
+        View viewArea = LayoutInflater.from(this).inflate(
+                R.layout.activity_detail_area_item_list, null);
         listViewArea = viewArea.findViewById(R.id.lv_area_detail);
-        listViewArea.setAdapter(new ArrayAdapter<>(UserDetailActivity.this,
-                android.R.layout.simple_list_item_1, areaList));
-
-        View viewGender = LayoutInflater.from(this)
-                .inflate(R.layout.activity_detail_gender_item_list, null);
-        listViewGender = viewGender.findViewById(R.id.lv_gender_detail);
-        listViewGender.setAdapter(new ArrayAdapter<>(UserDetailActivity.this,
+        listViewArea.setAdapter(new ArrayAdapter<>(ShopDetailActivity.this,
                 android.R.layout.simple_list_item_1, genders));
 
-        windowArea = new PopupWindow(viewArea,
-                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT,
-                true);
+        View viewGender = LayoutInflater.from(this).inflate(
+                R.layout.activity_detail_gender_item_list, null);
+        listViewGender = viewGender.findViewById(R.id.lv_gender_detail);
+        listViewGender.setAdapter(new ArrayAdapter<>(ShopDetailActivity.this,
+                android.R.layout.simple_list_item_1, areaList));
+
+        windowArea = new PopupWindow(viewArea, ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT, true);
         windowArea.setOutsideTouchable(true);
         windowArea.setBackgroundDrawable(new BitmapDrawable());
         windowArea.setFocusable(true);
         windowArea.setContentView(viewArea);
 
-        windowGender = new PopupWindow(viewGender,
-                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT,
-                true);
+        windowGender = new PopupWindow(viewGender, ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT, true);
         windowGender.setOutsideTouchable(true);
         windowGender.setBackgroundDrawable(new BitmapDrawable());
         windowGender.setFocusable(true);
         windowGender.setContentView(viewGender);
 
-        headView = findViewById(R.id.civ_detail_change);
-        headView.setOnClickListener(this);
     }
-
 
     private void initList() {
         areaList.add("广州");
@@ -269,35 +221,10 @@ public class UserDetailActivity extends AppCompatActivity implements View.OnClic
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.toolbar_back, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-
-        }
-        return true;
-    }
-
-    @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.et_birth:
-                showDateDialog();
-                break;
-            case R.id.et_gender:
-                windowGender.showAtLocation(UserDetailActivity.this.findViewById(R.id.btn_detail_save),
-                        Gravity.BOTTOM, 0, 0);
-                break;
-            case R.id.et_area:
-                windowArea.showAtLocation(UserDetailActivity.this.findViewById(R.id.btn_detail_save),
-                        Gravity.BOTTOM, 0, 0);
-                break;
-            case R.id.civ_detail_change:
-                AlertDialog.Builder builder = new AlertDialog.Builder(UserDetailActivity.this);
+            case R.id.civ_detail_change_shop:
+                AlertDialog.Builder builder = new AlertDialog.Builder(ShopDetailActivity.this);
                 builder.setItems(new String[]{"拍照", "选取照片"}, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -311,11 +238,34 @@ public class UserDetailActivity extends AppCompatActivity implements View.OnClic
                         }
                     }
                 });
-                builder.show();
                 break;
-            case R.id.btn_detail_cancel:
+            case R.id.et_gender_shop:
+                windowGender.showAtLocation(getCurrentFocus(), Gravity.BOTTOM,0, 0);
                 break;
-            case R.id.btn_detail_save:
+            case R.id.et_area_shop:
+                windowArea.showAtLocation(getCurrentFocus(), Gravity.BOTTOM, 0,0);
+                break;
+            case R.id.et_birth_shop:
+                showDateDialog();
+                break;
+            case R.id.btn_add_photo_detail_shop:
+                //设置调用相机权限
+                AlertDialog.Builder addPhotoBuilder = new AlertDialog.Builder(ShopDetailActivity.this);
+                addPhotoBuilder.setItems(new String[]{"拍照", "选取照片"}, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which) {
+                            case 0:
+                                checkCameraPermission();
+                                break;
+                            case 1:
+                                checkReadStoragePermission();
+                                break;
+                        }
+                    }
+                });
+                break;
+            case R.id.btn_detail_shop_save:
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
@@ -329,31 +279,29 @@ public class UserDetailActivity extends AppCompatActivity implements View.OnClic
                         }
                         FormBody.Builder builder = new FormBody.Builder();
                         builder.add("token", token);
+                        builder.add("realname", etName.getText().toString());
                         builder.add("idcard", etIDCard.getText().toString());
                         builder.add("introduction", etInfo.getText().toString());
                         builder.add("birth", etBirth.getText().toString());
-                        builder.add("realname", etName.getText().toString());
                         builder.add("gender", etGender.getText().toString());
                         builder.add("area", etArea.getText().toString());
-                        HttpUtils.sendRequest(client, ConstantValues.FILL_USER_INFO_URL,
-                                builder, new Callback() {
+                        HttpUtils.sendRequest(client, ConstantValues.FILL_HOTEL_INFO_URL, builder,
+                                new Callback() {
                                     @Override
                                     public void onFailure(Call call, IOException e) {
-
+                                        e.printStackTrace();
                                     }
 
                                     @Override
                                     public void onResponse(Call call, Response response) throws IOException {
                                         try {
-                                            JSONObject object = new JSONObject(response
-                                                    .body().string());
+                                            JSONObject object = new JSONObject(response.body().string());
                                             int code = object.getInt("code");
                                             if (code == 200) {
-                                                Intent intent = new Intent(UserDetailActivity.this,
+                                                Intent intent = new Intent(ShopDetailActivity.this,
                                                         HomeActivity.class);
                                                 intent.putExtra("token", token);
                                                 startActivity(intent);
-                                                finish();
                                             } else {
                                                 final String msg = object.getString("msg");
                                                 runOnUiThread(new Runnable() {
@@ -369,21 +317,18 @@ public class UserDetailActivity extends AppCompatActivity implements View.OnClic
                                         }
                                     }
                                 });
-//                                 Intent intent = new Intent(UserDetailActivity.this,
-//                                        HomeActivity.class);
-//                                 intent.putExtra("token", token);
-//                                 startActivity(intent);
-//                                 finish();
                     }
                 }).start();
+                break;
+            case R.id.btn_detail_shop_cancel:
                 break;
         }
     }
 
     private void checkReadStoragePermission() {
-        if (ContextCompat.checkSelfPermission(UserDetailActivity.this,
+        if (ContextCompat.checkSelfPermission(ShopDetailActivity.this,
                 Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(UserDetailActivity.this,
+            ActivityCompat.requestPermissions(ShopDetailActivity.this,
                     new String[] {Manifest.permission.READ_EXTERNAL_STORAGE}, 3);
         } else {
             startPick();
@@ -397,10 +342,10 @@ public class UserDetailActivity extends AppCompatActivity implements View.OnClic
     }
 
     private void checkCameraPermission() {
-        if (ContextCompat.checkSelfPermission(UserDetailActivity.this,
+        if (ContextCompat.checkSelfPermission(ShopDetailActivity.this,
                 Manifest.permission.CAMERA) != PackageManager
                 .PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(UserDetailActivity.this,
+            ActivityCompat.requestPermissions(ShopDetailActivity.this,
                     new String[]{Manifest.permission.CAMERA}, 1);
         } else {
             checkWriteStoragePermission();
@@ -409,9 +354,9 @@ public class UserDetailActivity extends AppCompatActivity implements View.OnClic
 
     //设置写入相册内存权限
     private void checkWriteStoragePermission() {
-        if (ContextCompat.checkSelfPermission(UserDetailActivity.this,
+        if (ContextCompat.checkSelfPermission(ShopDetailActivity.this,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(UserDetailActivity.this,
+            ActivityCompat.requestPermissions(ShopDetailActivity.this,
                     new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE}, 2);
         } else {
             startCamera();
@@ -448,7 +393,7 @@ public class UserDetailActivity extends AppCompatActivity implements View.OnClic
         File mediaFile;
         if (type == TYPE_TAKE_PHOTO) {
             mediaFile = new File(mediaStorageDir.getPath() + File.separator + "IMG_"
-                    + timeStamp + ".jpg");
+                + timeStamp + ".jpg");
         } else {
             return null;
         }
@@ -468,7 +413,7 @@ public class UserDetailActivity extends AppCompatActivity implements View.OnClic
         File mediaFile;
         if (type == TYPE_TAKE_PHOTO) {
             mediaFile = new File(mediaStorageDir.getPath() + File.separator + "IMG_"
-                    + timeStamp + ".jpg");
+                + timeStamp + ".jpg");
         } else {
             return null;
         }

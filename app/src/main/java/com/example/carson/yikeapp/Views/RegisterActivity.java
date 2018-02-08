@@ -244,8 +244,17 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                                                                 }
                                                             }
                                                         });
-                                                        startActivity(new Intent(RegisterActivity.this,
-                                                                LoginActivity.class));
+                                                        Intent intent = new Intent(RegisterActivity.this,
+                                                                LoginActivity.class);
+                                                        //作为身份标识符
+                                                        String id = "";
+                                                        if (rbtnShoper.isChecked()) {
+                                                            id = "商家";
+                                                        } else if (rbtnWorker.isChecked()) {
+                                                            id = "个人";
+                                                        }
+                                                        intent.putExtra("id", id);
+                                                        startActivity(intent);
                                                         finish();
                                                     }
                                                 } catch (JSONException e) {

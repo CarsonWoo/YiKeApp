@@ -7,6 +7,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -39,11 +40,23 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private TextView tvToForget, tvToRegis;
     private boolean isNameChecked = false, isPwdChecked = false;
     private Toolbar toolbar;
+    private String id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+
+        Intent intent;
+        intent = getIntent();
+        id = new String();
+        if (intent != null) {
+            if (intent.hasExtra("id")) {
+                id = intent.getStringExtra("id");
+            }
+        }
+
         initViews();
         initEvents();
     }
@@ -104,12 +117,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     public void run() {
                         final String name = etName.getText().toString();
                         final String pwd = etPwd.getText().toString();
-//                        final String data = "{\n" +
-//                                "    \'username\': " + "\'" + name + "\',\n" +
-//                                "    \'password\': " + "\'" + pwd + "\'\n" +
-//                                "}";
-//                        MediaType JSON = MediaType.parse("application/json; charset=utf-8");
-//                        RequestBody body = RequestBody.create(JSON, data);
                         FormBody.Builder builder = new FormBody.Builder();
                         builder.add("username", name);
                         builder.add("password", pwd);
@@ -164,8 +171,15 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                     } else {
                                         //需要传token
 //                                        Log.i("token>>>>>", msg);
-                                        Intent intent = new Intent(LoginActivity.this,
-                                                UserDetailActivity.class);
+                                        //需要判断身份
+                                        Intent intent = null;
+                                        if (id.equals("商家")) {
+                                            intent = new Intent(LoginActivity.this,
+                                                    UserDetailActivity.class);
+                                        } else {
+                                            intent = new Intent(LoginActivity.this,
+                                                    UserDetailActivity.class);
+                                        }
                                         intent.putExtra("token", msg);
                                         startActivity(intent);
                                         finish();

@@ -4,26 +4,29 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context="com.example.carson.yikeapp.Views.UserDetailActivity">
+    tools:context="com.example.carson.yikeapp.Views.ShopDetailActivity">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar_detail_user"
+    <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:theme="@style/AppTheme.NoActionBar"
-        android:background="#fff"
-        app:navigationIcon="@drawable/ic_back"
-        android:isScrollContainer="true"
-        app:popupTheme="@style/AppTheme.PopupOverlay">
+        android:layout_height="wrap_content">
 
-        <TextView
-            android:textSize="26sp"
-            android:text="返回"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+        <android.support.v7.widget.Toolbar
+            app:layout_scrollFlags="enterAlways"
+            android:background="#fff"
+            android:id="@+id/toolbar_detail_shop"
+            android:layout_width="match_parent"
+            app:navigationIcon="@drawable/ic_back"
+            android:layout_height="?attr/actionBarSize">
 
-    </android.support.v7.widget.Toolbar>
+            <TextView
+                android:textSize="26sp"
+                android:text="返回"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </android.support.v7.widget.Toolbar>
+
+    </android.support.design.widget.AppBarLayout>
 
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -37,7 +40,6 @@
 
             <LinearLayout
                 android:layout_marginLeft="15sp"
-                android:layout_marginTop="78sp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
@@ -66,10 +68,10 @@
 
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:clickable="true"
-                    android:id="@+id/civ_detail_change"
+                    android:id="@+id/civ_detail_change_shop"
                     android:layout_width="120sp"
                     android:layout_marginLeft="380sp"
-                    android:src="#fff"
+                    android:background="@drawable/bg_circle_image"
                     android:layout_height="120sp" />
 
             </LinearLayout>
@@ -98,7 +100,7 @@
                     android:textAlignment="viewEnd"
                     android:focusable="false"
                     android:inputType="none"
-                    android:id="@+id/et_gender"
+                    android:id="@+id/et_gender_shop"
                     android:textColor="#e26323"
                     android:textSize="28sp"
                     android:layout_marginLeft="355sp"
@@ -131,7 +133,7 @@
 
                 <EditText
                     android:textColor="#e26323"
-                    android:id="@+id/et_true_name"
+                    android:id="@+id/et_true_name_shop"
                     android:layout_marginLeft="250sp"
                     android:textAlignment="viewEnd"
                     android:background="@null"
@@ -154,17 +156,17 @@
                 android:layout_marginTop="15sp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-                
+
                 <TextView
                     android:layout_gravity="center_vertical"
                     android:text="身份证号"
                     android:textSize="28sp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
-                
+
                 <EditText
                     android:textAlignment="viewEnd"
-                    android:id="@+id/et_id_card"
+                    android:id="@+id/et_id_card_shop"
                     android:textColor="#e26323"
                     android:layout_marginLeft="150sp"
                     android:background="@null"
@@ -172,7 +174,7 @@
                     android:layout_width="300sp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end" />
-                
+
             </LinearLayout>
 
             <LinearLayout
@@ -196,7 +198,7 @@
                     android:layout_height="wrap_content" />
 
                 <EditText
-                    android:id="@+id/et_birth"
+                    android:id="@+id/et_birth_shop"
                     android:textColor="#e26323"
                     android:textAlignment="viewEnd"
                     android:layout_marginLeft="250sp"
@@ -231,7 +233,7 @@
 
                 <EditText
                     android:inputType="none"
-                    android:id="@+id/et_area"
+                    android:id="@+id/et_area_shop"
                     android:background="@null"
                     android:textSize="28sp"
                     android:textColor="#e26323"
@@ -259,17 +261,50 @@
                 <TextView
                     android:textSize="35sp"
                     android:text="个人简介"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
 
                 <EditText
-                    android:id="@+id/et_introduction"
+                    android:id="@+id/et_introduction_shop"
                     android:layout_marginRight="20sp"
                     android:layout_marginTop="15sp"
                     android:textSize="26sp"
                     android:background="@null"
                     android:layout_width="match_parent"
                     android:layout_height="70sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_marginTop="15sp"
+                android:background="#ede2dede"
+                android:layout_width="match_parent"
+                android:layout_height="20sp"/>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_marginLeft="15sp"
+                android:layout_marginTop="15sp"
+                android:layout_width="match_parent"
+                android:layout_height="180sp">
+
+                <TextView
+                    android:textSize="35sp"
+                    android:text="添加民宿相关图片"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <Button
+                    android:textColor="#e26323"
+                    android:layout_marginLeft="5sp"
+                    android:id="@+id/btn_add_photo_detail_shop"
+                    android:layout_marginRight="16sp"
+                    android:layout_marginTop="18sp"
+                    android:textSize="45sp"
+                    android:text="+"
+                    android:background="@drawable/bg_button_style1"
+                    android:layout_width="match_parent"
+                    android:layout_height="60sp" />
 
             </LinearLayout>
 
@@ -287,7 +322,7 @@
 
                 <Button
                     android:layout_marginTop="15sp"
-                    android:id="@+id/btn_detail_save"
+                    android:id="@+id/btn_detail_shop_save"
                     android:layout_marginLeft="75sp"
                     android:textSize="25sp"
                     android:textColor="#fff"
@@ -298,7 +333,7 @@
 
                 <Button
                     android:layout_marginTop="15sp"
-                    android:id="@+id/btn_detail_cancel"
+                    android:id="@+id/btn_detail_shop_cancel"
                     android:layout_marginLeft="65sp"
                     android:textSize="25sp"
                     android:background="@drawable/bg_button_style3"

@@ -66,8 +66,8 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            mIdView = (TextView) view.findViewById(R.id.bnb_name);
-            mContentView = (TextView) view.findViewById(R.id.bnb_host);
+            mIdView = view.findViewById(R.id.bnb_name);
+            mContentView = view.findViewById(R.id.bnb_host);
         }
 
         @Override
