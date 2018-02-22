@@ -23,6 +23,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -58,7 +59,10 @@ import de.hdodenhof.circleimageview.*;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.FormBody;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
+import okhttp3.RequestBody;
 import okhttp3.Response;
 
 import static com.example.carson.yikeapp.Utils.ConstantValues.CODE_PICK_PHOTO;
@@ -76,6 +80,8 @@ public class ShopDetailActivity extends AppCompatActivity implements View.OnClic
     private ArrayList<String> areaList;
     private String[] genders;
     private String token;
+
+    private File photoFile;
 
     private Uri photoUri;
 
@@ -400,6 +406,7 @@ public class ShopDetailActivity extends AppCompatActivity implements View.OnClic
         } else {
             return null;
         }
+        photoFile = mediaFile;
         return Uri.fromFile(mediaFile);
     }
 
@@ -421,6 +428,7 @@ public class ShopDetailActivity extends AppCompatActivity implements View.OnClic
         } else {
             return null;
         }
+        photoFile = mediaFile;
         return FileProvider.getUriForFile(this, getPackageName() + ".fileprovider",
                 mediaFile);
     }
@@ -444,32 +452,79 @@ public class ShopDetailActivity extends AppCompatActivity implements View.OnClic
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == CODE_TAKE_PHOTO && resultCode == RESULT_OK) {
-            if (data != null) {
-                Bitmap bm = data.getParcelableExtra("data");
-                Glide.with(ShopDetailActivity.this).load(bm)
-                        .into(headView);
-            } else {
-                Bitmap bm = null;
-                if (Build.VERSION.SDK_INT >= 24) {
+            Log.i("data", "has_data");
+            try {
+                MediaStore.Images.Media.insertImage(getContentResolver(), photoFile.getAbsolutePath(),
+                        photoFile.getName(), null);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+            sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.parse("file://"
+                    + photoFile.getAbsolutePath())));
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    OkHttpClient client = null;
                     try {
-                        bm = BitmapFactory.decodeStream(getContentResolver()
-                                .openInputStream(photoUri));
-                    } catch (FileNotFoundException e) {
+                        client = HttpUtils.getUnsafeOkHttpClient();
+                    } catch (NoSuchAlgorithmException e) {
+                        e.printStackTrace();
+                    } catch (KeyManagementException e) {
                         e.printStackTrace();
                     }
-                } else {
-                    bm = BitmapFactory.decodeFile(photoUri.getPath());
+                    MediaType type = MediaType.parse("image/*");
+                    RequestBody fileBody = RequestBody.create(type, photoFile);
+                    RequestBody multiBody = new MultipartBody.Builder()
+                            .setType(MultipartBody.FORM)
+                            .addFormDataPart("token", token)
+                            .addFormDataPart("photo", photoFile.getName(), fileBody)
+                            .build();
+                    HttpUtils.sendRequest(client, ConstantValues.CHANGE_ICON_URL, multiBody,
+                            new Callback() {
+                                @Override
+                                public void onFailure(Call call, IOException e) {
+
+                                }
+
+                                @Override
+                                public void onResponse(Call call, Response response) throws IOException {
+                                    try {
+                                        final JSONObject object = new JSONObject(response.body()
+                                                .string());
+                                        int code = object.getInt("code");
+                                        if (code == 200) {
+                                            runOnUiThread(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    Glide.with(ShopDetailActivity.this)
+                                                            .load(photoUri).into(headView);
+                                                    try {
+                                                        Toast.makeText(getApplicationContext(),
+                                                                object.getString("msg"),
+                                                                Toast.LENGTH_SHORT).show();
+                                                    } catch (JSONException e) {
+                                                        e.printStackTrace();
+                                                    }
+                                                }
+                                            });
+                                        }
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            });
                 }
-                Glide.with(ShopDetailActivity.this).load(bm)
-                        .into(headView);
-            }
+            }).start();
+            Log.i("resultCodeStage:", "ok");
+
         } else if (requestCode == CODE_PICK_PHOTO && resultCode == RESULT_OK) {
+            Log.i("pickPhotoStage:", "ok");
             selectPic(data);
         }
     }
 
     private void selectPic(Intent intent) {
-        Uri imgUri = intent.getData();
+        final Uri imgUri = intent.getData();
         String[] filePathColumn = {MediaStore.Images.Media.DATA};
         Cursor cursor = getContentResolver().query(imgUri, filePathColumn,
                 null, null, null);
@@ -477,8 +532,73 @@ public class ShopDetailActivity extends AppCompatActivity implements View.OnClic
         int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
         String picPath = cursor.getString(columnIndex);
         cursor.close();
-        Bitmap bm = BitmapFactory.decodeFile(picPath);
-        Glide.with(ShopDetailActivity.this).load(bm)
-                .into(headView);
+        photoFile = new File(picPath);
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                OkHttpClient client = null;
+                try {
+                    client = HttpUtils.getUnsafeOkHttpClient();
+                } catch (NoSuchAlgorithmException e) {
+                    e.printStackTrace();
+                } catch (KeyManagementException e) {
+                    e.printStackTrace();
+                }
+                Log.i("startStage:", "ok");
+//                FormBody.Builder builder = new FormBody.Builder();
+//                builder.add("token", token);
+//                builder.add("photo", String.valueOf(photoFile));
+                Log.i("token", token);
+                MediaType type = MediaType.parse("image/*");
+                RequestBody fileBody = RequestBody.create(type, photoFile);
+                RequestBody multiBody = new MultipartBody.Builder()
+                        .setType(MultipartBody.FORM)
+                        .addFormDataPart("token", token)
+                        .addFormDataPart("photo", photoFile.getName(), fileBody)
+                        .build();
+
+                HttpUtils.sendRequest(client, ConstantValues.CHANGE_ICON_URL, multiBody,
+                        new Callback() {
+                            @Override
+                            public void onFailure(Call call, IOException e) {
+
+                            }
+
+                            @Override
+                            public void onResponse(Call call, Response response) throws IOException {
+                                try {
+                                    Log.i("responseStage:", "ok");
+                                    final JSONObject object = new JSONObject(response.body().string());
+                                    int code = object.getInt("code");
+                                    if (code == 200) {
+                                        runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                Glide.with(ShopDetailActivity.this).load(imgUri)
+                                                        .into(headView);
+                                                try {
+                                                    Toast.makeText(getApplicationContext(),
+                                                            object.getString("msg"),
+                                                            Toast.LENGTH_SHORT).show();
+                                                } catch (JSONException e) {
+                                                    e.printStackTrace();
+                                                }
+                                            }
+                                        });
+
+                                    } else {
+                                        Log.i("msg:", object.getString("msg"));
+                                        Log.i("token", token);
+                                        Log.i("file", photoFile.getName());
+                                    }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        });
+            }
+
+        }).start();
     }
 }

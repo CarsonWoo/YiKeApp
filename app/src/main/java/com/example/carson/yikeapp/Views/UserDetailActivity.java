@@ -68,6 +68,7 @@ import okhttp3.FormBody;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
+import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
@@ -107,7 +108,6 @@ public class UserDetailActivity extends AppCompatActivity implements View.OnClic
 
         Intent intent = getIntent();
         token = intent.getStringExtra("token");
-        Log.i("token:", token);
 
         initViews();
         initEvents();
@@ -247,11 +247,13 @@ public class UserDetailActivity extends AppCompatActivity implements View.OnClic
                                             @Override
                                             public void run() {
                                                 etName.setText(infoList.get(0));
-                                                etGender.setText(infoList.get(1));
-                                                etIDCard.setText(infoList.get(2));
-                                                etBirth.setText(infoList.get(3));
-                                                etArea.setText(infoList.get(4));
-                                                etInfo.setText(infoList.get(5));
+                                                etGender.setText(infoList.get(2));
+                                                etIDCard.setText(infoList.get(3));
+                                                etBirth.setText(infoList.get(4));
+                                                etArea.setText(infoList.get(5));
+                                                etInfo.setText(infoList.get(6));
+                                                Glide.with(UserDetailActivity.this)
+                                                        .load(infoList.get(7)).into(headView);
 //                                                Glide.with(UserDetailActivity.this)
 //                                                        .load(infoList.get(6)).into(headView);
                                             }
@@ -578,32 +580,18 @@ public class UserDetailActivity extends AppCompatActivity implements View.OnClic
     protected void onActivityResult(int requestCode, int resultCode, final Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == CODE_TAKE_PHOTO && resultCode == RESULT_OK) {
-            Log.i("resultCodeStage:", "ok");
+            Log.i("data", "has_data");
+            try {
+                MediaStore.Images.Media.insertImage(getContentResolver(), photoFile.getAbsolutePath(),
+                        photoFile.getName(), null);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+            sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.parse("file://"
+                    + photoFile.getAbsolutePath())));
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    Log.i("ThreadStartStage:", "ok");
-                    Bitmap bm = null;
-                    if (data != null) {
-                        bm = data.getParcelableExtra("data");
-//                        Glide.with(UserDetailActivity.this).load(bm)
-//                                .into(headView);
-                    } else {
-                        if (Build.VERSION.SDK_INT >= 24) {
-                            try {
-                                bm = BitmapFactory.decodeStream(getContentResolver()
-                                        .openInputStream(photoUri));
-                            } catch (FileNotFoundException e) {
-                                e.printStackTrace();
-                            }
-//                            Glide.with(UserDetailActivity.this).load(bm)
-//                                    .into(headView);
-                        } else {
-                            bm = BitmapFactory.decodeFile(photoUri.getPath());
-//                            Glide.with(UserDetailActivity.this).load(bm)
-//                                    .into(headView);
-                        }
-                    }
                     OkHttpClient client = null;
                     try {
                         client = HttpUtils.getUnsafeOkHttpClient();
@@ -612,11 +600,14 @@ public class UserDetailActivity extends AppCompatActivity implements View.OnClic
                     } catch (KeyManagementException e) {
                         e.printStackTrace();
                     }
-                    FormBody.Builder builder = new FormBody.Builder();
-                    builder.add("token", token);
-                    builder.add("photo", String.valueOf(bm));
-                    final Bitmap finalBm = bm;
-                    HttpUtils.sendRequest(client, ConstantValues.CHANGE_ICON_URL, builder,
+                    MediaType type = MediaType.parse("image/*");
+                    RequestBody fileBody = RequestBody.create(type, photoFile);
+                    RequestBody multiBody = new MultipartBody.Builder()
+                            .setType(MultipartBody.FORM)
+                            .addFormDataPart("token", token)
+                            .addFormDataPart("photo", photoFile.getName(), fileBody)
+                            .build();
+                    HttpUtils.sendRequest(client, ConstantValues.CHANGE_ICON_URL, multiBody,
                             new Callback() {
                                 @Override
                                 public void onFailure(Call call, IOException e) {
@@ -625,27 +616,20 @@ public class UserDetailActivity extends AppCompatActivity implements View.OnClic
 
                                 @Override
                                 public void onResponse(Call call, Response response) throws IOException {
-                                    Log.i("responseStage:", "ok");
                                     try {
-                                        final JSONObject object = new JSONObject(response.body().string());
+                                        final JSONObject object = new JSONObject(response.body()
+                                                .string());
                                         int code = object.getInt("code");
                                         if (code == 200) {
                                             runOnUiThread(new Runnable() {
                                                 @Override
                                                 public void run() {
-                                                    Log.i("innerRunStage:", "ok");
                                                     Glide.with(UserDetailActivity.this)
-                                                            .load(finalBm).into(headView);
-                                                }
-                                            });
-                                        }else {
-                                            runOnUiThread(new Runnable() {
-                                                @Override
-                                                public void run() {
+                                                            .load(photoUri).into(headView);
                                                     try {
                                                         Toast.makeText(getApplicationContext(),
                                                                 object.getString("msg"),
-                                                                Toast.LENGTH_SHORT);
+                                                                Toast.LENGTH_SHORT).show();
                                                     } catch (JSONException e) {
                                                         e.printStackTrace();
                                                     }
@@ -659,6 +643,7 @@ public class UserDetailActivity extends AppCompatActivity implements View.OnClic
                             });
                 }
             }).start();
+            Log.i("resultCodeStage:", "ok");
 
         } else if (requestCode == CODE_PICK_PHOTO && resultCode == RESULT_OK) {
             Log.i("pickPhotoStage:", "ok");
@@ -667,7 +652,7 @@ public class UserDetailActivity extends AppCompatActivity implements View.OnClic
     }
 
     private void selectPic(Intent intent) {
-        Uri imgUri = intent.getData();
+        final Uri imgUri = intent.getData();
         String[] filePathColumn = {MediaStore.Images.Media.DATA};
         Cursor cursor = getContentResolver().query(imgUri, filePathColumn,
                 null, null, null);
@@ -676,7 +661,6 @@ public class UserDetailActivity extends AppCompatActivity implements View.OnClic
         String picPath = cursor.getString(columnIndex);
         cursor.close();
         photoFile = new File(picPath);
-        final Bitmap bm = BitmapFactory.decodeFile(picPath);
 
         new Thread(new Runnable() {
             @Override
@@ -690,18 +674,19 @@ public class UserDetailActivity extends AppCompatActivity implements View.OnClic
                     e.printStackTrace();
                 }
                 Log.i("startStage:", "ok");
-                FormBody.Builder builder = new FormBody.Builder();
-                builder.add("token", token);
-                builder.add("photo", String.valueOf(photoFile));
-//                MediaType type = MediaType.parse("application/octet-stream");
-//                RequestBody fileBody = RequestBody.create(type, photoFile);
-//                RequestBody multiBody = new MultipartBody.Builder()
-//                        .setType(MultipartBody.ALTERNATIVE)
-//                        .addFormDataPart("token", token)
-//                        .addFormDataPart("photo", photoFile.getName(), fileBody)
-//                        .build();
+//                FormBody.Builder builder = new FormBody.Builder();
+//                builder.add("token", token);
+//                builder.add("photo", String.valueOf(photoFile));
+                Log.i("token", token);
+                MediaType type = MediaType.parse("image/*");
+                RequestBody fileBody = RequestBody.create(type, photoFile);
+                RequestBody multiBody = new MultipartBody.Builder()
+                        .setType(MultipartBody.FORM)
+                        .addFormDataPart("token", token)
+                        .addFormDataPart("photo", photoFile.getName(), fileBody)
+                        .build();
 
-                HttpUtils.sendRequest(client, ConstantValues.CHANGE_ICON_URL, builder,
+                HttpUtils.sendRequest(client, ConstantValues.CHANGE_ICON_URL, multiBody,
                         new Callback() {
                             @Override
                             public void onFailure(Call call, IOException e) {
@@ -718,7 +703,7 @@ public class UserDetailActivity extends AppCompatActivity implements View.OnClic
                                         runOnUiThread(new Runnable() {
                                             @Override
                                             public void run() {
-                                                Glide.with(UserDetailActivity.this).load(bm)
+                                                Glide.with(UserDetailActivity.this).load(imgUri)
                                                         .into(headView);
                                                 try {
                                                     Toast.makeText(getApplicationContext(),
@@ -732,13 +717,16 @@ public class UserDetailActivity extends AppCompatActivity implements View.OnClic
 
                                     } else {
                                         Log.i("msg:", object.getString("msg"));
+                                        Log.i("token", token);
+                                        Log.i("file", photoFile.getName());
                                     }
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
                             }
                         });
-            }
+                    }
+
         }).start();
 
     }

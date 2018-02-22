@@ -246,14 +246,8 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                                                         });
                                                         Intent intent = new Intent(RegisterActivity.this,
                                                                 LoginActivity.class);
-                                                        //作为身份标识符
-                                                        String id = "";
-                                                        if (rbtnShoper.isChecked()) {
-                                                            id = "商家";
-                                                        } else if (rbtnWorker.isChecked()) {
-                                                            id = "个人";
-                                                        }
-                                                        intent.putExtra("id", id);
+                                                        boolean isFirstFill = true;
+                                                        intent.putExtra("isFirstFill", isFirstFill);
                                                         startActivity(intent);
                                                         finish();
                                                     }

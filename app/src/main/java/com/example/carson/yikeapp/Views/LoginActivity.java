@@ -24,6 +24,9 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -41,6 +44,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private boolean isNameChecked = false, isPwdChecked = false;
     private Toolbar toolbar;
     private String id;
+    private List<String> dataList;
+
+    private boolean isFirstFilled = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,12 +56,19 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         Intent intent;
         intent = getIntent();
+
+
         id = new String();
         if (intent != null) {
             if (intent.hasExtra("id")) {
                 id = intent.getStringExtra("id");
             }
+            if (intent.hasExtra("isFirstFill")) {
+                isFirstFilled = intent.getBooleanExtra("isFirstFill", true);
+            }
         }
+
+        Log.i("id", id);
 
         initViews();
         initEvents();
@@ -95,6 +108,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         tvToRegis = findViewById(R.id.tv_to_regis);
 
         toolbar = findViewById(R.id.toolbar_login);
+
+        dataList = new ArrayList<>();
     }
 
     @Override
@@ -156,6 +171,16 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                     JSONObject object = new JSONObject(responseData);
                                     String code = object.getString("code");
                                     String msg = object.getString("msg");
+                                    JSONObject datas = object.getJSONObject("msg");
+                                    Iterator iterator = datas.keys();
+                                    while (iterator.hasNext()) {
+                                        String key = (String) iterator.next();
+                                        dataList.add(datas.getString(key));
+                                    }
+                                    //token信息
+                                    String token = dataList.get(0);
+                                    //识别用户还是商家
+                                    String userType = dataList.get(1);
                                     if (!code.equals("200")) {
                                         runOnUiThread(new Runnable() {
                                             @Override
@@ -169,20 +194,42 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                             }
                                         });
                                     } else {
+                                        if (isFirstFilled) {
+                                            Intent intent = new Intent(LoginActivity.this,
+                                                    HomeActivity.class);
+                                            intent.putExtra("token", token);
+                                            startActivity(intent);
+                                            finish();
+                                        } else {
+                                            if (userType.equals("用户")) {
+                                                Intent intent = new Intent(LoginActivity.this,
+                                                        UserDetailActivity.class);
+                                                intent.putExtra("token", token);
+                                                startActivity(intent);
+                                                finish();
+                                            } else {
+                                                Intent intent = new Intent(LoginActivity.this,
+                                                        ShopDetailActivity.class);
+                                                intent.putExtra("token", token);
+                                                startActivity(intent);
+                                                finish();
+                                            }
+                                        }
                                         //需要传token
 //                                        Log.i("token>>>>>", msg);
                                         //需要判断身份
-                                        Intent intent = null;
-                                        if (id.equals("商家")) {
-                                            intent = new Intent(LoginActivity.this,
-                                                    UserDetailActivity.class);
-                                        } else {
-                                            intent = new Intent(LoginActivity.this,
-                                                    UserDetailActivity.class);
-                                        }
-                                        intent.putExtra("token", msg);
-                                        startActivity(intent);
-                                        finish();
+//                                        Intent intent = null;
+//
+//                                        if (id.equals("商家")) {
+//                                            intent = new Intent(LoginActivity.this,
+//                                                    ShopDetailActivity.class);
+//                                        } else if (id.equals("个人")){
+//                                            intent = new Intent(LoginActivity.this,
+//                                                    UserDetailActivity.class);
+//                                        }
+//                                        intent.putExtra("token", msg);
+//                                        startActivity(intent);
+//                                        finish();
                                     }
 
                                 } catch (JSONException e) {

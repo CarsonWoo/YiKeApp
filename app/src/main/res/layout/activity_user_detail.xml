@@ -26,6 +26,7 @@
     </android.support.v7.widget.Toolbar>
 
     <android.support.v4.widget.NestedScrollView
+        android:layout_marginTop="?attr/actionBarSize"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
@@ -37,7 +38,6 @@
 
             <LinearLayout
                 android:layout_marginLeft="15sp"
-                android:layout_marginTop="78sp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 

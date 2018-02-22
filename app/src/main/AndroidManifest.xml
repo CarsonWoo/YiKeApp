@@ -57,7 +57,9 @@
             android:name=".Views.UserDetailActivity"
             android:label=""
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".Views.ShopDetailActivity"></activity>
+        <activity
+            android:name=".Views.ShopDetailActivity"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>
