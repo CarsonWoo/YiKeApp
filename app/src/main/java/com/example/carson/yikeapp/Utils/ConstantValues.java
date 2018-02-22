@@ -28,4 +28,6 @@ public class ConstantValues {
 
     public static final int CODE_PICK_PHOTO = 2;
 
+    public static final String GET_INFO_URL = "https://www.yiluzou.cn/yike/public/index.php/getinfo";
+
 }

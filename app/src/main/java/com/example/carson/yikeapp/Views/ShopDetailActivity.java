@@ -36,6 +36,7 @@ import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.carson.yikeapp.R;
 import com.example.carson.yikeapp.Utils.ConstantValues;
 import com.example.carson.yikeapp.Utils.HttpUtils;
@@ -363,6 +364,7 @@ public class ShopDetailActivity extends AppCompatActivity implements View.OnClic
         }
     }
 
+    //启动相机
     private void startCamera() {
 
         if (Build.VERSION.SDK_INT >= 24) {
@@ -380,6 +382,7 @@ public class ShopDetailActivity extends AppCompatActivity implements View.OnClic
 
     }
 
+    //获取媒体uri
     private Uri getMediaFileUri(int type) {
         File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(Environment
                 .DIRECTORY_PICTURES), "相册名字");
@@ -400,6 +403,7 @@ public class ShopDetailActivity extends AppCompatActivity implements View.OnClic
         return Uri.fromFile(mediaFile);
     }
 
+    //获取sdk24以上的媒体uri
     private Uri get24MediaFileUri(int type) {
         File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(Environment
                 .DIRECTORY_PICTURES), "相册名字");
@@ -442,21 +446,22 @@ public class ShopDetailActivity extends AppCompatActivity implements View.OnClic
         if (requestCode == CODE_TAKE_PHOTO && resultCode == RESULT_OK) {
             if (data != null) {
                 Bitmap bm = data.getParcelableExtra("data");
-                headView.setImageBitmap(bm);
+                Glide.with(ShopDetailActivity.this).load(bm)
+                        .into(headView);
             } else {
+                Bitmap bm = null;
                 if (Build.VERSION.SDK_INT >= 24) {
-                    Bitmap bm = null;
                     try {
                         bm = BitmapFactory.decodeStream(getContentResolver()
                                 .openInputStream(photoUri));
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
                     }
-                    headView.setImageBitmap(bm);
                 } else {
-                    Bitmap bm = BitmapFactory.decodeFile(photoUri.getPath());
-                    headView.setImageBitmap(bm);
+                    bm = BitmapFactory.decodeFile(photoUri.getPath());
                 }
+                Glide.with(ShopDetailActivity.this).load(bm)
+                        .into(headView);
             }
         } else if (requestCode == CODE_PICK_PHOTO && resultCode == RESULT_OK) {
             selectPic(data);
@@ -472,6 +477,8 @@ public class ShopDetailActivity extends AppCompatActivity implements View.OnClic
         int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
         String picPath = cursor.getString(columnIndex);
         cursor.close();
-        headView.setImageBitmap(BitmapFactory.decodeFile(picPath));
+        Bitmap bm = BitmapFactory.decodeFile(picPath);
+        Glide.with(ShopDetailActivity.this).load(bm)
+                .into(headView);
     }
 }

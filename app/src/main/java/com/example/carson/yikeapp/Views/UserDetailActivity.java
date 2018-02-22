@@ -22,6 +22,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -39,10 +40,12 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 
+import com.bumptech.glide.Glide;
 import com.example.carson.yikeapp.R;
 import com.example.carson.yikeapp.Utils.ConstantValues;
 import com.example.carson.yikeapp.Utils.HttpUtils;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -55,11 +58,17 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
+import java.util.zip.InflaterOutputStream;
 
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.FormBody;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
+import okhttp3.RequestBody;
 import okhttp3.Response;
 
 import static com.example.carson.yikeapp.Utils.ConstantValues.CODE_PICK_PHOTO;
@@ -70,6 +79,10 @@ import static com.example.carson.yikeapp.Utils.ConstantValues.TYPE_TAKE_PHOTO;
 public class UserDetailActivity extends AppCompatActivity implements View.OnClickListener {
 
     private Toolbar toolbar;
+
+    private List<String> infoList;
+
+    private File photoFile;
 //    private Spinner spinner;
     private String[] genders;
     private EditText etName, etIDCard, etBirth, etArea, etInfo, etGender;
@@ -94,10 +107,12 @@ public class UserDetailActivity extends AppCompatActivity implements View.OnClic
 
         Intent intent = getIntent();
         token = intent.getStringExtra("token");
-
+        Log.i("token:", token);
 
         initViews();
         initEvents();
+
+
 
 //        Toast.makeText(getApplicationContext(), "token is " + token,
 //                Toast.LENGTH_LONG).show();
@@ -185,6 +200,70 @@ public class UserDetailActivity extends AppCompatActivity implements View.OnClic
         btnCancel.setOnClickListener(this);
 
         headView.setOnClickListener(this);
+
+        loadDatas();
+    }
+
+    private void loadDatas() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                OkHttpClient client = null;
+                try {
+                    client = HttpUtils.getUnsafeOkHttpClient();
+                } catch (NoSuchAlgorithmException e) {
+                    e.printStackTrace();
+                } catch (KeyManagementException e) {
+                    e.printStackTrace();
+                }
+                FormBody.Builder builder = new FormBody.Builder();
+                builder.add("token", token);
+                HttpUtils.sendRequest(client, ConstantValues.GET_INFO_URL, builder,
+                        new Callback() {
+                            @Override
+                            public void onFailure(Call call, IOException e) {
+
+                            }
+
+                            @Override
+                            public void onResponse(Call call, Response response) throws IOException {
+                                try {
+                                    JSONObject object = new JSONObject(response.body().string());
+                                    int code = object.getInt("code");
+                                    if (code == 200) {
+//                                        Log.i("detail>>>>>>", object.getString("msg"));
+//                                        Iterator iterator = object.keys();
+//                                        while(iterator.hasNext()) {
+//                                            String key = (String) iterator.next();
+//                                            Log.i("detail_info>>>>", object.getString(key));
+//                                        }
+                                        JSONObject detailOb = object.getJSONObject("msg");
+                                        Iterator iterator = detailOb.keys();
+                                        while(iterator.hasNext()) {
+                                            String key = (String) iterator.next();
+                                            infoList.add(detailOb.getString(key));
+                                        }
+                                        runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                etName.setText(infoList.get(0));
+                                                etGender.setText(infoList.get(1));
+                                                etIDCard.setText(infoList.get(2));
+                                                etBirth.setText(infoList.get(3));
+                                                etArea.setText(infoList.get(4));
+                                                etInfo.setText(infoList.get(5));
+//                                                Glide.with(UserDetailActivity.this)
+//                                                        .load(infoList.get(6)).into(headView);
+                                            }
+                                        });
+                                    }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        });
+            }
+        }).start();
     }
 
     private void showDateDialog() {
@@ -250,6 +329,8 @@ public class UserDetailActivity extends AppCompatActivity implements View.OnClic
 
         headView = findViewById(R.id.civ_detail_change);
         headView.setOnClickListener(this);
+
+        infoList = new ArrayList<>();
     }
 
 
@@ -452,6 +533,7 @@ public class UserDetailActivity extends AppCompatActivity implements View.OnClic
         } else {
             return null;
         }
+        photoFile = mediaFile;
         return Uri.fromFile(mediaFile);
     }
 
@@ -472,6 +554,7 @@ public class UserDetailActivity extends AppCompatActivity implements View.OnClic
         } else {
             return null;
         }
+        photoFile = mediaFile;
         return FileProvider.getUriForFile(this, getPackageName() + ".fileprovider",
                 mediaFile);
     }
@@ -492,28 +575,93 @@ public class UserDetailActivity extends AppCompatActivity implements View.OnClic
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, final Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == CODE_TAKE_PHOTO && resultCode == RESULT_OK) {
-            if (data != null) {
-                Bitmap bm = data.getParcelableExtra("data");
-                headView.setImageBitmap(bm);
-            } else {
-                if (Build.VERSION.SDK_INT >= 24) {
+            Log.i("resultCodeStage:", "ok");
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    Log.i("ThreadStartStage:", "ok");
                     Bitmap bm = null;
+                    if (data != null) {
+                        bm = data.getParcelableExtra("data");
+//                        Glide.with(UserDetailActivity.this).load(bm)
+//                                .into(headView);
+                    } else {
+                        if (Build.VERSION.SDK_INT >= 24) {
+                            try {
+                                bm = BitmapFactory.decodeStream(getContentResolver()
+                                        .openInputStream(photoUri));
+                            } catch (FileNotFoundException e) {
+                                e.printStackTrace();
+                            }
+//                            Glide.with(UserDetailActivity.this).load(bm)
+//                                    .into(headView);
+                        } else {
+                            bm = BitmapFactory.decodeFile(photoUri.getPath());
+//                            Glide.with(UserDetailActivity.this).load(bm)
+//                                    .into(headView);
+                        }
+                    }
+                    OkHttpClient client = null;
                     try {
-                        bm = BitmapFactory.decodeStream(getContentResolver()
-                                .openInputStream(photoUri));
-                    } catch (FileNotFoundException e) {
+                        client = HttpUtils.getUnsafeOkHttpClient();
+                    } catch (NoSuchAlgorithmException e) {
+                        e.printStackTrace();
+                    } catch (KeyManagementException e) {
                         e.printStackTrace();
                     }
-                    headView.setImageBitmap(bm);
-                } else {
-                    Bitmap bm = BitmapFactory.decodeFile(photoUri.getPath());
-                    headView.setImageBitmap(bm);
+                    FormBody.Builder builder = new FormBody.Builder();
+                    builder.add("token", token);
+                    builder.add("photo", String.valueOf(bm));
+                    final Bitmap finalBm = bm;
+                    HttpUtils.sendRequest(client, ConstantValues.CHANGE_ICON_URL, builder,
+                            new Callback() {
+                                @Override
+                                public void onFailure(Call call, IOException e) {
+
+                                }
+
+                                @Override
+                                public void onResponse(Call call, Response response) throws IOException {
+                                    Log.i("responseStage:", "ok");
+                                    try {
+                                        final JSONObject object = new JSONObject(response.body().string());
+                                        int code = object.getInt("code");
+                                        if (code == 200) {
+                                            runOnUiThread(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    Log.i("innerRunStage:", "ok");
+                                                    Glide.with(UserDetailActivity.this)
+                                                            .load(finalBm).into(headView);
+                                                }
+                                            });
+                                        }else {
+                                            runOnUiThread(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    try {
+                                                        Toast.makeText(getApplicationContext(),
+                                                                object.getString("msg"),
+                                                                Toast.LENGTH_SHORT);
+                                                    } catch (JSONException e) {
+                                                        e.printStackTrace();
+                                                    }
+                                                }
+                                            });
+                                        }
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            });
                 }
-            }
+            }).start();
+
         } else if (requestCode == CODE_PICK_PHOTO && resultCode == RESULT_OK) {
+            Log.i("pickPhotoStage:", "ok");
             selectPic(data);
         }
     }
@@ -527,6 +675,71 @@ public class UserDetailActivity extends AppCompatActivity implements View.OnClic
         int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
         String picPath = cursor.getString(columnIndex);
         cursor.close();
-        headView.setImageBitmap(BitmapFactory.decodeFile(picPath));
+        photoFile = new File(picPath);
+        final Bitmap bm = BitmapFactory.decodeFile(picPath);
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                OkHttpClient client = null;
+                try {
+                    client = HttpUtils.getUnsafeOkHttpClient();
+                } catch (NoSuchAlgorithmException e) {
+                    e.printStackTrace();
+                } catch (KeyManagementException e) {
+                    e.printStackTrace();
+                }
+                Log.i("startStage:", "ok");
+                FormBody.Builder builder = new FormBody.Builder();
+                builder.add("token", token);
+                builder.add("photo", String.valueOf(photoFile));
+//                MediaType type = MediaType.parse("application/octet-stream");
+//                RequestBody fileBody = RequestBody.create(type, photoFile);
+//                RequestBody multiBody = new MultipartBody.Builder()
+//                        .setType(MultipartBody.ALTERNATIVE)
+//                        .addFormDataPart("token", token)
+//                        .addFormDataPart("photo", photoFile.getName(), fileBody)
+//                        .build();
+
+                HttpUtils.sendRequest(client, ConstantValues.CHANGE_ICON_URL, builder,
+                        new Callback() {
+                            @Override
+                            public void onFailure(Call call, IOException e) {
+
+                            }
+
+                            @Override
+                            public void onResponse(Call call, Response response) throws IOException {
+                                try {
+                                    Log.i("responseStage:", "ok");
+                                    final JSONObject object = new JSONObject(response.body().string());
+                                    int code = object.getInt("code");
+                                    if (code == 200) {
+                                        runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                Glide.with(UserDetailActivity.this).load(bm)
+                                                        .into(headView);
+                                                try {
+                                                    Toast.makeText(getApplicationContext(),
+                                                            object.getString("msg"),
+                                                            Toast.LENGTH_SHORT).show();
+                                                } catch (JSONException e) {
+                                                    e.printStackTrace();
+                                                }
+                                            }
+                                        });
+
+                                    } else {
+                                        Log.i("msg:", object.getString("msg"));
+                                    }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        });
+            }
+        }).start();
+
     }
 }

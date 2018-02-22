@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <android.support.design.widget.AppBarLayout
+        android:background="#fff"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <android.support.v7.widget.Toolbar
+            android:background="#fff"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize">
+
+            <TextView
+                android:textColor="#000"
+                android:textSize="25sp"
+                android:gravity="center"
+                android:text="交流"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+        </android.support.v7.widget.Toolbar>
+
+        <android.support.v7.widget.SearchView
+            android:id="@+id/search_view_discuss"
+            android:layout_marginLeft="10sp"
+            android:layout_marginRight="10sp"
+            android:background="#16483838"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </android.support.v7.widget.SearchView>
+
+    </android.support.design.widget.AppBarLayout>
+
+    <LinearLayout
+        android:layout_marginTop="130sp"
+        android:background="#7ca69c9c"
+        android:layout_width="match_parent"
+        android:layout_height="1sp"/>
+
+    <android.support.v4.view.ViewPager
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:layout_marginTop="30sp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+    <android.support.design.widget.TabLayout
+        android:layout_marginTop="130sp"
+        app:tabGravity="fill"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <android.support.design.widget.TabItem
+             android:id="@+id/tab_item_experience"
+             android:text="@string/experience_share"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content" />
+
+        <android.support.design.widget.TabItem
+             android:id="@+id/tab_item_partner"
+             android:text="@string/partner"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content" />
+        <android.support.design.widget.TabItem
+             android:id="@+id/tab_item_question"
+             android:text="@string/question"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content" />
+
+        <android.support.design.widget.TabItem
+             android:id="@+id/tab_item_diary"
+             android:text="@string/diary"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content" />
+
+    </android.support.design.widget.TabLayout>
+
+    <LinearLayout
+        android:layout_marginTop="180sp"
+        android:background="#7ca69c9c"
+        android:layout_width="match_parent"
+        android:layout_height="1sp"/>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_marginTop="200sp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:gravity="center_horizontal"
+            android:text="按发布时间"
+            android:layout_weight="1"
+            android:layout_width="0sp"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:text="按获赞数"
+            android:gravity="center_horizontal"
+            android:layout_weight="1"
+            android:layout_width="0sp"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_marginTop="240sp"
+        android:background="#7ca69c9c"
+        android:layout_width="match_parent"
+        android:layout_height="1sp"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:layout_marginTop="250sp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </android.support.v7.widget.RecyclerView>
+
+</android.support.design.widget.CoordinatorLayout>

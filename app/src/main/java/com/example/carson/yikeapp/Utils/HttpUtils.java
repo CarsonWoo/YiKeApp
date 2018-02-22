@@ -101,5 +101,4 @@ public class HttpUtils {
         Call call = client.newCall(request);
         call.enqueue(callback);
     }
-
 }

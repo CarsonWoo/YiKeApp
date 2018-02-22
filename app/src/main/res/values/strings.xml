@@ -9,5 +9,9 @@
     <string name="bnb_host">掌柜：</string>
     <string name="action_settings">Settings</string>
     <string name="section_format">Hello World from section: %1$d</string>
+    <string name="experience_share">经验分享</string>
+    <string name="partner">约伴同行</string>
+    <string name="question">互助问答</string>
+    <string name="diary">义客日记</string>
 
 </resources>
