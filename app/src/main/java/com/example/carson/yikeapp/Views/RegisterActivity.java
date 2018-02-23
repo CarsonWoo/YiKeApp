@@ -248,6 +248,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                                                                 LoginActivity.class);
                                                         boolean isFirstFill = true;
                                                         intent.putExtra("isFirstFill", isFirstFill);
+                                                        Log.i("isFirstFill", isFirstFill + "");
                                                         startActivity(intent);
                                                         finish();
                                                     }

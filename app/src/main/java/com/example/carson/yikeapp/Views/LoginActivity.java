@@ -43,7 +43,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private TextView tvToForget, tvToRegis;
     private boolean isNameChecked = false, isPwdChecked = false;
     private Toolbar toolbar;
-    private String id;
     private List<String> dataList;
 
     private boolean isFirstFilled = false;
@@ -57,18 +56,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         Intent intent;
         intent = getIntent();
 
-
-        id = new String();
         if (intent != null) {
-            if (intent.hasExtra("id")) {
-                id = intent.getStringExtra("id");
-            }
-            if (intent.hasExtra("isFirstFill")) {
-                isFirstFilled = intent.getBooleanExtra("isFirstFill", true);
-            }
+            isFirstFilled = intent.getBooleanExtra("isFirstFill", false);
         }
 
-        Log.i("id", id);
+        Log.i("isFF", isFirstFilled + "");
 
         initViews();
         initEvents();

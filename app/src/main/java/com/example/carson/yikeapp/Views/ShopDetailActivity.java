@@ -157,7 +157,7 @@ public class ShopDetailActivity extends AppCompatActivity implements View.OnClic
 
     private void showDateDialog() {
         Calendar c = Calendar.getInstance();
-        new DatePickerDialog(getApplicationContext(), new DatePickerDialog.OnDateSetListener() {
+        new DatePickerDialog(ShopDetailActivity.this, new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                 etBirth.setText(year + "-" + (month + 1) + "-" + dayOfMonth);
@@ -188,13 +188,13 @@ public class ShopDetailActivity extends AppCompatActivity implements View.OnClic
                 R.layout.activity_detail_area_item_list, null);
         listViewArea = viewArea.findViewById(R.id.lv_area_detail);
         listViewArea.setAdapter(new ArrayAdapter<>(ShopDetailActivity.this,
-                android.R.layout.simple_list_item_1, genders));
+                android.R.layout.simple_list_item_1, areaList));
 
         View viewGender = LayoutInflater.from(this).inflate(
                 R.layout.activity_detail_gender_item_list, null);
         listViewGender = viewGender.findViewById(R.id.lv_gender_detail);
         listViewGender.setAdapter(new ArrayAdapter<>(ShopDetailActivity.this,
-                android.R.layout.simple_list_item_1, areaList));
+                android.R.layout.simple_list_item_1, genders));
 
         windowArea = new PopupWindow(viewArea, ViewGroup.LayoutParams.WRAP_CONTENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT, true);
@@ -244,7 +244,8 @@ public class ShopDetailActivity extends AppCompatActivity implements View.OnClic
                                 break;
                         }
                     }
-                });
+                })
+                .show();
                 break;
             case R.id.et_gender_shop:
                 windowGender.showAtLocation(getCurrentFocus(), Gravity.BOTTOM,0, 0);
@@ -270,7 +271,8 @@ public class ShopDetailActivity extends AppCompatActivity implements View.OnClic
                                 break;
                         }
                     }
-                });
+                })
+                .show();
                 break;
             case R.id.btn_detail_shop_save:
                 new Thread(new Runnable() {

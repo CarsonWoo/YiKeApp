@@ -44,7 +44,7 @@
                 <TextView
                     android:textStyle="bold"
                     android:textSize="35sp"
-                    android:text="填写资料"
+                    android:text="填写用户资料"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
 
