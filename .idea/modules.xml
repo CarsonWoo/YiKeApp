@@ -3,7 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/YiKeApp.iml" filepath="$PROJECT_DIR$/YiKeApp.iml" />
-      <module fileurl="file://D:\Download\AndroidPackage\YiKeApp\YiKeApp.iml" filepath="D:\Download\AndroidPackage\YiKeApp\YiKeApp.iml" />
       <module fileurl="file://D:\andoridstudio\YiKeApp\.idea\YiKeApp.iml" filepath="D:\andoridstudio\YiKeApp\.idea\YiKeApp.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>

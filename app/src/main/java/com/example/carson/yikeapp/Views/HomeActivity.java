@@ -8,17 +8,21 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.carson.yikeapp.R;
+import com.example.carson.yikeapp.Views.dummy.ChatItem;
 import com.example.carson.yikeapp.Views.dummy.HomeContent;
 
+import java.util.ArrayList;
+
 public class HomeActivity extends AppCompatActivity implements ItemFragment.OnListFragmentInteractionListener {
+
+    private final static String TAG = "HomeActivity";
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -35,13 +39,16 @@ public class HomeActivity extends AppCompatActivity implements ItemFragment.OnLi
      */
     private ViewPager mViewPager;
 
+    private String[] titles = new String[]{"义客","交流","聊天","我的"};
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        final Toolbar toolbar = findViewById(R.id.toolbar_home);
         setSupportActionBar(toolbar);
+
         // Create the adapter that will return a fragment for each of the four
         // primary sections of the activity.
         mSectionsPagerAdapter = new HomePagerAdapter(getSupportFragmentManager());
@@ -55,8 +62,29 @@ public class HomeActivity extends AppCompatActivity implements ItemFragment.OnLi
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
 
-    }
+        //title
+        TextView title = (TextView) findViewById(R.id.title);
+        title.setText(titles[mViewPager.getCurrentItem()]);
 
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                TextView title = (TextView) findViewById(R.id.title);
+                title.setText(titles[mViewPager.getCurrentItem()]);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+        toolbar.requestFocus();
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -81,42 +109,19 @@ public class HomeActivity extends AppCompatActivity implements ItemFragment.OnLi
     }
 
     @Override
-    public void onListFragmentInteraction(HomeContent.BNBHomeItem item) {
+    public void onListFragmentInteraction(ArrayList item) {
         //TODO 点击了一个recycleview 的item
-        Toast.makeText(this,"Item "+ item.id+" clicked.",Toast.LENGTH_SHORT);
-    }
-
-    /**
-     * A placeholder fragment containing a simple view.
-     */
-    public static class PlaceholderFragment extends Fragment {
-        /**
-         * The fragment argument representing the section number for this
-         * fragment.
-         */
-        private static final String ARG_SECTION_NUMBER = "section_number";
-
-        public PlaceholderFragment() {
+        switch (mViewPager.getCurrentItem()){
+            case 0:
+                Log.d(TAG,"点击了首页的item");
+                Log.d(TAG,((HomeContent.BNBHomeItem)(item.get(0))).id+"");
+                Toast.makeText(this,"Item "+ ((HomeContent.BNBHomeItem)(item.get(0))).id+" clicked.",Toast.LENGTH_SHORT).show();
+                break;
+            case 2:
+                Toast.makeText(this,"Item "+ ((ChatItem.ChatWinItem)(item.get(0))).name+" clicked.",Toast.LENGTH_SHORT).show();
+                break;
         }
 
-        /**
-         * Returns a new instance of this fragment for the given section
-         * number.
-         */
-        public static PlaceholderFragment newInstance(int sectionNumber) {
-            PlaceholderFragment fragment = new PlaceholderFragment();
-            Bundle args = new Bundle();
-            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-            fragment.setArguments(args);
-            return fragment;
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_home_item_list, container, false);
-            return rootView;
-        }
     }
 
     /**

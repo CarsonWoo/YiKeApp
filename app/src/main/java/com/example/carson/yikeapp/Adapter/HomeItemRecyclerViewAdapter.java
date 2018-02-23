@@ -1,4 +1,4 @@
-package com.example.carson.yikeapp.Views;
+package com.example.carson.yikeapp.Adapter;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -10,6 +10,7 @@ import com.example.carson.yikeapp.R;
 import com.example.carson.yikeapp.Views.ItemFragment.OnListFragmentInteractionListener;
 import com.example.carson.yikeapp.Views.dummy.HomeContent.BNBHomeItem;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -17,12 +18,14 @@ import java.util.List;
  * specified {@link OnListFragmentInteractionListener}.
  * TODO: Replace the implementation with code for your data type.
  */
-public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecyclerViewAdapter.ViewHolder> {
+public class HomeItemRecyclerViewAdapter extends RecyclerView.Adapter<HomeItemRecyclerViewAdapter.ViewHolder> {
+    private final static String TAG = "HomeItemRViewAdapter";
 
     private final List<BNBHomeItem> mValues;
     private final OnListFragmentInteractionListener mListener;
+    private final ArrayList<BNBHomeItem> itemSelected = new ArrayList<>();
 
-    public MyItemRecyclerViewAdapter(List<BNBHomeItem> items, OnListFragmentInteractionListener listener) {
+    public HomeItemRecyclerViewAdapter(List<BNBHomeItem> items, OnListFragmentInteractionListener listener) {
         mValues = items;
         mListener = listener;
     }
@@ -30,7 +33,7 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.fragment_home_item, parent, false);
+                .inflate(R.layout.item_fragment_home, parent, false);
         return new ViewHolder(view);
     }
 
@@ -46,7 +49,9 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
                 if (null != mListener) {
                     // Notify the active callbacks interface (the activity, if the
                     // fragment is attached to one) that an item has been selected.
-                    mListener.onListFragmentInteraction(holder.mItem);
+                    itemSelected.clear();
+                    itemSelected.add(holder.mItem);
+                    mListener.onListFragmentInteraction(itemSelected);
                 }
             }
         });

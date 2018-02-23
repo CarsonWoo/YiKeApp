@@ -4,37 +4,15 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <android.support.design.widget.AppBarLayout
-        android:background="#fff"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <android.support.v7.widget.Toolbar
-            android:background="#fff"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize">
-
-            <TextView
-                android:textColor="#000"
-                android:textSize="25sp"
-                android:gravity="center"
-                android:text="交流"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
-
-        </android.support.v7.widget.Toolbar>
 
         <android.support.v7.widget.SearchView
             android:id="@+id/search_view_discuss"
-            android:layout_marginLeft="10sp"
-            android:layout_marginRight="10sp"
+            android:layout_margin="10dp"
             android:background="#16483838"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
 
         </android.support.v7.widget.SearchView>
-
-    </android.support.design.widget.AppBarLayout>
 
     <LinearLayout
         android:layout_marginTop="130sp"
