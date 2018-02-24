@@ -17,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.carson.yikeapp.R;
+import com.example.carson.yikeapp.Utils.ConstantValues;
 import com.example.carson.yikeapp.Views.dummy.ChatItem;
 import com.example.carson.yikeapp.Views.dummy.HomeContent;
 
@@ -41,7 +42,7 @@ public class HomeActivity extends AppCompatActivity implements ItemFragment.OnLi
      */
     private ViewPager mViewPager;
 
-    private String[] titles = new String[]{"义客","交流","消息",""};
+    private String[] titles = new String[]{"义客", "交流", "消息", ""};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,7 +93,7 @@ public class HomeActivity extends AppCompatActivity implements ItemFragment.OnLi
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         // 动态设置ToolBar状态
-        switch (mViewPager.getCurrentItem()){
+        switch (mViewPager.getCurrentItem()) {
             case 0:
                 menu.findItem(R.id.action_scan).setVisible(true);
                 menu.findItem(R.id.action_setting).setVisible(false);
@@ -129,13 +130,13 @@ public class HomeActivity extends AppCompatActivity implements ItemFragment.OnLi
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        switch (id){
+        switch (id) {
             case R.id.action_scan:
                 break;
             case R.id.action_setting:
                 //TODO 点击setting跳转到设置界面。
-                Intent toSetting = new Intent(this,SettingsActivity.class);
-                startActivity(toSetting);
+                Intent toSetting = new Intent(this, SettingActivity.class);
+                startActivityForResult(toSetting, ConstantValues.REQUESTCODE_START_SETTING);
                 break;
 
         }
@@ -144,16 +145,32 @@ public class HomeActivity extends AppCompatActivity implements ItemFragment.OnLi
     }
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        switch (requestCode) {
+            case ConstantValues.REQUESTCODE_START_SETTING:
+                if (resultCode == ConstantValues.RESULTCODE_SETTING_ACCOUNT_QUIT) {
+                    finish();
+                }
+                break;
+            default:
+                break;
+        }
+
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
     public void onListFragmentInteraction(ArrayList item) {
         //TODO 点击了一个recycleview 的item
-        switch (mViewPager.getCurrentItem()){
+        switch (mViewPager.getCurrentItem()) {
             case 0:
-                Log.d(TAG,"点击了首页的item");
-                Log.d(TAG,((HomeContent.BNBHomeItem)(item.get(0))).id+"");
-                Toast.makeText(this,"Item "+ ((HomeContent.BNBHomeItem)(item.get(0))).id+" clicked.",Toast.LENGTH_SHORT).show();
+                Log.d(TAG, "点击了首页的item");
+                Log.d(TAG, ((HomeContent.BNBHomeItem) (item.get(0))).id + "");
+                Toast.makeText(this, "Item " + ((HomeContent.BNBHomeItem) (item.get(0))).id + " clicked.", Toast.LENGTH_SHORT).show();
                 break;
             case 2:
-                Toast.makeText(this,"Item "+ ((ChatItem.ChatWinItem)(item.get(0))).name+" clicked.",Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Item " + ((ChatItem.ChatWinItem) (item.get(0))).name + " clicked.", Toast.LENGTH_SHORT).show();
                 break;
         }
 

@@ -61,10 +61,7 @@
         <activity
             android:name=".Views.ShopDetailActivity"
             android:theme="@style/MainTheme" />
-        <activity
-            android:name=".Views.SettingsActivity"
-            android:label="@string/title_activity_settings"
-            android:theme="@style/MainTheme"></activity>
+        <activity android:name=".Views.SettingActivity"></activity>
     </application>
 
 </manifest>

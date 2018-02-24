@@ -2,7 +2,6 @@ package com.example.carson.yikeapp.Utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Log;
 
 /**
  * Created by 84594 on 2018/1/17.
@@ -37,6 +36,10 @@ public class ConstantValues {
 
     public static final int CODE_PICK_PHOTO = 2;
 
+    public static final int REQUESTCODE_START_SETTING = 10001;
+
+    public static final int RESULTCODE_SETTING_ACCOUNT_QUIT = 10002;
+
     //获取用户信息时服务器返回json数据key名
     public static final String KEY_USER_NAME = "realname";
     public static final String KEY_USER_TYPE = "usertype";
@@ -60,7 +63,13 @@ public class ConstantValues {
         SharedPreferences.Editor editor = context.getSharedPreferences(APP_ID,Context.MODE_PRIVATE).edit();
         editor.putString(KEY_TOKEN,token);
         editor.commit();
-        Log.d(TAG,"token_cached");
+    }
+
+    //清除token（退出登录用）
+    public static void removeToken(Context context){
+        SharedPreferences.Editor editor = context.getSharedPreferences(APP_ID,Context.MODE_PRIVATE).edit();
+        editor.remove(KEY_TOKEN);
+        editor.commit();
     }
 
 }
