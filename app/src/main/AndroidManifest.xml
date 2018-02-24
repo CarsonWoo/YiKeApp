@@ -21,18 +21,19 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        
         <provider
-            android:authorities="com.example.carson.yikeapp.fileprovider"
             android:name="android.support.v4.content.FileProvider"
+            android:authorities="com.example.carson.yikeapp.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_path" />
         </provider>
-        
-        <activity android:name=".Views.StartActivity" android:theme="@style/MainTheme">
+
+        <activity
+            android:name=".Views.StartActivity"
+            android:theme="@style/MainTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -59,6 +60,10 @@
             android:theme="@style/MainTheme" />
         <activity
             android:name=".Views.ShopDetailActivity"
+            android:theme="@style/MainTheme" />
+        <activity
+            android:name=".Views.SettingsActivity"
+            android:label="@string/title_activity_settings"
             android:theme="@style/MainTheme"></activity>
     </application>
 

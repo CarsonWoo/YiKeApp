@@ -136,7 +136,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         } catch (KeyManagementException e) {
                             e.printStackTrace();
                         }
-                        HttpUtils.sendRequest(client, ConstantValues.LOGIN_URL, builder,
+                        HttpUtils.sendRequest(client, ConstantValues.URL_LOGIN, builder,
                                 new Callback() {
                             @Override
                             public void onFailure(Call call, IOException e) {
@@ -171,6 +171,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                     }
                                     //token信息
                                     String token = dataList.get(0);
+                                    ConstantValues.cachToken(LoginActivity.this,token);
                                     //识别用户还是商家
                                     String userType = dataList.get(1);
                                     if (!code.equals("200")) {

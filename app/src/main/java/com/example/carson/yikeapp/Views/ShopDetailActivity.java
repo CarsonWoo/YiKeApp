@@ -3,13 +3,10 @@ package com.example.carson.yikeapp.Views;
 import android.Manifest;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
-import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
@@ -55,7 +52,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
-import de.hdodenhof.circleimageview.*;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.FormBody;
@@ -294,7 +290,7 @@ public class ShopDetailActivity extends AppCompatActivity implements View.OnClic
                         builder.add("birth", etBirth.getText().toString());
                         builder.add("gender", etGender.getText().toString());
                         builder.add("area", etArea.getText().toString());
-                        HttpUtils.sendRequest(client, ConstantValues.FILL_HOTEL_INFO_URL, builder,
+                        HttpUtils.sendRequest(client, ConstantValues.URL_FILL_HOTEL_INFO, builder,
                                 new Callback() {
                                     @Override
                                     public void onFailure(Call call, IOException e) {
@@ -481,7 +477,7 @@ public class ShopDetailActivity extends AppCompatActivity implements View.OnClic
                             .addFormDataPart("token", token)
                             .addFormDataPart("photo", photoFile.getName(), fileBody)
                             .build();
-                    HttpUtils.sendRequest(client, ConstantValues.CHANGE_ICON_URL, multiBody,
+                    HttpUtils.sendRequest(client, ConstantValues.URL_CHANGE_ICON, multiBody,
                             new Callback() {
                                 @Override
                                 public void onFailure(Call call, IOException e) {
@@ -560,7 +556,7 @@ public class ShopDetailActivity extends AppCompatActivity implements View.OnClic
                         .addFormDataPart("photo", photoFile.getName(), fileBody)
                         .build();
 
-                HttpUtils.sendRequest(client, ConstantValues.CHANGE_ICON_URL, multiBody,
+                HttpUtils.sendRequest(client, ConstantValues.URL_CHANGE_ICON, multiBody,
                         new Callback() {
                             @Override
                             public void onFailure(Call call, IOException e) {

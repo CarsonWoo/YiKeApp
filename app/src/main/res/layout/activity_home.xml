@@ -12,17 +12,16 @@
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appbar"
         android:layout_width="match_parent"
+        android:elevation="0dp"
         android:layout_height="wrap_content"
-        android:paddingTop="@dimen/appbar_padding_top"
-        android:theme="@style/AppTheme.AppBarOverlay"
-        android:background="@android:color/white">
+        android:theme="@style/AppTheme.AppBarOverlay">
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar_home"
+            android:elevation="0dp"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="#fff"
-            android:gravity="center">
+            android:background="@android:color/white"
+            android:layout_height="?attr/actionBarSize">
 
             <TextView
                 android:id="@+id/title"

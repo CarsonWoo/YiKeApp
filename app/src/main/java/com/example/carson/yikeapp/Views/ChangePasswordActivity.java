@@ -74,7 +74,7 @@ public class ChangePasswordActivity extends AppCompatActivity implements View.On
                         } catch (KeyManagementException e) {
                             e.printStackTrace();
                         }
-                        HttpUtils.sendRequest(client, ConstantValues.CHANGE_PHONE_REQUEST_URL,
+                        HttpUtils.sendRequest(client, ConstantValues.URL_CHANGE_PHONE_REQUEST,
                                 builder, new Callback() {
                                     @Override
                                     public void onFailure(Call call, IOException e) {
@@ -128,7 +128,7 @@ public class ChangePasswordActivity extends AppCompatActivity implements View.On
                             } catch (KeyManagementException e) {
                                 e.printStackTrace();
                             }
-                            HttpUtils.sendRequest(client, ConstantValues.CHANGE_PASSWORD_URL,
+                            HttpUtils.sendRequest(client, ConstantValues.URL_CHANGE_PASSWORD,
                                     builder, new Callback() {
                                         @Override
                                         public void onFailure(Call call, IOException e) {

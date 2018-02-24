@@ -5,46 +5,51 @@
     android:name="com.example.carson.yikeapp.Views.ItemFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    app:layoutManager="LinearLayoutManager"
+    android:orientation="vertical"
     tools:context="com.example.carson.yikeapp.Views.ItemFragment"
-    tools:listitem="@layout/item_fragment_home"
-    android:orientation="vertical">
+    tools:listitem="@layout/item_fragment_home">
 
-    <ScrollView
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/srl_refresh"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scrollbars="none">
+        android:layout_height="match_parent">
 
-        <LinearLayout
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_height="match_parent"
+            android:scrollbars="none">
 
-            <android.support.v7.widget.SearchView
-                android:id="@+id/search_view_discuss"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_margin="10dp"
-                android:background="#16483838" />
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
-            <android.support.v4.view.ViewPager
-                android:id="@+id/vp_home_header"
-                android:layout_width="match_parent"
-                android:layout_height="213.3dp" />
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/rv_homelist"
+                <android.support.v7.widget.SearchView
+                    android:id="@+id/search_view_discuss"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    app:layoutManager="LinearLayoutManager" />
+                    android:layout_margin="10dp"
+                    android:background="#16483838" />
 
-            </RelativeLayout>
+                <android.support.v4.view.ViewPager
+                    android:id="@+id/vp_home_header"
+                    android:layout_width="match_parent"
+                    android:layout_height="213.3dp" />
 
-        </LinearLayout>
-    </ScrollView>
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/rv_homelist"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        app:layoutManager="LinearLayoutManager" />
+
+                </RelativeLayout>
+
+            </LinearLayout>
+        </ScrollView>
+    </android.support.v4.widget.SwipeRefreshLayout>
 
 </LinearLayout>

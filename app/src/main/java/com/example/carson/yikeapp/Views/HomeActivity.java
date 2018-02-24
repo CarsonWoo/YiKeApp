@@ -1,11 +1,13 @@
 package com.example.carson.yikeapp.Views;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -39,7 +41,7 @@ public class HomeActivity extends AppCompatActivity implements ItemFragment.OnLi
      */
     private ViewPager mViewPager;
 
-    private String[] titles = new String[]{"义客","交流","聊天","我的"};
+    private String[] titles = new String[]{"义客","交流","消息",""};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +78,8 @@ public class HomeActivity extends AppCompatActivity implements ItemFragment.OnLi
             public void onPageSelected(int position) {
                 TextView title = findViewById(R.id.title);
                 title.setText(titles[mViewPager.getCurrentItem()]);
+                invalidateOptionsMenu();
+                ActionBar actionBar = getSupportActionBar();
             }
 
             @Override
@@ -83,7 +87,31 @@ public class HomeActivity extends AppCompatActivity implements ItemFragment.OnLi
 
             }
         });
-        toolbar.requestFocus();
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        // 动态设置ToolBar状态
+        switch (mViewPager.getCurrentItem()){
+            case 0:
+                menu.findItem(R.id.action_scan).setVisible(true);
+                menu.findItem(R.id.action_setting).setVisible(false);
+                break;
+            case 1:
+                menu.findItem(R.id.action_scan).setVisible(false);
+                menu.findItem(R.id.action_setting).setVisible(false);
+                break;
+            case 2:
+                menu.findItem(R.id.action_scan).setVisible(false);
+                menu.findItem(R.id.action_setting).setVisible(false);
+                break;
+            case 3:
+                menu.findItem(R.id.action_scan).setVisible(false);
+                menu.findItem(R.id.action_setting).setVisible(true);
+                break;
+
+        }
+        return super.onPrepareOptionsMenu(menu);
     }
 
     @Override
@@ -101,8 +129,15 @@ public class HomeActivity extends AppCompatActivity implements ItemFragment.OnLi
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        switch (id){
+            case R.id.action_scan:
+                break;
+            case R.id.action_setting:
+                //TODO 点击setting跳转到设置界面。
+                Intent toSetting = new Intent(this,SettingsActivity.class);
+                startActivity(toSetting);
+                break;
+
         }
 
         return super.onOptionsItemSelected(item);

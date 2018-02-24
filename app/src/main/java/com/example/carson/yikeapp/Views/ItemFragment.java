@@ -4,27 +4,46 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.carson.yikeapp.Adapter.ChatItemRVAdapter;
 import com.example.carson.yikeapp.Adapter.HomeItemRecyclerViewAdapter;
 import com.example.carson.yikeapp.R;
+import com.example.carson.yikeapp.Utils.ConstantValues;
+import com.example.carson.yikeapp.Utils.HttpUtils;
 import com.example.carson.yikeapp.Views.dummy.ChatItem;
 import com.example.carson.yikeapp.Views.dummy.HomeContent;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.FormBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Response;
 
 /**
  * A fragment representing a list of Items.
@@ -33,6 +52,7 @@ import java.util.ArrayList;
  * interface.
  */
 public class ItemFragment extends Fragment {
+    private static final String TAG = "ItemFragment";
 
     // TODO: Customize parameter argument names
     private static final String ARG_PAGE_POSITION = "page-position";
@@ -44,6 +64,7 @@ public class ItemFragment extends Fragment {
     private static final int TIME = 3000;
     private Handler mHandler = new Handler();
     private int itemPosition = 0;
+    private Handler sendMsg;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -92,6 +113,29 @@ public class ItemFragment extends Fragment {
                 DividerItemDecoration decoration = new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL);
                 rvList.addItemDecoration(decoration);
                 rvList.setHasFixedSize(true);
+                rvList.setFocusable(false);
+
+                //下拉刷新
+                final SwipeRefreshLayout refreshLayout = view.findViewById(R.id.srl_refresh);
+                refreshLayout.setColorSchemeResources(
+                        android.R.color.holo_blue_light,
+                        android.R.color.holo_green_light,
+                        android.R.color.holo_purple,
+                        android.R.color.holo_orange_light
+                );
+                refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+                    @Override
+                    public void onRefresh() {
+                        Toast.makeText(getContext(),"refreshing",Toast.LENGTH_SHORT);
+                        new Handler().postDelayed(new Runnable() {
+
+                            @Override
+                            public void run() {
+                                refreshLayout.setRefreshing(false);
+                            }
+                        }, 1000);
+                    }
+                });
 
                 //headerViewPager
                 final ViewPager header = view.findViewById(R.id.vp_home_header);
@@ -180,7 +224,36 @@ public class ItemFragment extends Fragment {
                 recyclerView.setHasFixedSize(true);
                 return chatPage;
             case 4:
-                view = inflater.inflate(R.layout.fragment_discuss, container, false);
+                view = inflater.inflate(R.layout.fragment_user, container, false);
+                //findview
+                CircleImageView userHead = view.findViewById(R.id.cv_user_head);
+                final TextView userName = view.findViewById(R.id.tv_user_name);
+                TextView userLevel = view.findViewById(R.id.tv_user_level);
+                TextView userXp = view.findViewById(R.id.tv_user_xp);
+                TextView userIntro = view.findViewById(R.id.tv_user_intro);
+                TextView userDiary = view.findViewById(R.id.tv_user_diary);
+                TextView userBalance = view.findViewById(R.id.tv_user_balance);
+                TextView userReserve = view.findViewById(R.id.tv_user_reserve);
+                final TextView userArea = view.findViewById(R.id.tv_user_area_value);
+
+                //向服务器获取用户信息
+                final JSONObject[] userInfo = {new JSONObject()};
+                sendMsg = new Handler(){
+                    @Override
+                    public void handleMessage(Message msg) {
+                        super.handleMessage(msg);
+                        userInfo[0] = (JSONObject) msg.obj;
+                        try {
+                            userName.setText(userInfo[0].getString(ConstantValues.KEY_USER_NAME));
+                            userArea.setText(userInfo[0].getString(ConstantValues.KEY_USER_AREA));
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                };
+                getUserInfo();
+
                 return view;
             default:
                 view = inflater.inflate(R.layout.fragment_discuss, container, false);
@@ -236,6 +309,60 @@ public class ItemFragment extends Fragment {
         public Fragment getItem(int position) {
             return DiscussFragment.newInstance(position + 1);
         }
+    }
+
+    private void getUserInfo(){
+        final String token = ConstantValues.getCachedToken(getContext());
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                OkHttpClient client = null;
+                try {
+                    client = HttpUtils.getUnsafeOkHttpClient();
+                } catch (NoSuchAlgorithmException e) {
+                    e.printStackTrace();
+                } catch (KeyManagementException e) {
+                    e.printStackTrace();
+                }
+                FormBody.Builder builder = new FormBody.Builder();
+                builder.add("token", token);
+                HttpUtils.sendRequest(client, ConstantValues.URL_GET_USER_INFO,
+                        builder, new Callback() {
+                            @Override
+                            public void onFailure(Call call, IOException e) {
+
+                            }
+
+                            @Override
+                            public void onResponse(Call call, Response response) throws IOException {
+                                try {
+                                    JSONObject object = new JSONObject(response
+                                            .body().string());
+                                    int code = object.getInt("code");
+                                    Log.d(TAG,object.toString());
+                                    if (code == 200) {
+                                        JSONObject tempMsg = object.getJSONObject("msg");
+                                        Message message = Message.obtain();
+                                        message.obj = tempMsg;
+                                        sendMsg.sendMessage(message);
+                                    } else {
+                                        final String msg = object.getString("msg");
+                                        getActivity().runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                Toast.makeText(getContext(),
+                                                        msg, Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
+                                    }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        });
+            }
+        }).start();
     }
 
 }

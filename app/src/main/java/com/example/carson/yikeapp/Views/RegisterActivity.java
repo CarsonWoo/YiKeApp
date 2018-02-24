@@ -1,7 +1,6 @@
 package com.example.carson.yikeapp.Views;
 
 import android.content.Intent;
-import android.os.Looper;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -21,7 +20,6 @@ import com.example.carson.yikeapp.R;
 import com.example.carson.yikeapp.Utils.ConstantValues;
 import com.example.carson.yikeapp.Utils.HttpUtils;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -33,8 +31,6 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class RegisterActivity extends AppCompatActivity implements View.OnClickListener,
@@ -122,7 +118,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                         } catch (KeyManagementException e) {
                             e.printStackTrace();
                         }
-                        HttpUtils.sendRequest(client, ConstantValues.PHONE_REQUEST_URL, builder, new Callback() {
+                        HttpUtils.sendRequest(client, ConstantValues.URL_PHONE_REQUEST, builder, new Callback() {
                             @Override
                             public void onFailure(Call call, IOException e) {
                                 Snackbar.make(btnRegis, e.toString(),
@@ -217,7 +213,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                                 } catch (KeyManagementException e) {
                                     e.printStackTrace();
                                 }
-                                HttpUtils.sendRequest(client, ConstantValues.REGISTER_URL, builder1,
+                                HttpUtils.sendRequest(client, ConstantValues.URL_REGISTER, builder1,
                                         new Callback() {
                                             @Override
                                             public void onFailure(Call call, IOException e) {

@@ -7,8 +7,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
@@ -36,7 +34,6 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.PopupWindow;
-import android.widget.Spinner;
 import android.widget.Toast;
 
 
@@ -45,7 +42,6 @@ import com.example.carson.yikeapp.R;
 import com.example.carson.yikeapp.Utils.ConstantValues;
 import com.example.carson.yikeapp.Utils.HttpUtils;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -60,7 +56,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
-import java.util.zip.InflaterOutputStream;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -68,7 +63,6 @@ import okhttp3.FormBody;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
-import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
@@ -218,7 +212,7 @@ public class UserDetailActivity extends AppCompatActivity implements View.OnClic
                 }
                 FormBody.Builder builder = new FormBody.Builder();
                 builder.add("token", token);
-                HttpUtils.sendRequest(client, ConstantValues.GET_INFO_URL, builder,
+                HttpUtils.sendRequest(client, ConstantValues.URL_GET_USER_INFO, builder,
                         new Callback() {
                             @Override
                             public void onFailure(Call call, IOException e) {
@@ -418,7 +412,7 @@ public class UserDetailActivity extends AppCompatActivity implements View.OnClic
                         builder.add("realname", etName.getText().toString());
                         builder.add("gender", etGender.getText().toString());
                         builder.add("area", etArea.getText().toString());
-                        HttpUtils.sendRequest(client, ConstantValues.FILL_USER_INFO_URL,
+                        HttpUtils.sendRequest(client, ConstantValues.URL_FILL_USER_INFO,
                                 builder, new Callback() {
                                     @Override
                                     public void onFailure(Call call, IOException e) {
@@ -607,7 +601,7 @@ public class UserDetailActivity extends AppCompatActivity implements View.OnClic
                             .addFormDataPart("token", token)
                             .addFormDataPart("photo", photoFile.getName(), fileBody)
                             .build();
-                    HttpUtils.sendRequest(client, ConstantValues.CHANGE_ICON_URL, multiBody,
+                    HttpUtils.sendRequest(client, ConstantValues.URL_CHANGE_ICON, multiBody,
                             new Callback() {
                                 @Override
                                 public void onFailure(Call call, IOException e) {
@@ -686,7 +680,7 @@ public class UserDetailActivity extends AppCompatActivity implements View.OnClic
                         .addFormDataPart("photo", photoFile.getName(), fileBody)
                         .build();
 
-                HttpUtils.sendRequest(client, ConstantValues.CHANGE_ICON_URL, multiBody,
+                HttpUtils.sendRequest(client, ConstantValues.URL_CHANGE_ICON, multiBody,
                         new Callback() {
                             @Override
                             public void onFailure(Call call, IOException e) {
