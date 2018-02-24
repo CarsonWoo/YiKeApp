@@ -85,7 +85,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                LoginActivity.this.finish();
+                startActivity(new Intent(LoginActivity.this, StartActivity.class));
             }
         });
     }
@@ -207,21 +207,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                                 finish();
                                             }
                                         }
-                                        //需要传token
-//                                        Log.i("token>>>>>", msg);
-                                        //需要判断身份
-//                                        Intent intent = null;
-//
-//                                        if (id.equals("商家")) {
-//                                            intent = new Intent(LoginActivity.this,
-//                                                    ShopDetailActivity.class);
-//                                        } else if (id.equals("个人")){
-//                                            intent = new Intent(LoginActivity.this,
-//                                                    UserDetailActivity.class);
-//                                        }
-//                                        intent.putExtra("token", msg);
-//                                        startActivity(intent);
-//                                        finish();
                                     }
 
                                 } catch (JSONException e) {

@@ -19,5 +19,9 @@
     <string name="textDemo_3">美国</string>
     <string name="textDemo_4">2017.08.09</string>
     <string name="textDemo_5">2367赞</string>
+    <string name="slogan">SLOGAN</string>
+    <string name="register">Register</string>
+    <string name="login">Login</string>
+    <string name="description_start">img_start_header</string>
 
 </resources>
