@@ -4,4 +4,5 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
     <color name="bg_bnb_loca">#ff6600</color>
+    <color name="accent_material_light">#e26323</color>
 </resources>

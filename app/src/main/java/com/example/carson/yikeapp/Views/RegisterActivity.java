@@ -257,18 +257,6 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                                                 }
                                             }
                                         });
-//                                HttpUtils.sendRequest(client, "https://www.yiluzou.cn/tttt.php",
-//                                        new Callback() {
-//                                            @Override
-//                                            public void onFailure(Call call, IOException e) {
-//
-//                                            }
-//
-//                                            @Override
-//                                            public void onResponse(Call call, Response response) throws IOException {
-//                                                Log.i("test.>>>>>>>>", response.body().string());
-//                                            }
-//                                        });
                             }
                         }).start();
                     }

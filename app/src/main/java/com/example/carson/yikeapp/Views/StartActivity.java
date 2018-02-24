@@ -18,8 +18,8 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
 
-        buttonLogin = (ImageButton) findViewById(R.id.ib_to_login);
-        buttonRegis = (ImageButton) findViewById(R.id.ib_to_regis);
+        buttonLogin = findViewById(R.id.ib_to_login);
+        buttonRegis = findViewById(R.id.ib_to_regis);
 
         buttonRegis.setOnClickListener(this);
         buttonLogin.setOnClickListener(this);

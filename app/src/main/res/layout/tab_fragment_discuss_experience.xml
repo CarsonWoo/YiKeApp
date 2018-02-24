@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/tv_discuss_sort_time"
+            android:textSize="18sp"
+            android:clickable="true"
+            android:gravity="center_horizontal"
+            android:text="按发布时间"
+            android:layout_weight="1"
+            android:layout_width="0sp"
+            android:layout_height="wrap_content" />
+
+        <TextView
+
+            android:id="@+id/tv_discuss_sort_like"
+            android:textSize="18sp"
+            android:clickable="true"
+            android:text="按获赞数"
+            android:gravity="center_horizontal"
+            android:layout_weight="1"
+            android:layout_width="0sp"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_marginTop="10sp"
+        android:background="#7ca69c9c"
+        android:layout_width="match_parent"
+        android:layout_height="1sp"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_discuss_experience"
+        android:layout_marginTop="10sp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </android.support.v7.widget.RecyclerView>
+
+</LinearLayout>

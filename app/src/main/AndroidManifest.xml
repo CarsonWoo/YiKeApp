@@ -32,7 +32,7 @@
                 android:resource="@xml/provider_path" />
         </provider>
         
-        <activity android:name=".Views.StartActivity">
+        <activity android:name=".Views.StartActivity" android:theme="@style/MainTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -49,17 +49,17 @@
         <activity
             android:name=".Views.HomeActivity"
             android:label="@string/title_activity_home"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/MainTheme" />
         <activity
             android:name=".Views.LoginActivity"
             android:theme="@style/LoginActivityTheme" />
         <activity
             android:name=".Views.UserDetailActivity"
             android:label=""
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/MainTheme" />
         <activity
             android:name=".Views.ShopDetailActivity"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/MainTheme"></activity>
     </application>
 
 </manifest>

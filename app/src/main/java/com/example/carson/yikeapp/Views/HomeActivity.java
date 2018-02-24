@@ -63,7 +63,7 @@ public class HomeActivity extends AppCompatActivity implements ItemFragment.OnLi
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
 
         //title
-        TextView title = (TextView) findViewById(R.id.title);
+        TextView title = findViewById(R.id.title);
         title.setText(titles[mViewPager.getCurrentItem()]);
 
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -74,7 +74,7 @@ public class HomeActivity extends AppCompatActivity implements ItemFragment.OnLi
 
             @Override
             public void onPageSelected(int position) {
-                TextView title = (TextView) findViewById(R.id.title);
+                TextView title = findViewById(R.id.title);
                 title.setText(titles[mViewPager.getCurrentItem()]);
             }
 

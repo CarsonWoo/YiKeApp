@@ -16,13 +16,13 @@ import java.util.List;
  * Created by 84594 on 2018/2/22.
  */
 
-public class DiscussRVAdapter extends RecyclerView.Adapter<DiscussRVAdapter.DiscussVH> {
+public class DiscussItemExperienceRVAdapter extends RecyclerView.Adapter<DiscussItemExperienceRVAdapter.DiscussVH> {
 
     private Context context;
     private List<String> titles, contents, dates, likes, tags;
 
-    public DiscussRVAdapter(Context context, List<String> titles, List<String> contents,
-                            List<String> dates, List<String> likes, List<String> tags) {
+    public DiscussItemExperienceRVAdapter(Context context, List<String> titles, List<String> contents,
+                                          List<String> dates, List<String> likes, List<String> tags) {
         this.context = context;
         this.titles = titles;
         this.contents = contents;
@@ -61,7 +61,7 @@ public class DiscussRVAdapter extends RecyclerView.Adapter<DiscussRVAdapter.Disc
 
     class DiscussVH extends RecyclerView.ViewHolder {
 
-        TextView tvTitle, tvContent, tvDate, tvLike;
+        TextView tvTitle, tvContent, tvDate, tvLike, tvCollect;
 
         Button btnTag;
 
@@ -72,8 +72,11 @@ public class DiscussRVAdapter extends RecyclerView.Adapter<DiscussRVAdapter.Disc
             tvContent = itemView.findViewById(R.id.tv_discuss_rv_item_content);
             tvDate = itemView.findViewById(R.id.tv_discuss_rv_item_date);
             tvLike = itemView.findViewById(R.id.tv_discuss_rv_item_likes);
+            tvCollect = itemView.findViewById(R.id.tv_collect);
 
             btnTag = itemView.findViewById(R.id.btn_discuss_rv_item_tag);
+
+
 
         }
     }

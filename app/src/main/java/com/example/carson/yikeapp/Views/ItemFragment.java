@@ -4,7 +4,10 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.DividerItemDecoration;
@@ -83,7 +86,7 @@ public class ItemFragment extends Fragment {
 
                 //rv_homelist
                 Context context = view.getContext();
-                RecyclerView rvList = (RecyclerView) view.findViewById(R.id.rv_homelist);
+                RecyclerView rvList = view.findViewById(R.id.rv_homelist);
                 rvList.setLayoutManager(new LinearLayoutManager(context));
                 rvList.setAdapter(new HomeItemRecyclerViewAdapter(HomeContent.ITEMS, mListener));
                 DividerItemDecoration decoration = new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL);
@@ -159,6 +162,12 @@ public class ItemFragment extends Fragment {
                 return view;
             case 2:
                 view = inflater.inflate(R.layout.fragment_discuss, container, false);
+                DiscussPagerAdapter discussPagerAdapter = new DiscussPagerAdapter(getFragmentManager());
+                ViewPager vp = view.findViewById(R.id.vp_discuss_item);
+                vp.setAdapter(discussPagerAdapter);
+                TabLayout tabLayout = view.findViewById(R.id.tab_layout_discuss);
+                vp.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+                tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(vp));
                 return view;
             case 3:
                 View chatPage = inflater.inflate(R.layout.fragment_communication,container,false);
@@ -210,6 +219,23 @@ public class ItemFragment extends Fragment {
     public interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
         void onListFragmentInteraction(ArrayList item);
+    }
+
+    private class DiscussPagerAdapter extends FragmentPagerAdapter {
+
+        public DiscussPagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public int getCount() {
+            return 4;
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return DiscussFragment.newInstance(position + 1);
+        }
     }
 
 }

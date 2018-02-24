@@ -13,5 +13,11 @@
     <string name="partner">约伴同行</string>
     <string name="question">互助问答</string>
     <string name="diary">义客日记</string>
+    <string name="collect">收藏攻略</string>
+    <string name="textDemo_1">非985、211的本二学生怎样才能尽快提升自己并去英国留学？</string>
+    <string name="textDemo_2">你需要根据你自身的情况才能做进一步的选择和规划。虽然你的学校优势不大，但可以通过gpa</string>
+    <string name="textDemo_3">美国</string>
+    <string name="textDemo_4">2017.08.09</string>
+    <string name="textDemo_5">2367赞</string>
 
 </resources>
