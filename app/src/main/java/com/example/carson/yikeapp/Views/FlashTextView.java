@@ -17,7 +17,11 @@ import com.example.carson.yikeapp.Utils.FontUtils;
  * Created by 84594 on 2018/2/24.
  */
 
+/**
+ * 此类是作为闪现文字，与ShimmerTextView的效果相仿
+ */
 public class FlashTextView extends android.support.v7.widget.AppCompatTextView {
+
     private int mViewWidth = 0;//textview的宽度
 
     private TextPaint mPaint;//画布
