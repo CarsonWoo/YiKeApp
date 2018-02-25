@@ -12,15 +12,15 @@
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appbar"
         android:layout_width="match_parent"
-        android:elevation="0dp"
         android:layout_height="wrap_content"
+        app:elevation="0dp"
         android:theme="@style/AppTheme.AppBarOverlay">
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar_home"
-            android:elevation="0dp"
             android:layout_width="match_parent"
-            android:background="@android:color/white"
+            app:title=" "
+            android:theme="@style/AppTheme.AppBarOverlay"
             android:layout_height="?attr/actionBarSize">
 
             <TextView
@@ -29,7 +29,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:textColor="@android:color/black"
-                android:textSize="25sp"/>
+                android:textSize="25sp" />
 
         </android.support.v7.widget.Toolbar>
 
@@ -44,37 +44,39 @@
 
     <android.support.design.widget.TabLayout
         android:id="@+id/tabs"
+        app:tabIndicatorHeight="0dp"
+        app:tabTextColor="@android:color/black"
+        app:tabSelectedTextColor="@color/bg_bnb_loca"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:tabSelectedTextColor="#e26323"
         app:tabGravity="fill">
 
         <android.support.design.widget.TabItem
             android:id="@+id/tabItem"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:icon="@drawable/ic_home_page"
+            android:icon="@drawable/tab_home_selector"
             android:text="@string/tab_home" />
 
         <android.support.design.widget.TabItem
             android:id="@+id/tabItem2"
+            android:icon="@drawable/tab_discuss_selector"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:icon="@drawable/ic_globe_un"
             android:text="@string/tab_community" />
 
         <android.support.design.widget.TabItem
             android:id="@+id/tabItem3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:icon="@drawable/ic_message_square_un"
+            android:icon="@drawable/tab_message_selector"
             android:text="@string/tab_notifications" />
 
         <android.support.design.widget.TabItem
             android:id="@+id/tabItem4"
-            android:icon="@drawable/ic_user_un"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:icon="@drawable/tab_user_selector"
             android:text="@string/tab_user" />
 
     </android.support.design.widget.TabLayout>

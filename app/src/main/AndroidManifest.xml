@@ -49,7 +49,6 @@
             android:theme="@style/register_toolbar_theme" />
         <activity
             android:name=".Views.HomeActivity"
-            android:label="@string/title_activity_home"
             android:theme="@style/MainTheme" />
         <activity
             android:name=".Views.LoginActivity"
@@ -61,7 +60,8 @@
         <activity
             android:name=".Views.ShopDetailActivity"
             android:theme="@style/MainTheme" />
-        <activity android:name=".Views.SettingActivity"></activity>
+        <activity android:name=".Views.SettingActivity"
+            android:label="设置"></activity>
     </application>
 
 </manifest>

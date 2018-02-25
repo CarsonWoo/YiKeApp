@@ -4,6 +4,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.carson.yikeapp.R;
@@ -40,8 +41,11 @@ public class HomeItemRecyclerViewAdapter extends RecyclerView.Adapter<HomeItemRe
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-        holder.mIdView.setText(mValues.get(position).id);
-        holder.mContentView.setText(mValues.get(position).host);
+        holder.bnbName.setText(mValues.get(position).name);
+        holder.bnbHost.setText(mValues.get(position).host);
+        holder.bnbTime.setText(mValues.get(position).time);
+        holder.bnbDura.setText(mValues.get(position).duration);
+        holder.bnbLoca.setText(mValues.get(position).loca);
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -64,20 +68,26 @@ public class HomeItemRecyclerViewAdapter extends RecyclerView.Adapter<HomeItemRe
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
-        public final TextView mIdView;
-        public final TextView mContentView;
+        public final TextView bnbName;
+        public final TextView bnbHost;
+        public final TextView bnbTime;
+        public final TextView bnbDura;
+        public final Button bnbLoca;
         public BNBHomeItem mItem;
 
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            mIdView = view.findViewById(R.id.bnb_name);
-            mContentView = view.findViewById(R.id.bnb_host);
+            bnbName = view.findViewById(R.id.bnb_name);
+            bnbHost = view.findViewById(R.id.bnb_host);
+            bnbTime = view.findViewById(R.id.bnb_time);
+            bnbDura = view.findViewById(R.id.bnb_duration);
+            bnbLoca = view.findViewById(R.id.bnb_location);
         }
 
         @Override
         public String toString() {
-            return super.toString() + " '" + mContentView.getText() + "'";
+            return super.toString() + " '" + bnbHost.getText() + "'";
         }
     }
 }

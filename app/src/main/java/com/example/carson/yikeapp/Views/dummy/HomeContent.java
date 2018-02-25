@@ -40,7 +40,8 @@ public class HomeContent {
 
     private static BNBHomeItem createBNBHomeItem(int position) {
         //TODO:返回一个新的item
-        return new BNBHomeItem(String.valueOf(position), "Item " + position, makeDetails(position),null,null);
+        return new BNBHomeItem(String.valueOf(position), "大理梦飞扬客栈","张晓明-"+String.valueOf(position),
+                "7-8月","时长一个月","云南");
     }
 
     private static String makeDetails(int position) {
@@ -64,11 +65,11 @@ public class HomeContent {
         public final String loca;
 
         //TODO：设置传入值-id-name-host-time-duration
-        public BNBHomeItem(String id, String content, String details,String duration,String loca) {
+        public BNBHomeItem(String id,String name, String host, String time,String duration,String loca) {
             this.id = id;
-            this.name = id;
-            this.host = content;
-            this.time = details;
+            this.name = name;
+            this.host = host;
+            this.time = time;
             this.duration = duration;
             this.loca = loca;
         }

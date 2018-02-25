@@ -5,7 +5,6 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.design.widget.TabItem;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -24,7 +23,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.example.carson.yikeapp.Adapter.ChatItemRVAdapter;
 import com.example.carson.yikeapp.Adapter.HomeItemRecyclerViewAdapter;
 import com.example.carson.yikeapp.R;
@@ -314,6 +312,61 @@ public class ItemFragment extends Fragment {
         }
     }
 
+    //首页店家列表获取
+    private void getHomeBNBList(){
+        final String token = ConstantValues.getCachedToken(getContext());
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                OkHttpClient client = null;
+                try {
+                    client = HttpUtils.getUnsafeOkHttpClient();
+                } catch (NoSuchAlgorithmException e) {
+                    e.printStackTrace();
+                } catch (KeyManagementException e) {
+                    e.printStackTrace();
+                }
+                FormBody.Builder builder = new FormBody.Builder();
+                //TODO 设置HomeBNBList传递参数
+                builder.add("token", token);
+                //TODO 设置HomeBNBList接口链接。
+                HttpUtils.sendRequest(client, ConstantValues.URL_GET_USER_INFO,
+                        builder, new Callback() {
+                            @Override
+                            public void onFailure(Call call, IOException e) {
+
+                            }
+
+                            @Override
+                            public void onResponse(Call call, Response response) throws IOException {
+                                try {
+                                    JSONObject object = new JSONObject(response
+                                            .body().string());
+                                    int code = object.getInt("code");
+                                    Log.d(TAG,object.toString());
+                                    if (code == 200) {
+                                        //TODO 正常返回首页店家HomeBNBList，处理返回信息
+                                    } else {
+                                        final String msg = object.getString("msg");
+                                        getActivity().runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                Toast.makeText(getContext(),
+                                                        msg, Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
+                                    }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        });
+            }
+        }).start();
+    }
+
+    //“我的”界面信息获取
     private void getUserInfo(){
         final String token = ConstantValues.getCachedToken(getContext());
 

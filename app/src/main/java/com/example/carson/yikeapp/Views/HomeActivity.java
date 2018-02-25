@@ -3,6 +3,7 @@ package com.example.carson.yikeapp.Views;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
+import android.support.design.widget.TabLayout.TabLayoutOnPageChangeListener;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -23,7 +24,7 @@ import com.example.carson.yikeapp.Views.dummy.HomeContent;
 
 import java.util.ArrayList;
 
-public class HomeActivity extends AppCompatActivity implements ItemFragment.OnListFragmentInteractionListener {
+public class HomeActivity extends AppCompatActivity implements ItemFragment.OnListFragmentInteractionListener{
 
     private final static String TAG = "HomeActivity";
 
@@ -68,7 +69,8 @@ public class HomeActivity extends AppCompatActivity implements ItemFragment.OnLi
 
         tabLayout = findViewById(R.id.tabs);
 
-        mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+        mViewPager.addOnPageChangeListener(new TabLayoutOnPageChangeListener(tabLayout));
+        mViewPager.setOffscreenPageLimit(1);
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
 
 
