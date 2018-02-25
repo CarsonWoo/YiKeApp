@@ -46,32 +46,33 @@
         android:id="@+id/tabs"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:tabSelectedTextColor="#e26323"
         app:tabGravity="fill">
 
         <android.support.design.widget.TabItem
             android:id="@+id/tabItem"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:icon="@drawable/ic_home_black_24dp"
+            android:icon="@drawable/ic_home_page"
             android:text="@string/tab_home" />
 
         <android.support.design.widget.TabItem
             android:id="@+id/tabItem2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:icon="@drawable/ic_dashboard_black_24dp"
+            android:icon="@drawable/ic_globe_un"
             android:text="@string/tab_community" />
 
         <android.support.design.widget.TabItem
             android:id="@+id/tabItem3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:icon="@drawable/ic_notifications_black_24dp"
+            android:icon="@drawable/ic_message_square_un"
             android:text="@string/tab_notifications" />
 
         <android.support.design.widget.TabItem
             android:id="@+id/tabItem4"
-
+            android:icon="@drawable/ic_user_un"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/tab_user" />

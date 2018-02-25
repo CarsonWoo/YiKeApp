@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.carson.yikeapp.Adapter.DiscussItemExperienceRVAdapter;
+import com.example.carson.yikeapp.Adapter.DiscussItemPartnerRVAdapter;
 import com.example.carson.yikeapp.R;
 
 import java.util.ArrayList;
@@ -86,16 +87,16 @@ public class DiscussFragment extends Fragment {
                     tags.add("中国");
                 }
 
-                RecyclerView recyclerView = view.findViewById(R.id.rv_discuss_experience);
-                recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext(),
+                RecyclerView rvExp = view.findViewById(R.id.rv_discuss_experience);
+                rvExp.setLayoutManager(new LinearLayoutManager(view.getContext(),
                         LinearLayoutManager.VERTICAL, false));
                 final DiscussItemExperienceRVAdapter adapter =
                         new DiscussItemExperienceRVAdapter(view.getContext(), titles, contents,
                                 dates, likes, tags);
-                recyclerView.setAdapter(adapter);
-                recyclerView.addItemDecoration(new DividerItemDecoration(view.getContext(),
+                rvExp.setAdapter(adapter);
+                rvExp.addItemDecoration(new DividerItemDecoration(view.getContext(),
                         DividerItemDecoration.VERTICAL));
-                recyclerView.setHasFixedSize(true);
+                rvExp.setHasFixedSize(true);
 
                 final TextView tvSortByTime = view.findViewById(R.id.tv_discuss_sort_time);
                 final TextView tvSortByLike = view.findViewById(R.id.tv_discuss_sort_like);
@@ -132,6 +133,26 @@ public class DiscussFragment extends Fragment {
             case 2:
                 view = inflater.inflate(R.layout.tab_fragment_discuss_partner, container,
                         false);
+                RecyclerView rvPartner = view.findViewById(R.id.rv_discuss_partner);
+                List<String> names = new ArrayList<>();
+                List<String> comments = new ArrayList<>();
+                List<String> views = new ArrayList<>();
+                List<String> replies = new ArrayList<>();
+
+                for (int i = 1; i < 10; i++) {
+                    names.add("username" + i);
+                    comments.add("comment" + i);
+                    views.add(i * 10 + "浏览");
+                    replies.add(i + "回复");
+                }
+
+                DiscussItemPartnerRVAdapter partnerRVAdapter = new
+                        DiscussItemPartnerRVAdapter(names, comments, views, replies);
+                rvPartner.setAdapter(partnerRVAdapter);
+                rvPartner.setLayoutManager(new LinearLayoutManager(view.getContext(),
+                        LinearLayoutManager.VERTICAL, false));
+                rvPartner.setHasFixedSize(true);
+
                 return view;
             case 3:
                 view = inflater.inflate(R.layout.tab_fragment_discuss_question, container,

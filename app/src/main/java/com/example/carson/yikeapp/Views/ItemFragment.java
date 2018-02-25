@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.design.widget.TabItem;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -23,6 +24,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.carson.yikeapp.Adapter.ChatItemRVAdapter;
 import com.example.carson.yikeapp.Adapter.HomeItemRecyclerViewAdapter;
 import com.example.carson.yikeapp.R;
@@ -98,7 +100,6 @@ public class ItemFragment extends Fragment {
         Bundle args = getArguments();
         int pagerPos = args.getInt(ARG_PAGE_POSITION);
         View view;
-
         switch (pagerPos) {
             case 1:
                 //PagerHome
@@ -114,6 +115,7 @@ public class ItemFragment extends Fragment {
                 rvList.addItemDecoration(decoration);
                 rvList.setHasFixedSize(true);
                 rvList.setFocusable(false);
+
 
                 //下拉刷新
                 final SwipeRefreshLayout refreshLayout = view.findViewById(R.id.srl_refresh);
@@ -206,7 +208,7 @@ public class ItemFragment extends Fragment {
                 return view;
             case 2:
                 view = inflater.inflate(R.layout.fragment_discuss, container, false);
-                DiscussPagerAdapter discussPagerAdapter = new DiscussPagerAdapter(getFragmentManager());
+                DiscussPagerAdapter discussPagerAdapter = new DiscussPagerAdapter(getChildFragmentManager());
                 ViewPager vp = view.findViewById(R.id.vp_discuss_item);
                 vp.setAdapter(discussPagerAdapter);
                 TabLayout tabLayout = view.findViewById(R.id.tab_layout_discuss);
@@ -219,14 +221,15 @@ public class ItemFragment extends Fragment {
                 RecyclerView recyclerView = (RecyclerView) chatPage;
                 recyclerView.setLayoutManager(new LinearLayoutManager(chatContext));
                 recyclerView.setAdapter(new ChatItemRVAdapter(ChatItem.ITEMS, mListener));
-                DividerItemDecoration chatDecoration = new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL);
+                DividerItemDecoration chatDecoration = new DividerItemDecoration(getContext(),
+                        DividerItemDecoration.VERTICAL);
                 recyclerView.addItemDecoration(chatDecoration);
                 recyclerView.setHasFixedSize(true);
                 return chatPage;
             case 4:
                 view = inflater.inflate(R.layout.fragment_user, container, false);
                 //findview
-                CircleImageView userHead = view.findViewById(R.id.cv_user_head);
+                final CircleImageView userHead = view.findViewById(R.id.cv_user_head);
                 final TextView userName = view.findViewById(R.id.tv_user_name);
                 TextView userLevel = view.findViewById(R.id.tv_user_level);
                 TextView userXp = view.findViewById(R.id.tv_user_xp);

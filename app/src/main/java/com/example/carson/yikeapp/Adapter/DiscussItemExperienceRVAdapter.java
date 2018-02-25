@@ -34,7 +34,7 @@ public class DiscussItemExperienceRVAdapter extends RecyclerView.Adapter<Discuss
     @Override
     public DiscussVH onCreateViewHolder(ViewGroup parent, int viewType) {
         DiscussVH vh = new DiscussVH(LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.discuss_rv_item, parent, false));
+                .inflate(R.layout.discuss_rv_item_experience, parent, false));
         return vh;
     }
 
@@ -68,13 +68,13 @@ public class DiscussItemExperienceRVAdapter extends RecyclerView.Adapter<Discuss
         public DiscussVH(View itemView) {
             super(itemView);
 
-            tvTitle = itemView.findViewById(R.id.tv_discuss_rv_item_title);
-            tvContent = itemView.findViewById(R.id.tv_discuss_rv_item_content);
-            tvDate = itemView.findViewById(R.id.tv_discuss_rv_item_date);
-            tvLike = itemView.findViewById(R.id.tv_discuss_rv_item_likes);
-            tvCollect = itemView.findViewById(R.id.tv_collect);
+            tvTitle = itemView.findViewById(R.id.tv_discuss_rv_item_ex_title);
+            tvContent = itemView.findViewById(R.id.tv_discuss_rv_item_ex_content);
+            tvDate = itemView.findViewById(R.id.tv_discuss_rv_item_ex_date);
+            tvLike = itemView.findViewById(R.id.tv_discuss_rv_item_ex_likes);
+            tvCollect = itemView.findViewById(R.id.tv_discuss_rv_item_ex_collect);
 
-            btnTag = itemView.findViewById(R.id.btn_discuss_rv_item_tag);
+            btnTag = itemView.findViewById(R.id.btn_discuss_rv_item_ex_tag);
 
 
 

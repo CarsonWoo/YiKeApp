@@ -27,6 +27,12 @@ public class HomeActivity extends AppCompatActivity implements ItemFragment.OnLi
 
     private final static String TAG = "HomeActivity";
 
+    private TabLayout tabLayout;
+
+    private int[] iconList = {R.drawable.ic_home_page, R.drawable.ic_globe, R.drawable.ic_message_square,
+            R.drawable.ic_user, R.drawable.ic_home_un, R.drawable.ic_globe_un, R.drawable.ic_message_square_un,
+            R.drawable.ic_user_un};
+
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
      * fragments for each of the sections. We use a
@@ -42,7 +48,7 @@ public class HomeActivity extends AppCompatActivity implements ItemFragment.OnLi
      */
     private ViewPager mViewPager;
 
-    private String[] titles = new String[]{"义客", "交流", "消息", ""};
+    private String[] titles = new String[]{"义客", "交流", "消息", "我的"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,10 +66,11 @@ public class HomeActivity extends AppCompatActivity implements ItemFragment.OnLi
         mViewPager = findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
-        TabLayout tabLayout = findViewById(R.id.tabs);
+        tabLayout = findViewById(R.id.tabs);
 
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
+
 
         //title
         TextView title = findViewById(R.id.title);
@@ -81,6 +88,23 @@ public class HomeActivity extends AppCompatActivity implements ItemFragment.OnLi
                 title.setText(titles[mViewPager.getCurrentItem()]);
                 invalidateOptionsMenu();
                 ActionBar actionBar = getSupportActionBar();
+                switch (mViewPager.getCurrentItem()) {
+                    case 0:
+                        setTabChange(0, 1, 2, 3);
+                        break;
+                    case 1:
+                        setTabChange(1, 0 , 2, 3);
+                        break;
+                    case 2:
+                        setTabChange(2, 0, 1,3);
+                        break;
+                    case 3:
+                        setTabChange(3,0,1,2);
+                        break;
+                    default:
+                        setTabChange(0,1,2,3);
+                        break;
+                }
             }
 
             @Override
@@ -88,6 +112,13 @@ public class HomeActivity extends AppCompatActivity implements ItemFragment.OnLi
 
             }
         });
+    }
+
+    private void setTabChange(int mainTab, int subTab1, int subTab2, int subTab3) {
+        tabLayout.getTabAt(mainTab).setIcon(iconList[mainTab]);
+        tabLayout.getTabAt(subTab1).setIcon(iconList[subTab1 + 4]);
+        tabLayout.getTabAt(subTab2).setIcon(iconList[subTab2 + 4]);
+        tabLayout.getTabAt(subTab3).setIcon(iconList[subTab3 + 4]);
     }
 
     @Override

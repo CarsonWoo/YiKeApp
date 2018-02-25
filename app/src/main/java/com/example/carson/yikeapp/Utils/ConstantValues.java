@@ -62,14 +62,14 @@ public class ConstantValues {
     public static void cachToken(Context context,String token){
         SharedPreferences.Editor editor = context.getSharedPreferences(APP_ID,Context.MODE_PRIVATE).edit();
         editor.putString(KEY_TOKEN,token);
-        editor.commit();
+        editor.apply();
     }
 
     //清除token（退出登录用）
     public static void removeToken(Context context){
         SharedPreferences.Editor editor = context.getSharedPreferences(APP_ID,Context.MODE_PRIVATE).edit();
         editor.remove(KEY_TOKEN);
-        editor.commit();
+        editor.apply();
     }
 
 }
