@@ -90,23 +90,23 @@ public class HomeActivity extends AppCompatActivity implements ItemFragment.OnLi
                 title.setText(titles[mViewPager.getCurrentItem()]);
                 invalidateOptionsMenu();
                 ActionBar actionBar = getSupportActionBar();
-                switch (mViewPager.getCurrentItem()) {
-                    case 0:
-                        setTabChange(0, 1, 2, 3);
-                        break;
-                    case 1:
-                        setTabChange(1, 0 , 2, 3);
-                        break;
-                    case 2:
-                        setTabChange(2, 0, 1,3);
-                        break;
-                    case 3:
-                        setTabChange(3,0,1,2);
-                        break;
-                    default:
-                        setTabChange(0,1,2,3);
-                        break;
-                }
+//                switch (mViewPager.getCurrentItem()) {
+//                    case 0:
+//                        setTabChange(0, 1, 2, 3);
+//                        break;
+//                    case 1:
+//                        setTabChange(1, 0 , 2, 3);
+//                        break;
+//                    case 2:
+//                        setTabChange(2, 0, 1,3);
+//                        break;
+//                    case 3:
+//                        setTabChange(3,0,1,2);
+//                        break;
+//                    default:
+//                        setTabChange(0,1,2,3);
+//                        break;
+//                }
             }
 
             @Override
@@ -115,13 +115,13 @@ public class HomeActivity extends AppCompatActivity implements ItemFragment.OnLi
             }
         });
     }
-
-    private void setTabChange(int mainTab, int subTab1, int subTab2, int subTab3) {
-        tabLayout.getTabAt(mainTab).setIcon(iconList[mainTab]);
-        tabLayout.getTabAt(subTab1).setIcon(iconList[subTab1 + 4]);
-        tabLayout.getTabAt(subTab2).setIcon(iconList[subTab2 + 4]);
-        tabLayout.getTabAt(subTab3).setIcon(iconList[subTab3 + 4]);
-    }
+//
+//    private void setTabChange(int mainTab, int subTab1, int subTab2, int subTab3) {
+//        tabLayout.getTabAt(mainTab).setIcon(iconList[mainTab]);
+//        tabLayout.getTabAt(subTab1).setIcon(iconList[subTab1 + 4]);
+//        tabLayout.getTabAt(subTab2).setIcon(iconList[subTab2 + 4]);
+//        tabLayout.getTabAt(subTab3).setIcon(iconList[subTab3 + 4]);
+//    }
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
