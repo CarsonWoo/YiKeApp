@@ -25,10 +25,10 @@ import com.example.carson.yikeapp.Views.dummy.HomeContent;
 
 import java.util.ArrayList;
 
-public class HomeActivity extends AppCompatActivity implements ItemFragment.OnListFragmentInteractionListener,
-                                                                FragmentHome.OnFragmentInteractionListener,
-                                                                FragmentMessage.OnFragmentInteractionListener,
-                                                                FragmentUser.OnFragmentInteractionListener{
+public class HomeActivity extends AppCompatActivity implements FragmentHome.OnFragmentInteractionListener,
+                                                               FragmentMessage.OnFragmentInteractionListener,
+                                                               FragmentUser.OnFragmentInteractionListener,
+                                                               FragmentDiscuss.OnFragmentInteractionListener {
 
     private final static String TAG = "HomeActivity";
 
@@ -170,11 +170,6 @@ public class HomeActivity extends AppCompatActivity implements ItemFragment.OnLi
     }
 
     @Override
-    public void onListFragmentInteraction(ArrayList item) {
-
-    }
-
-    @Override
     public void onFragmentInteraction(ArrayList item) {
         switch (mViewPager.getCurrentItem()){
             case 0:
@@ -188,6 +183,7 @@ public class HomeActivity extends AppCompatActivity implements ItemFragment.OnLi
                 overridePendingTransition(R.anim.ani_right_get_into, R.anim.ani_left_sign_out);
                 break;
             case 1:
+
                 break;
             case 2:
                 //TODO 点击了一个ChatFragment中RecycleView 的item
@@ -203,6 +199,19 @@ public class HomeActivity extends AppCompatActivity implements ItemFragment.OnLi
     @Override
     public void onFragmentInteraction(Uri uri) {
 
+    }
+
+    @Override
+    public void onFragmentInteraction() {
+
+    }
+
+    @Override
+    public void onAttachFragment(Fragment fragment) {
+        super.onAttachFragment(fragment);
+        if (fragment instanceof FragmentDiscuss) {
+            Toast.makeText(this, "onAttachFragmentDiscuss", Toast.LENGTH_SHORT).show();
+        }
     }
 
     /**
@@ -223,13 +232,13 @@ public class HomeActivity extends AppCompatActivity implements ItemFragment.OnLi
                 case 0:
                     return FragmentHome.newInstance();
                 case 1:
-                    return ItemFragment.newInstance(position + 1);
+                    return FragmentDiscuss.newInstance(position + 1);
                 case 2:
                     return FragmentMessage.newInstance();
                 case 3:
                    return FragmentUser.newInstance();
                 default:
-                    return ItemFragment.newInstance(position + 1);
+                    return FragmentHome.newInstance();
             }
         }
 

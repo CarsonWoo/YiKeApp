@@ -1,6 +1,7 @@
 package com.example.carson.yikeapp.Adapter;
 
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,6 +51,7 @@ public class ChatItemRVAdapter extends RecyclerView.Adapter<ChatItemRVAdapter.Vi
                 if (null != mListener) {
                     // Notify the active callbacks interface (the activity, if the
                     // fragment is attached to one) that an item has been selected.
+                    Log.i("ChatItemRVAdapter", "listener not null");
                     itemSelected.clear();
                     itemSelected.add(holder.item);
                     mListener.onFragmentInteraction(itemSelected);
@@ -74,10 +76,10 @@ public class ChatItemRVAdapter extends RecyclerView.Adapter<ChatItemRVAdapter.Vi
         public ViewHolder(View itemView) {
             super(itemView);
             this.itemView = itemView;
-            ivHead = (ImageView) itemView.findViewById(R.id.iv_head);
-            tvName = (TextView) itemView.findViewById(R.id.tv_name);
-            tvLatestTime = (TextView) itemView.findViewById(R.id.tv_latest_time);
-            tvLatestMsg = (TextView) itemView.findViewById(R.id.tv_latest_msg);
+            ivHead = itemView.findViewById(R.id.iv_head);
+            tvName = itemView.findViewById(R.id.tv_name);
+            tvLatestTime = itemView.findViewById(R.id.tv_latest_time);
+            tvLatestMsg = itemView.findViewById(R.id.tv_latest_msg);
         }
     }
 }

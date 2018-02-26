@@ -146,6 +146,8 @@ public class ChangePasswordActivity extends AppCompatActivity implements View.On
                                                     runOnUiThread(new Runnable() {
                                                         @Override
                                                         public void run() {
+                                                            ConstantValues.cachPsw(ChangePasswordActivity.this,
+                                                                    etPwd.getText().toString());
                                                             Toast.makeText(getApplicationContext(), msg,
                                                                     Toast.LENGTH_SHORT).show();
                                                         }

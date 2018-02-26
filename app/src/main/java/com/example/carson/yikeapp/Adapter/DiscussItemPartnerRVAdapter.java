@@ -9,7 +9,10 @@ import android.widget.TextView;
 
 import com.example.carson.yikeapp.R;
 import com.example.carson.yikeapp.Views.ArchRivalTextView;
+import com.example.carson.yikeapp.Views.FragmentPartner;
+import com.example.carson.yikeapp.Views.dummy.PartnerItem;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -20,24 +23,25 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class DiscussItemPartnerRVAdapter extends RecyclerView.Adapter<DiscussItemPartnerRVAdapter.PartnerVH> {
 
-    private List<String> names, comments, views, replies;
+    private final List<PartnerItem.PartItem> mValues;
+    private final FragmentPartner.OnFragmentInteractionListener mListener;
+    private final ArrayList<PartnerItem.PartItem> itemSelected = new ArrayList<>();
 
-    public DiscussItemPartnerRVAdapter(List<String> names, List<String> comments,
-                                          List<String> views, List<String> replies) {
-        this.names = names;
-        this.comments = comments;
-        this.views = views;
-        this.replies = replies;
+    public DiscussItemPartnerRVAdapter(List<PartnerItem.PartItem> items,
+                                       FragmentPartner.OnFragmentInteractionListener listener) {
+        this.mValues = items;
+        this.mListener = listener;
     }
 
     class PartnerVH extends RecyclerView.ViewHolder {
-
+        View itemView;
         CircleImageView headView;
         ArchRivalTextView tvName;
         TextView tvComment;
         TextView tvView;
         TextView tvReply;
         ImageView ivLike;
+        public PartnerItem.PartItem item;
 
         public PartnerVH(View itemView) {
             super(itemView);
@@ -47,7 +51,7 @@ public class DiscussItemPartnerRVAdapter extends RecyclerView.Adapter<DiscussIte
             tvView = itemView.findViewById(R.id.tv_discuss_rv_item_part_view);
             tvReply = itemView.findViewById(R.id.tv_discuss_rv_item_part_reply);
             ivLike = itemView.findViewById(R.id.iv_discuss_rv_item_like);
-
+            this.itemView = itemView;
         }
     }
 
@@ -61,15 +65,24 @@ public class DiscussItemPartnerRVAdapter extends RecyclerView.Adapter<DiscussIte
 
     @Override
     public void onBindViewHolder(final PartnerVH holder, int position) {
-        String name = names.get(position);
-        String comment = comments.get(position);
-        String view = views.get(position);
-        String reply = replies.get(position);
+        holder.item = mValues.get(position);
+        holder.tvName.setText(mValues.get(position).name);
+        holder.tvComment.setText(mValues.get(position).comment);
+        holder.tvView.setText(mValues.get(position).viewNum + "浏览");
+        holder.tvReply.setText(mValues.get(position).replyNum + "回复");
 
-        holder.tvName.setText(name);
-        holder.tvComment.setText(comment);
-        holder.tvView.setText(view);
-        holder.tvReply.setText(reply);
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (null != mListener) {
+                    // Notify the active callbacks interface (the activity, if the
+                    // fragment is attached to one) that an item has been selected.
+                    itemSelected.clear();
+                    itemSelected.add(holder.item);
+                    mListener.onFragmentInteraction(itemSelected);
+                }
+            }
+        });
 
         holder.ivLike.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -83,6 +96,6 @@ public class DiscussItemPartnerRVAdapter extends RecyclerView.Adapter<DiscussIte
 
     @Override
     public int getItemCount() {
-        return names.size();
+        return mValues.size();
     }
 }
