@@ -32,14 +32,6 @@ import okhttp3.OkHttpClient;
 import okhttp3.Response;
 
 public class StoreDetailActivity extends AppCompatActivity{
-    /**
-     * 当前Activity的DecorView
-     */
-    private View mDecorView;
-    /**
-     * 屏幕宽度
-     */
-    private static float mScreenW = -1;
 
     //普通控件
     private TextView title, headerStoreTime, headerStoreDura, headerStorePeoLimit,

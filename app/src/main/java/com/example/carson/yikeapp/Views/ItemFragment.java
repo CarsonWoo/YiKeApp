@@ -26,9 +26,9 @@ public class ItemFragment extends Fragment {
 
     private static final String TAG = "ItemFragment";
 
-    // TODO: Customize parameter argument names
+    // Customize parameter argument names
     private static final String ARG_PAGE_POSITION = "page-position";
-    // TODO: Customize parameters
+    //  Customize parameters
     private int mPagerPos = 1;
     private OnListFragmentInteractionListener mListener;
 
@@ -40,7 +40,7 @@ public class ItemFragment extends Fragment {
     public ItemFragment() {
     }
 
-    // TODO: Customize parameter initialization
+    // Customize parameter initialization
     @SuppressWarnings("unused")
     public static ItemFragment newInstance(int pagerPos) {
         ItemFragment fragment = new ItemFragment();
@@ -117,7 +117,7 @@ public class ItemFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnListFragmentInteractionListener {
-        // TODO: Update argument type and name
+        //Update argument type and name
         void onListFragmentInteraction(ArrayList item);
     }
 

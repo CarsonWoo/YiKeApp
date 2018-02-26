@@ -48,12 +48,12 @@ import okhttp3.Response;
  * create an instance of this fragment.
  */
 public class FragmentHome extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
+    //Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
+    //Rename and change types of parameters
 //    private String mParam1;
 //    private String mParam2;
 
@@ -79,7 +79,7 @@ public class FragmentHome extends Fragment {
 
      * @return A new instance of fragment FragmentHome.
      */
-    // TODO: Rename and change types and number of parameters
+    //Rename and change types and number of parameters
     public static FragmentHome newInstance() {
         FragmentHome fragment = new FragmentHome();
 //        Bundle args = new Bundle();
@@ -162,26 +162,22 @@ public class FragmentHome extends Fragment {
 
             @Override
             public boolean isViewFromObject(View arg0, Object arg1) {
-                // TODO Auto-generated method stub
                 return arg0 == arg1;
             }
 
             @Override
             public int getCount() {
-                // TODO Auto-generated method stub
                 return finalViewList.size();
             }
 
             @Override
             public void destroyItem(ViewGroup container, int position,
                                     Object object) {
-                // TODO Auto-generated method stub
                 container.removeView(finalViewList.get(position));
             }
 
             @Override
             public Object instantiateItem(ViewGroup container, int position) {
-                // TODO Auto-generated method stub
                 container.addView(finalViewList.get(position));
 
 
@@ -264,7 +260,7 @@ public class FragmentHome extends Fragment {
         }).start();
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
+    // Rename method, update argument and hook method into UI event
 //    public void onButtonPressed(Uri uri) {
 //        if (mListener != null) {
 //            mListener.onFragmentInteraction(uri);
@@ -299,7 +295,7 @@ public class FragmentHome extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
+        //Update argument type and name
         void onFragmentInteraction(ArrayList item);
     }
 }

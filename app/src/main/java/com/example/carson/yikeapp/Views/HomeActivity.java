@@ -190,7 +190,7 @@ public class HomeActivity extends AppCompatActivity implements ItemFragment.OnLi
             case 1:
                 break;
             case 2:
-                //TODO 点击了一个recycleview 的item
+                //TODO 点击了一个ChatFragment中RecycleView 的item
                 Toast.makeText(this, "Item " + ((ChatItem.ChatWinItem) (item.get(0))).name + " clicked.", Toast.LENGTH_SHORT).show();
                 break;
             case 3:

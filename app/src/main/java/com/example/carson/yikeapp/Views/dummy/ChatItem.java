@@ -24,7 +24,7 @@ public class ChatItem {
     private static final int COUNT = 25;
 
     static {
-        //TODO 测试创建items
+        //测试创建items
         // Add some sample items.
         for (int i = 1; i <= COUNT; i++) {
             addItem(createChatWinItem(i));
@@ -37,7 +37,7 @@ public class ChatItem {
     }
 
     private static ChatWinItem createChatWinItem(int position) {
-        //TODO:返回一个新的item
+        //返回一个新的item
         return new ChatWinItem(String.valueOf(position), "Item " + position, "15:15",makeDetails(position));
     }
 
@@ -57,7 +57,7 @@ public class ChatItem {
         public final String latestTime;
         public final String latestMsg;
 
-        //TODO：设置传入值
+        //设置传入值
         public ChatWinItem(String id, String name, String latestTime,String latestMsg) {
             this.id = id;
             this.name = name;
@@ -67,7 +67,7 @@ public class ChatItem {
 
         @Override
         public String toString() {
-            //TODO: 设置tostring
+            //设置tostring
             return name+latestTime+latestMsg;
         }
     }

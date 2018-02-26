@@ -43,8 +43,4 @@
     <string name="store_other">其他:</string>
     <string name="store_more_info">青旅更多信息:</string>
     <string name="store_time_with_colon">青旅旅行时间:</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-
 </resources>

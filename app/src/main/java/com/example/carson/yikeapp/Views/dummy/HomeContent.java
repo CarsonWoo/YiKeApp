@@ -9,7 +9,6 @@ import java.util.Map;
  * Helper class for providing sample content for ic_user interfaces created by
  * Android template wizards.
  * <p>
- * TODO: Replace all uses of this class before publishing your app.
  */
 public class HomeContent {
 
@@ -26,7 +25,7 @@ public class HomeContent {
     private static final int COUNT = 25;
 
     static {
-        //TODO 测试创建items
+        //测试创建items
         // Add some sample items.
         for (int i = 1; i <= COUNT; i++) {
             addItem(createBNBHomeItem(i));
@@ -39,7 +38,7 @@ public class HomeContent {
     }
 
     private static BNBHomeItem createBNBHomeItem(int position) {
-        //TODO:返回一个新的item
+        //返回一个新的item
         return new BNBHomeItem(String.valueOf(position), "大理梦飞扬客栈","张晓明-"+String.valueOf(position),
                 "7-8月","时长一个月","云南");
     }
@@ -64,7 +63,7 @@ public class HomeContent {
         public final String duration;
         public final String loca;
 
-        //TODO：设置传入值-id-name-host-time-duration
+        //设置传入值-id-name-host-time-duration
         public BNBHomeItem(String id,String name, String host, String time,String duration,String loca) {
             this.id = id;
             this.name = name;
@@ -76,7 +75,7 @@ public class HomeContent {
 
         @Override
         public String toString() {
-            //TODO: 设置tostring
+            //设置tostring
             return name+host+time+duration+loca;
         }
     }
