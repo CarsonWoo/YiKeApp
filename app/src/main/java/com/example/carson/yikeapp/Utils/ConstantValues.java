@@ -30,6 +30,8 @@ public class ConstantValues {
 
     public static final String URL_GET_USER_INFO = "https://www.yiluzou.cn/yike/public/index.php/getinfo";
 
+    public static final String URL_CHANGE_PWD_BY_OLD_PWD = "https://www.yiluzou.cn/yike/public/index.php/changepwd";
+
     public static final int CODE_TAKE_PHOTO = 1;
 
     public static final int TYPE_TAKE_PHOTO = 1;
@@ -75,6 +77,8 @@ public class ConstantValues {
 
     public static final String KEY_TOKEN = "token";
     public static final String KEY_STORE_NAME = "storeName";
+    public static final String KEY_PHONE_NUM = "phone";
+    public static final String KEY_PSW = "password";
 
 
     //取得token
@@ -105,6 +109,18 @@ public class ConstantValues {
     public static void cachUserType(Context context,String userType){
         SharedPreferences.Editor editor = context.getSharedPreferences(APP_ID,Context.MODE_PRIVATE).edit();
         editor.putString(KEY_USER_TYPE,userType);
+        editor.apply();
+    }
+
+    //获取密码
+    public static String getCachedPsw(Context context){
+        return context.getSharedPreferences(APP_ID,Context.MODE_PRIVATE).getString(KEY_PSW,null);
+    }
+
+    //储存密码
+    public static void cachPsw(Context context,String psw){
+        SharedPreferences.Editor editor = context.getSharedPreferences(APP_ID,Context.MODE_PRIVATE).edit();
+        editor.putString(KEY_PSW,psw);
         editor.apply();
     }
 

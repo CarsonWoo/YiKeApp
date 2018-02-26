@@ -53,9 +53,11 @@ public class StoreDetailActivity extends AppCompatActivity{
         SwipeBackHelper.onCreate(this);
         SwipeBackHelper.getCurrentPage(this)
                 .setSwipeBackEnable(true)
-                .setSwipeSensitivity(0.5f)
+                .setSwipeSensitivity(1.0f)
                 .setSwipeRelateEnable(true)
-                .setSwipeRelateOffset(300);
+                .setSwipeRelateOffset(300)
+                .setSwipeEdgePercent(0.15f)
+                .setClosePercent(0.5f);
 
         //取得token
         token = ConstantValues.getCachedToken(this);

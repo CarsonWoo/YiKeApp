@@ -188,6 +188,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                             }
                                         });
                                     } else {
+                                        ConstantValues.cachPsw(LoginActivity.this,pwd);
                                         if (!isFirstFilled) {
                                             Intent intent = new Intent(LoginActivity.this,
                                                     HomeActivity.class);

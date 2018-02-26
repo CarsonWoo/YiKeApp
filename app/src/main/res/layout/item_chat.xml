@@ -2,8 +2,9 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="wrap_content">
 
-    <ImageView
+    <com.example.carson.yikeapp.Views.CircleImageView
         android:id="@+id/iv_head"
+        android:src="@android:color/darker_gray"
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_centerVertical="true"
