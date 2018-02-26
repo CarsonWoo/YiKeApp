@@ -8,7 +8,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.carson.yikeapp.R;
-import com.example.carson.yikeapp.Views.ItemFragment.OnListFragmentInteractionListener;
+import com.example.carson.yikeapp.Views.FragmentHome.OnFragmentInteractionListener;
 import com.example.carson.yikeapp.Views.dummy.HomeContent.BNBHomeItem;
 
 import java.util.ArrayList;
@@ -16,17 +16,17 @@ import java.util.List;
 
 /**
  * {@link RecyclerView.Adapter} that can display a {@link BNBHomeItem} and makes a call to the
- * specified {@link OnListFragmentInteractionListener}.
+ * specified {@link OnFragmentInteractionListener}.
  * TODO: Replace the implementation with code for your data type.
  */
 public class HomeItemRecyclerViewAdapter extends RecyclerView.Adapter<HomeItemRecyclerViewAdapter.ViewHolder> {
     private final static String TAG = "HomeItemRViewAdapter";
 
     private final List<BNBHomeItem> mValues;
-    private final OnListFragmentInteractionListener mListener;
+    private final OnFragmentInteractionListener mListener;
     private final ArrayList<BNBHomeItem> itemSelected = new ArrayList<>();
 
-    public HomeItemRecyclerViewAdapter(List<BNBHomeItem> items, OnListFragmentInteractionListener listener) {
+    public HomeItemRecyclerViewAdapter(List<BNBHomeItem> items, OnFragmentInteractionListener listener) {
         mValues = items;
         mListener = listener;
     }
@@ -55,7 +55,7 @@ public class HomeItemRecyclerViewAdapter extends RecyclerView.Adapter<HomeItemRe
                     // fragment is attached to one) that an item has been selected.
                     itemSelected.clear();
                     itemSelected.add(holder.mItem);
-                    mListener.onListFragmentInteraction(itemSelected);
+                    mListener.onFragmentInteraction(itemSelected);
                 }
             }
         });

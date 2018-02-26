@@ -1,6 +1,7 @@
 package com.example.carson.yikeapp.Views;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.TabLayout.TabLayoutOnPageChangeListener;
@@ -24,15 +25,14 @@ import com.example.carson.yikeapp.Views.dummy.HomeContent;
 
 import java.util.ArrayList;
 
-public class HomeActivity extends AppCompatActivity implements ItemFragment.OnListFragmentInteractionListener{
+public class HomeActivity extends AppCompatActivity implements ItemFragment.OnListFragmentInteractionListener,
+                                                                FragmentHome.OnFragmentInteractionListener,
+                                                                FragmentMessage.OnFragmentInteractionListener,
+                                                                FragmentUser.OnFragmentInteractionListener{
 
     private final static String TAG = "HomeActivity";
 
     private TabLayout tabLayout;
-
-    private int[] iconList = {R.drawable.ic_home_page, R.drawable.ic_globe, R.drawable.ic_message_square,
-            R.drawable.ic_user, R.drawable.ic_home_un, R.drawable.ic_globe_un, R.drawable.ic_message_square_un,
-            R.drawable.ic_user_un};
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -49,7 +49,7 @@ public class HomeActivity extends AppCompatActivity implements ItemFragment.OnLi
      */
     private ViewPager mViewPager;
 
-    private String[] titles = new String[]{"义客", "交流", "消息", "我的"};
+    private String[] titles = new String[]{"义客", "交流", "消息", ""};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,23 +90,6 @@ public class HomeActivity extends AppCompatActivity implements ItemFragment.OnLi
                 title.setText(titles[mViewPager.getCurrentItem()]);
                 invalidateOptionsMenu();
                 ActionBar actionBar = getSupportActionBar();
-//                switch (mViewPager.getCurrentItem()) {
-//                    case 0:
-//                        setTabChange(0, 1, 2, 3);
-//                        break;
-//                    case 1:
-//                        setTabChange(1, 0 , 2, 3);
-//                        break;
-//                    case 2:
-//                        setTabChange(2, 0, 1,3);
-//                        break;
-//                    case 3:
-//                        setTabChange(3,0,1,2);
-//                        break;
-//                    default:
-//                        setTabChange(0,1,2,3);
-//                        break;
-//                }
             }
 
             @Override
@@ -115,13 +98,6 @@ public class HomeActivity extends AppCompatActivity implements ItemFragment.OnLi
             }
         });
     }
-//
-//    private void setTabChange(int mainTab, int subTab1, int subTab2, int subTab3) {
-//        tabLayout.getTabAt(mainTab).setIcon(iconList[mainTab]);
-//        tabLayout.getTabAt(subTab1).setIcon(iconList[subTab1 + 4]);
-//        tabLayout.getTabAt(subTab2).setIcon(iconList[subTab2 + 4]);
-//        tabLayout.getTabAt(subTab3).setIcon(iconList[subTab3 + 4]);
-//    }
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
@@ -167,9 +143,9 @@ public class HomeActivity extends AppCompatActivity implements ItemFragment.OnLi
             case R.id.action_scan:
                 break;
             case R.id.action_setting:
-                //TODO 点击setting跳转到设置界面。
                 Intent toSetting = new Intent(this, SettingActivity.class);
                 startActivityForResult(toSetting, ConstantValues.REQUESTCODE_START_SETTING);
+                overridePendingTransition(R.anim.ani_right_get_into, R.anim.ani_left_sign_out);
                 break;
 
         }
@@ -195,17 +171,37 @@ public class HomeActivity extends AppCompatActivity implements ItemFragment.OnLi
 
     @Override
     public void onListFragmentInteraction(ArrayList item) {
-        //TODO 点击了一个recycleview 的item
-        switch (mViewPager.getCurrentItem()) {
+
+    }
+
+    @Override
+    public void onFragmentInteraction(ArrayList item) {
+        switch (mViewPager.getCurrentItem()){
             case 0:
                 Log.d(TAG, "点击了首页的item");
                 Log.d(TAG, ((HomeContent.BNBHomeItem) (item.get(0))).id + "");
                 Toast.makeText(this, "Item " + ((HomeContent.BNBHomeItem) (item.get(0))).id + " clicked.", Toast.LENGTH_SHORT).show();
+                Intent toStoreDetail = new Intent(HomeActivity.this, StoreDetailActivity.class);
+                //TODO 传递查询店家详细信息所需数据
+                toStoreDetail.putExtra(ConstantValues.KEY_STORE_NAME, ((HomeContent.BNBHomeItem) (item.get(0))).name);
+                startActivity(toStoreDetail);
+                overridePendingTransition(R.anim.ani_right_get_into, R.anim.ani_left_sign_out);
+                break;
+            case 1:
                 break;
             case 2:
+                //TODO 点击了一个recycleview 的item
                 Toast.makeText(this, "Item " + ((ChatItem.ChatWinItem) (item.get(0))).name + " clicked.", Toast.LENGTH_SHORT).show();
                 break;
+            case 3:
+                break;
+            default:
+                break;
         }
+    }
+
+    @Override
+    public void onFragmentInteraction(Uri uri) {
 
     }
 
@@ -223,7 +219,18 @@ public class HomeActivity extends AppCompatActivity implements ItemFragment.OnLi
         public Fragment getItem(int position) {
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
-            return ItemFragment.newInstance(position + 1);
+            switch (position) {
+                case 0:
+                    return FragmentHome.newInstance();
+                case 1:
+                    return ItemFragment.newInstance(position + 1);
+                case 2:
+                    return FragmentMessage.newInstance();
+                case 3:
+                   return FragmentUser.newInstance();
+                default:
+                    return ItemFragment.newInstance(position + 1);
+            }
         }
 
         @Override

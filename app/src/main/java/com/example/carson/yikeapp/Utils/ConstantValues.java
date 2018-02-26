@@ -40,8 +40,13 @@ public class ConstantValues {
 
     public static final int RESULTCODE_SETTING_ACCOUNT_QUIT = 10002;
 
+    public static final String USER_TYPE_STORE = "店家";
+
+    public static final String USER_TYPE_NORMAL = "用户";
+
     //获取用户信息时服务器返回json数据key名
-    public static final String KEY_USER_NAME = "realname";
+    //义工
+    public static final String KEY_USER_REALNAME = "realname";
     public static final String KEY_USER_TYPE = "usertype";
     public static final String KEY_USER_GENDER = "gender";
     public static final String KEY_USER_IDCARD = "idcard";
@@ -49,8 +54,27 @@ public class ConstantValues {
     public static final String KEY_USER_AREA = "area";
     public static final String KEY_USER_INTRO = "introduction";
     public static final String KEY_USER_PHOTO_URL = "photo_url";
+    public static final String KEY_USER_EXP = "experience";
+    public static final String KEY_USER_DIA_NUM = "diary_number";
+    public static final String KEY_USER_BALACE = "all_pay";
+    public static final String KEY_USER_RESERVE = "online_booking";
+    public static final String KEY_USER_EXP_POST = "experience_number";
+    public static final String KEY_USER_CREDIT = "credit_score";
+    //店家
+    public static final String KEY_STORE_REALNAME = "realname";
+    public static final String KEY_STORE_TYPE = "usertype";
+    public static final String KEY_STORE_GENDER = "gender";
+    public static final String KEY_STORE_IDCARD = "idcard";
+    public static final String KEY_STORE_BIRTH = "birth";
+    public static final String KEY_STORE_AREA = "area";
+    public static final String KEY_STORE_INTRO = "introduction";
+    public static final String KEY_STORE_PHOTO_URL = "photo_url";
+    public static final String KEY_STORE_EXP = "experience";
+    public static final String KEY_STORE_ATY_NUM = "activity_number";
+    public static final String KEY_STORE_CREDIT = "credit_score";
 
     public static final String KEY_TOKEN = "token";
+    public static final String KEY_STORE_NAME = "storeName";
 
 
     //取得token
@@ -69,6 +93,18 @@ public class ConstantValues {
     public static void removeToken(Context context){
         SharedPreferences.Editor editor = context.getSharedPreferences(APP_ID,Context.MODE_PRIVATE).edit();
         editor.remove(KEY_TOKEN);
+        editor.apply();
+    }
+
+    //获取用户类型
+    public static String getCachedUserType(Context context){
+        return context.getSharedPreferences(APP_ID,Context.MODE_PRIVATE).getString(KEY_USER_TYPE,null);
+    }
+
+    //储存用户类型
+    public static void cachUserType(Context context,String userType){
+        SharedPreferences.Editor editor = context.getSharedPreferences(APP_ID,Context.MODE_PRIVATE).edit();
+        editor.putString(KEY_USER_TYPE,userType);
         editor.apply();
     }
 

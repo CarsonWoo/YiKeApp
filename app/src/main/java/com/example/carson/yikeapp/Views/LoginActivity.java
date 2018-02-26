@@ -174,6 +174,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                     ConstantValues.cachToken(LoginActivity.this,token);
                                     //识别用户还是商家
                                     String userType = dataList.get(1);
+                                    ConstantValues.cachUserType(LoginActivity.this,userType);
                                     if (!code.equals("200")) {
                                         runOnUiThread(new Runnable() {
                                             @Override
@@ -194,7 +195,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                             startActivity(intent);
                                             finish();
                                         } else {
-                                            if (userType.equals("用户")) {
+                                            if (userType.equals(ConstantValues.USER_TYPE_NORMAL)) {
                                                 Intent intent = new Intent(LoginActivity.this,
                                                         UserDetailActivity.class);
                                                 intent.putExtra("token", token);

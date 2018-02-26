@@ -8,7 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.carson.yikeapp.R;
-import com.example.carson.yikeapp.Views.ItemFragment;
+import com.example.carson.yikeapp.Views.FragmentMessage;
 import com.example.carson.yikeapp.Views.dummy.ChatItem;
 
 import java.util.ArrayList;
@@ -21,10 +21,10 @@ import java.util.List;
 public class ChatItemRVAdapter extends RecyclerView.Adapter<ChatItemRVAdapter.ViewHolder> {
 
     private final List<ChatItem.ChatWinItem> mValues;
-    private final ItemFragment.OnListFragmentInteractionListener mListener;
+    private final FragmentMessage.OnFragmentInteractionListener mListener;
     private final ArrayList<ChatItem.ChatWinItem> itemSelected = new ArrayList<>();
 
-    public ChatItemRVAdapter(List<ChatItem.ChatWinItem> items, ItemFragment.OnListFragmentInteractionListener listener) {
+    public ChatItemRVAdapter(List<ChatItem.ChatWinItem> items, FragmentMessage.OnFragmentInteractionListener listener) {
         mValues = items;
         mListener = listener;
     }
@@ -52,7 +52,7 @@ public class ChatItemRVAdapter extends RecyclerView.Adapter<ChatItemRVAdapter.Vi
                     // fragment is attached to one) that an item has been selected.
                     itemSelected.clear();
                     itemSelected.add(holder.item);
-                    mListener.onListFragmentInteraction(itemSelected);
+                    mListener.onFragmentInteraction(itemSelected);
                 }
             }
         });
