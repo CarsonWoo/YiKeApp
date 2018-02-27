@@ -21,7 +21,7 @@
             android:layout_width="match_parent"
             app:title=" "
             android:theme="@style/AppTheme.AppBarOverlay"
-            android:layout_height="?attr/actionBarSize">
+            android:layout_height="39dp">
 
             <TextView
                 android:id="@+id/title"
@@ -29,7 +29,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:textColor="@android:color/black"
-                android:textSize="25sp" />
+                android:textSize="18sp" />
 
         </android.support.v7.widget.Toolbar>
 
@@ -48,7 +48,7 @@
         app:tabTextColor="@android:color/black"
         app:tabSelectedTextColor="@color/bg_bnb_loca"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="48.5dp"
         app:tabGravity="fill">
 
         <android.support.design.widget.TabItem

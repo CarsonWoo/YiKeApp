@@ -1,16 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
-    android:layout_margin="15sp"
-    android:layout_marginLeft="15sp"
-    android:layout_marginRight="15sp"
+    android:layout_margin="15dp"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
     <TextView
-        android:layout_marginTop="5sp"
         android:text="@string/textDemo_1"
-        android:textSize="32sp"
+        android:textSize="20sp"
         android:textColor="#000"
         android:id="@+id/tv_discuss_rv_item_ex_title"
         android:layout_width="wrap_content"
@@ -18,7 +15,7 @@
 
     <TextView
         android:id="@+id/tv_discuss_rv_item_ex_content"
-        android:textSize="26sp"
+        android:textSize="15sp"
         android:text="@string/textDemo_2"
         android:layout_below="@id/tv_discuss_rv_item_ex_title"
         android:maxLines="2"
@@ -27,55 +24,55 @@
 
     <Button
         android:id="@+id/btn_discuss_rv_item_ex_tag"
-        android:textSize="13.2sp"
+        android:textSize="9.2sp"
         android:textColor="#e26232"
         android:text="@string/textDemo_3"
-        android:background="@drawable/bg_button_style1"
-        android:layout_marginTop="10sp"
+        android:background="@drawable/bg_bnb_loca"
+        android:layout_marginTop="10dp"
         android:layout_below="@id/tv_discuss_rv_item_ex_content"
-        android:layout_width="64sp"
-        android:layout_height="21.3sp" />
+        android:layout_width="44dp"
+        android:layout_height="16.3dp" />
 
     <TextView
         android:id="@+id/tv_discuss_rv_item_ex_date"
         android:layout_below="@id/tv_discuss_rv_item_ex_content"
-        android:layout_marginTop="10sp"
-        android:textSize="15.6sp"
-        android:layout_marginLeft="30sp"
+        android:layout_marginTop="11dp"
+        android:textSize="9.6sp"
+        android:layout_marginLeft="15dp"
         android:text="@string/textDemo_4"
         android:layout_toRightOf="@id/btn_discuss_rv_item_ex_tag"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="30sp"
+        android:layout_marginStart="15sp"
         android:layout_toEndOf="@id/btn_discuss_rv_item_ex_tag" />
 
     <TextView
-        android:textSize="15.6sp"
-        android:layout_marginTop="10sp"
+        android:textSize="9.6sp"
+        android:layout_marginTop="11dp"
         android:layout_below="@id/tv_discuss_rv_item_ex_content"
-        android:layout_marginLeft="30sp"
+        android:layout_marginLeft="15dp"
         android:layout_toRightOf="@id/tv_discuss_rv_item_ex_date"
         android:id="@+id/tv_discuss_rv_item_ex_likes"
         android:text="@string/textDemo_5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="30sp"
+        android:layout_marginStart="15dp"
         android:layout_toEndOf="@id/tv_discuss_rv_item_ex_date" />
 
     <TextView
         android:id="@+id/tv_discuss_rv_item_ex_collect"
         android:clickable="true"
-        android:layout_marginLeft="250sp"
+        android:layout_marginLeft="135dp"
         android:layout_toRightOf="@id/tv_discuss_rv_item_ex_likes"
         android:textColor="#e26323"
-        android:layout_marginTop="10sp"
-        android:textSize="15.6sp"
+        android:layout_marginTop="11dp"
+        android:textSize="9.6sp"
         android:text="@string/collect"
         android:layout_below="@id/tv_discuss_rv_item_ex_content"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:focusable="true"
-        android:layout_marginStart="250sp"
+        android:layout_marginStart="135dp"
         android:layout_toEndOf="@id/tv_discuss_rv_item_ex_likes" />
 
 </RelativeLayout>

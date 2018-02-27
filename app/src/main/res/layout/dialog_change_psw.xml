@@ -16,14 +16,14 @@
         android:layout_height="wrap_content"
         android:text="旧密码"
         android:textColor="@android:color/black"
-        android:textSize="21.3sp" />
+        android:textSize="16.3sp" />
 
     <EditText
         android:inputType="textPassword"
         android:id="@+id/et_old_psw"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="21.3sp" />
+        android:textSize="16.3sp" />
 
 
     <TextView
@@ -31,14 +31,14 @@
         android:layout_height="wrap_content"
         android:text="新密码"
         android:textColor="@android:color/black"
-        android:textSize="21.3sp" />
+        android:textSize="16.3sp" />
 
     <EditText
         android:id="@+id/et_new_psw"
         android:inputType="textPassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="21.3sp" />
+        android:textSize="16.3sp" />
 
 
     <TextView
@@ -46,14 +46,14 @@
         android:layout_height="wrap_content"
         android:text="确认新密码"
         android:textColor="@android:color/black"
-        android:textSize="21.3sp" />
+        android:textSize="16.3sp" />
 
     <EditText
         android:inputType="textPassword"
         android:id="@+id/et_confirm_new_psw"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="21.3sp" />
+        android:textSize="16.3sp" />
     <TextView
         android:id="@+id/tv_warn"
         android:layout_marginTop="10dp"
@@ -72,17 +72,22 @@
         android:orientation="horizontal">
 
         <Button
+            android:background="@drawable/bg_button_style2"
             android:id="@+id/btn_confirm"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="80dp"
+            android:textColor="#fff"
+            android:layout_height="35.6dp"
             android:layout_margin="10dp"
+            android:textSize="13sp"
             android:text="确认" />
 
         <Button
+            android:background="@drawable/bg_button_style3"
             android:id="@+id/btn_cancel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="80dp"
+            android:layout_height="35.6dp"
             android:layout_margin="10dp"
+            android:textSize="13sp"
             android:text="取消" />
 
     </LinearLayout>

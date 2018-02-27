@@ -43,4 +43,8 @@
     <string name="store_other">其他:</string>
     <string name="store_more_info">青旅更多信息:</string>
     <string name="store_time_with_colon">青旅旅行时间:</string>
+    <string name="forget_psw">忘记密码?</string>
+    <string name="new_user_register">新用户注册</string>
+    <string name="login_chinese">登录</string>
+    <string name="login_tab_title">登录义客</string>
 </resources>

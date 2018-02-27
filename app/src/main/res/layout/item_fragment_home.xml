@@ -15,12 +15,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/text_margin"
-            android:textSize="21.3sp"
+            android:textSize="16.3sp"
             android:text="00000"
             android:textAppearance="?attr/textAppearanceListItem" />
 
         <TextView
-            android:textSize="18.7sp"
+            android:textSize="13.7sp"
             android:id="@+id/bnb_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -31,12 +31,12 @@
 
         <Button
             android:id="@+id/bnb_location"
-            android:layout_width="64dp"
-            android:layout_height="21.3dp"
+            android:layout_width="44dp"
+            android:layout_height="16.3dp"
             android:background="@drawable/bg_bnb_loca"
             android:text="云南"
             android:textColor="@color/bg_bnb_loca"
-            android:textSize="13.3sp" />
+            android:textSize="9.3sp" />
 
     </LinearLayout>
 
@@ -54,7 +54,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="end"
             android:layout_margin="@dimen/text_margin"
-            android:textSize="21.3sp"
+            android:textSize="16.3sp"
             android:textAppearance="?attr/textAppearanceListItem" />
 
         <TextView
@@ -62,7 +62,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="00000"
-            android:textSize="18.7sp"
+            android:textSize="13.7sp"
             android:layout_margin="@dimen/text_margin"
             android:textColor="#999999"
             android:textAppearance="?attr/textAppearanceListItem" />

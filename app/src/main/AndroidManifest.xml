@@ -42,17 +42,17 @@
         </activity>
         <activity
             android:name=".Views.ChangePasswordActivity"
-            android:theme="@style/register_toolbar_theme" />
+            android:theme="@style/MainTheme" />
         <activity
             android:name=".Views.RegisterActivity"
             android:label="注册"
-            android:theme="@style/register_toolbar_theme" />
+            android:theme="@style/MainTheme" />
         <activity
             android:name=".Views.HomeActivity"
             android:theme="@style/MainTheme" />
         <activity
             android:name=".Views.LoginActivity"
-            android:theme="@style/LoginActivityTheme" />
+            android:theme="@style/MainTheme" />
         <activity
             android:name=".Views.UserDetailActivity"
             android:label=""

@@ -17,7 +17,7 @@
             app:navigationIcon="@drawable/ic_chevron_left"
             android:id="@+id/toolbar_setting"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize">
+            android:layout_height="39dp">
 
             <TextView
                 android:id="@+id/title"
@@ -26,7 +26,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:textColor="@android:color/black"
-                android:textSize="25sp" />
+                android:textSize="18sp" />
 
         </android.support.v7.widget.Toolbar>
 
@@ -43,14 +43,14 @@
             android:text="修改密码"
             android:layout_marginTop="17dp"
             android:layout_marginBottom="12dp"
-            android:textSize="21.3sp"
+            android:textSize="16.3sp"
             android:textColor="@android:color/black"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
         <ImageButton
             android:layout_alignParentRight="true"
-            android:layout_marginTop="17dp"
+            android:layout_marginTop="22dp"
             android:layout_marginBottom="12dp"
             android:background="@android:color/white"
             android:src="@drawable/ic_more"
@@ -77,7 +77,7 @@
             android:text="震动提醒"
             android:layout_marginTop="17dp"
             android:layout_marginBottom="12dp"
-            android:textSize="21.3sp"
+            android:textSize="16.3sp"
             android:textColor="@android:color/black"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
@@ -110,7 +110,7 @@
             android:text="声音"
             android:layout_marginTop="17dp"
             android:layout_marginBottom="12dp"
-            android:textSize="21.3sp"
+            android:textSize="16.3sp"
             android:textColor="@android:color/black"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
@@ -143,14 +143,14 @@
             android:text="反馈"
             android:layout_marginTop="17dp"
             android:layout_marginBottom="12dp"
-            android:textSize="21.3sp"
+            android:textSize="16.3sp"
             android:textColor="@android:color/black"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
         <ImageButton
             android:layout_alignParentRight="true"
-            android:layout_marginTop="17dp"
+            android:layout_marginTop="22dp"
             android:layout_marginBottom="12dp"
             android:background="@android:color/white"
             android:src="@drawable/ic_more"
@@ -177,14 +177,14 @@
             android:text="关于"
             android:layout_marginTop="17dp"
             android:layout_marginBottom="12dp"
-            android:textSize="21.3sp"
+            android:textSize="16.3sp"
             android:textColor="@android:color/black"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
         <ImageButton
             android:layout_alignParentRight="true"
-            android:layout_marginTop="17dp"
+            android:layout_marginTop="22dp"
             android:layout_marginBottom="12dp"
             android:background="@android:color/white"
             android:src="@drawable/ic_more"
@@ -211,7 +211,7 @@
             android:text="版本更新"
             android:layout_marginTop="17dp"
             android:layout_marginBottom="12dp"
-            android:textSize="21.3sp"
+            android:textSize="16.3sp"
             android:textColor="@android:color/black"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
@@ -235,7 +235,7 @@
             android:text="退出"
             android:layout_marginTop="17dp"
             android:layout_marginBottom="12dp"
-            android:textSize="21.3sp"
+            android:textSize="16.3sp"
             android:textColor="@android:color/black"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />

@@ -115,7 +115,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 //跳转到忘记密码的页面
                 startActivity(new Intent(LoginActivity.this,
                         ChangePasswordActivity.class));
-                finish();
                 break;
             case R.id.btn_login:
                 //交到后台处理

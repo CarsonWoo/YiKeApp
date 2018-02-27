@@ -30,7 +30,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="30sp"
             android:text="@string/slogan"
-            android:textSize="38sp" />
+            android:textSize="30sp" />
 
     </LinearLayout>
 

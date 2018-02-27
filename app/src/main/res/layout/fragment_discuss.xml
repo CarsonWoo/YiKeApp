@@ -1,29 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-
 
         <android.support.v7.widget.SearchView
             android:id="@+id/search_view_discuss"
             android:layout_margin="10dp"
             android:background="#16483838"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="30.7dp">
 
         </android.support.v7.widget.SearchView>
 
     <LinearLayout
-        android:layout_marginTop="80sp"
+        android:layout_marginTop="50dp"
         android:background="#7ca69c9c"
         android:layout_width="match_parent"
-        android:layout_height="1sp"/>
+        android:layout_height="1dp"/>
 
 
     <android.support.design.widget.TabLayout
         android:id="@+id/tab_layout_discuss"
-        android:layout_marginTop="80sp"
+        android:layout_marginTop="50dp"
         app:tabGravity="fill"
         app:tabSelectedTextColor="#e26323"
         android:layout_width="match_parent"
@@ -55,15 +55,15 @@
     </android.support.design.widget.TabLayout>
 
     <LinearLayout
-        android:layout_marginTop="128sp"
+        android:layout_marginTop="97.8dp"
         android:background="#7ca69c9c"
         android:layout_width="match_parent"
-        android:layout_height="1sp"/>
+        android:layout_height="1dp"/>
 
     <android.support.v4.view.ViewPager
         android:id="@+id/vp_discuss_item"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        android:layout_marginTop="140sp"
+        android:layout_marginTop="105dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 

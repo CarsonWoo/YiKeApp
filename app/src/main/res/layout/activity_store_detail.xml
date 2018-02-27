@@ -17,7 +17,7 @@
             android:id="@+id/toolbar_stroe_detail"
             android:layout_width="match_parent"
             app:navigationIcon="@drawable/ic_chevron_left"
-            android:layout_height="?attr/actionBarSize">
+            android:layout_height="39sp">
 
             <TextView
                 android:id="@+id/title"
@@ -26,7 +26,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:textColor="@android:color/black"
-                android:textSize="25sp" />
+                android:textSize="18sp" />
 
         </android.support.v7.widget.Toolbar>
 
@@ -49,7 +49,7 @@
                 android:src="@drawable/banner"
                 android:id="@+id/iv_store_photo"
                 android:layout_width="match_parent"
-                android:layout_height="260dp"/>
+                android:layout_height="200dp"/>
 
             <LinearLayout
                 app:layout_constraintTop_toBottomOf="@+id/iv_store_photo"
@@ -60,7 +60,7 @@
 
                 <LinearLayout
                     android:layout_weight="1"
-                    android:layout_margin="20dp"
+                    android:layout_margin="15dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
@@ -69,13 +69,13 @@
                         android:id="@+id/tv_store_time_header"
                         android:text="11"
                         android:textColor="@android:color/black"
-                        android:textSize="21.3sp"
+                        android:textSize="16.3sp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
                     <TextView
                         android:text="@string/store_time"
                         android:textColor="#999999"
-                        android:textSize="16sp"
+                        android:textSize="13sp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
 
@@ -83,7 +83,7 @@
 
                 <LinearLayout
                     android:layout_weight="1"
-                    android:layout_margin="20dp"
+                    android:layout_margin="15dp"
                     android:gravity="center"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -93,13 +93,13 @@
                         android:id="@+id/tv_store_duration_header"
                         android:text="1099"
                         android:textColor="@android:color/black"
-                        android:textSize="21.3sp"
+                        android:textSize="16.3sp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
                     <TextView
                         android:text="@string/store_dura"
                         android:textColor="#999999"
-                        android:textSize="16sp"
+                        android:textSize="13sp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
 
@@ -108,7 +108,7 @@
                 <LinearLayout
                     android:layout_weight="1"
                     android:gravity="end"
-                    android:layout_margin="20dp"
+                    android:layout_margin="15dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
@@ -117,13 +117,13 @@
                         android:id="@+id/tv_store_volun_needed_header"
                         android:text="1099"
                         android:textColor="@android:color/black"
-                        android:textSize="21.3sp"
+                        android:textSize="16.3sp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
                     <TextView
                         android:text="@string/store_volun_needed_header"
                         android:textColor="#999999"
-                        android:textSize="16sp"
+                        android:textSize="13sp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
 
@@ -131,23 +131,28 @@
 
             </LinearLayout>
 
+            <View
+                android:background="#868282"
+                android:layout_width="match_parent"
+                android:layout_height="1dp" />
+
             <LinearLayout
                 android:layout_marginRight="20dp"
                 android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
+                android:layout_marginLeft="15dp"
                 android:layout_marginBottom="20dp">
 
                 <LinearLayout
-                    android:layout_marginTop="17dp"
+                    android:layout_marginTop="15dp"
                     android:orientation="vertical"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
                     <TextView
                         android:text="@string/store_intro"
-                        android:textSize="21.3sp"
+                        android:textSize="16.3sp"
                         android:textColor="@color/bg_bnb_loca"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
@@ -155,7 +160,7 @@
                     <TextView
                         android:id="@+id/tv_store_intro_content"
                         android:textColor="@android:color/black"
-                        android:textSize="21.3sp"
+                        android:textSize="16.3sp"
                         android:text="随着国内、外的升学管道的日益增长，对于升学的选择像是面对着百货公司里琳琅满目的产品，随之而起的是各种各样的教育资讯展。"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
@@ -163,14 +168,14 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_marginTop="36dp"
+                    android:layout_marginTop="30dp"
                     android:orientation="vertical"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
                     <TextView
                         android:text="@string/store_volun_needed_detail"
-                        android:textSize="21.3sp"
+                        android:textSize="16.3sp"
                         android:textColor="@color/bg_bnb_loca"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
@@ -178,7 +183,7 @@
                     <TextView
                         android:id="@+id/tv_store_volun_needed"
                         android:textColor="@android:color/black"
-                        android:textSize="21.3sp"
+                        android:textSize="16.3sp"
                         android:text="1人"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
@@ -186,14 +191,14 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_marginTop="36dp"
+                    android:layout_marginTop="30dp"
                     android:orientation="vertical"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
                     <TextView
                         android:text="@string/store_volun_requ"
-                        android:textSize="21.3sp"
+                        android:textSize="16.3sp"
                         android:textColor="@color/bg_bnb_loca"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
@@ -201,7 +206,7 @@
                     <TextView
                         android:id="@+id/tv_store_volun_requ"
                         android:textColor="@android:color/black"
-                        android:textSize="21.3sp"
+                        android:textSize="16.3sp"
                         android:text="勤劳靠谱就好，无性别要求"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
@@ -209,14 +214,14 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_marginTop="36dp"
+                    android:layout_marginTop="30dp"
                     android:orientation="vertical"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
                     <TextView
                         android:text="@string/store_work_content"
-                        android:textSize="21.3sp"
+                        android:textSize="16.3sp"
                         android:textColor="@color/bg_bnb_loca"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
@@ -224,7 +229,7 @@
                     <TextView
                         android:id="@+id/tv_store_work_content"
                         android:textColor="@android:color/black"
-                        android:textSize="21.3sp"
+                        android:textSize="16.3sp"
                         android:text="前台值班，办理入住\n工作时间：3-4小时"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
@@ -232,14 +237,14 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_marginTop="36dp"
+                    android:layout_marginTop="30dp"
                     android:orientation="vertical"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
                     <TextView
                         android:text="@string/store_time_with_colon"
-                        android:textSize="21.3sp"
+                        android:textSize="16.3sp"
                         android:textColor="@color/bg_bnb_loca"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
@@ -247,7 +252,7 @@
                     <TextView
                         android:id="@+id/tv_store_time_detail"
                         android:textColor="@android:color/black"
-                        android:textSize="21.3sp"
+                        android:textSize="16.3sp"
                         android:text="最低一个月\n7-8月最好"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
@@ -255,14 +260,14 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_marginTop="36dp"
+                    android:layout_marginTop="30dp"
                     android:orientation="vertical"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
                     <TextView
                         android:text="@string/store_other"
-                        android:textSize="21.3sp"
+                        android:textSize="16.3sp"
                         android:textColor="@color/bg_bnb_loca"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
@@ -270,7 +275,7 @@
                     <TextView
                         android:id="@+id/tv_store_other"
                         android:textColor="@android:color/black"
-                        android:textSize="21.3sp"
+                        android:textSize="16.3sp"
                         android:text="无"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
@@ -278,14 +283,14 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_marginTop="36dp"
+                    android:layout_marginTop="30dp"
                     android:orientation="vertical"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
                     <TextView
                         android:text="@string/store_more_info"
-                        android:textSize="21.3sp"
+                        android:textSize="16.3sp"
                         android:textColor="@color/bg_bnb_loca"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
@@ -293,7 +298,7 @@
                     <TextView
                         android:id="@+id/tv_store_more_info"
                         android:textColor="@android:color/black"
-                        android:textSize="21.3sp"
+                        android:textSize="16.3sp"
                         android:text="无"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
@@ -320,7 +325,7 @@
         <Button
             android:id="@+id/btn_store_detail_apply"
             android:text="报名"
-            android:textSize="18.7sp"
+            android:textSize="13.7sp"
             android:textColor="@color/bg_bnb_loca"
             android:background="@android:color/white"
             android:layout_weight="1"
@@ -330,7 +335,7 @@
         <Button
             android:id="@+id/btn_store_detail_contact"
             android:text="咨询客服"
-            android:textSize="18.7sp"
+            android:textSize="13.7sp"
             android:textColor="@android:color/darker_gray"
             android:background="@android:color/white"
             android:layout_weight="1"

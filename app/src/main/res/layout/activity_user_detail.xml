@@ -10,23 +10,18 @@
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar_detail_user"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
+        android:layout_height="39dp"
         android:theme="@style/AppTheme.NoActionBar"
         android:background="#fff"
-        app:navigationIcon="@drawable/ic_back"
+        app:navigationIcon="@drawable/ic_chevron_left"
         android:isScrollContainer="true"
+        app:title="返回"
         app:popupTheme="@style/AppTheme.PopupOverlay">
-
-        <TextView
-            android:textSize="26sp"
-            android:text="返回"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
 
     </android.support.v7.widget.Toolbar>
 
     <android.support.v4.widget.NestedScrollView
-        android:layout_marginTop="?attr/actionBarSize"
+        android:layout_marginTop="50dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
@@ -37,13 +32,13 @@
             android:layout_height="wrap_content">
 
             <LinearLayout
-                android:layout_marginLeft="15sp"
+                android:layout_marginLeft="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
                 <TextView
                     android:textStyle="bold"
-                    android:textSize="35sp"
+                    android:textSize="23sp"
                     android:text="填写用户资料"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
@@ -51,15 +46,16 @@
             </LinearLayout>
 
             <LinearLayout
-                android:layout_marginTop="15sp"
+                android:layout_marginTop="10dp"
                 android:orientation="horizontal"
-                android:layout_marginLeft="15sp"
+                android:layout_marginLeft="10dp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp">
 
                 <TextView
                     android:layout_gravity="center_vertical"
-                    android:textSize="28sp"
+                    android:textSize="18sp"
                     android:text="头像"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
@@ -67,30 +63,32 @@
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:clickable="true"
                     android:id="@+id/civ_detail_change"
-                    android:layout_width="120sp"
-                    android:layout_marginLeft="380sp"
+                    android:layout_width="80dp"
+                    android:layout_marginLeft="220dp"
                     android:src="#fff"
-                    android:layout_height="120sp" />
+                    android:layout_height="80dp"
+                    android:focusable="true"
+                    android:layout_marginStart="220dp" />
 
             </LinearLayout>
 
             <LinearLayout
-                android:layout_marginLeft="15sp"
-                android:layout_marginTop="15sp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
                 android:background="#868282"
                 android:layout_width="match_parent"
-                android:layout_height="1sp"/>
+                android:layout_height="1dp"/>
 
             <LinearLayout
-                android:layout_marginLeft="15sp"
-                android:layout_marginTop="15sp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
                 <TextView
                     android:layout_gravity="center_vertical"
                     android:text="性别"
-                    android:textSize="28sp"
+                    android:textSize="18sp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
 
@@ -100,31 +98,32 @@
                     android:inputType="none"
                     android:id="@+id/et_gender"
                     android:textColor="#e26323"
-                    android:textSize="28sp"
-                    android:layout_marginLeft="355sp"
+                    android:textSize="18sp"
+                    android:layout_marginLeft="180dp"
                     android:background="@null"
-                    android:layout_width="150sp"
+                    android:layout_width="120dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end" />
 
             </LinearLayout>
 
             <LinearLayout
-                android:layout_marginLeft="15sp"
-                android:layout_marginTop="15sp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
                 android:background="#868282"
                 android:layout_width="match_parent"
-                android:layout_height="1sp"/>
+                android:layout_height="1dp"
+                android:layout_marginStart="10dp" />
 
             <LinearLayout
-                android:layout_marginTop="15sp"
-                android:layout_marginLeft="15sp"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
                 <TextView
                     android:layout_gravity="center_vertical"
-                    android:textSize="28sp"
+                    android:textSize="18sp"
                     android:text="真实姓名"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
@@ -132,33 +131,34 @@
                 <EditText
                     android:textColor="#e26323"
                     android:id="@+id/et_true_name"
-                    android:layout_marginLeft="250sp"
+                    android:layout_marginLeft="85dp"
                     android:textAlignment="viewEnd"
                     android:background="@null"
-                    android:textSize="28sp"
-                    android:layout_width="200sp"
+                    android:textSize="18sp"
+                    android:layout_width="180dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end" />
 
             </LinearLayout>
 
             <LinearLayout
-                android:layout_marginLeft="15sp"
-                android:layout_marginTop="15sp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
                 android:background="#868282"
                 android:layout_width="match_parent"
-                android:layout_height="1sp"/>
+                android:layout_height="1dp"
+                android:layout_marginStart="10dp" />
 
             <LinearLayout
-                android:layout_marginLeft="15sp"
-                android:layout_marginTop="15sp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 
                 <TextView
                     android:layout_gravity="center_vertical"
                     android:text="身份证号"
-                    android:textSize="28sp"
+                    android:textSize="18sp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
                 
@@ -166,31 +166,31 @@
                     android:textAlignment="viewEnd"
                     android:id="@+id/et_id_card"
                     android:textColor="#e26323"
-                    android:layout_marginLeft="150sp"
+                    android:layout_marginLeft="80dp"
                     android:background="@null"
-                    android:textSize="28sp"
-                    android:layout_width="300sp"
+                    android:textSize="18sp"
+                    android:layout_width="185dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end" />
                 
             </LinearLayout>
 
             <LinearLayout
-                android:layout_marginLeft="15sp"
-                android:layout_marginTop="15sp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
                 android:background="#868282"
                 android:layout_width="match_parent"
-                android:layout_height="1sp"/>
+                android:layout_height="1dp"/>
 
             <LinearLayout
-                android:layout_marginTop="15sp"
-                android:layout_marginLeft="15sp"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
                 <TextView
                     android:layout_gravity="center_vertical"
-                    android:textSize="28sp"
+                    android:textSize="18sp"
                     android:text="出生年月"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
@@ -199,32 +199,32 @@
                     android:id="@+id/et_birth"
                     android:textColor="#e26323"
                     android:textAlignment="viewEnd"
-                    android:layout_marginLeft="250sp"
-                    android:textSize="28sp"
+                    android:layout_marginLeft="115dp"
+                    android:textSize="18sp"
                     android:background="@null"
                     android:inputType="none"
-                    android:layout_width="200sp"
+                    android:layout_width="150dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end" />
 
             </LinearLayout>
 
             <LinearLayout
-                android:layout_marginLeft="15sp"
-                android:layout_marginTop="15sp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
                 android:background="#868282"
                 android:layout_width="match_parent"
-                android:layout_height="1sp"/>
+                android:layout_height="1dp"/>
 
             <LinearLayout
-                android:layout_marginTop="15sp"
-                android:layout_marginLeft="15sp"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
                 <TextView
                     android:layout_gravity="center_vertical"
-                    android:textSize="28sp"
+                    android:textSize="18sp"
                     android:text="意向地区"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
@@ -233,78 +233,81 @@
                     android:inputType="none"
                     android:id="@+id/et_area"
                     android:background="@null"
-                    android:textSize="28sp"
+                    android:textSize="18sp"
                     android:textColor="#e26323"
                     android:textAlignment="viewEnd"
-                    android:layout_marginLeft="250sp"
-                    android:layout_width="200sp"
+                    android:layout_marginLeft="145dp"
+                    android:layout_width="120dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end" />
 
             </LinearLayout>
 
             <LinearLayout
-                android:layout_marginTop="15sp"
+                android:layout_marginTop="15dp"
                 android:background="#ede2dede"
                 android:layout_width="match_parent"
-                android:layout_height="20sp"/>
+                android:layout_height="20dp"/>
 
             <LinearLayout
                 android:orientation="vertical"
-                android:layout_marginLeft="15sp"
-                android:layout_marginTop="25sp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="15dp"
                 android:layout_width="match_parent"
-                android:layout_height="150sp">
+                android:layout_height="120sp"
+                android:layout_marginStart="10dp">
 
                 <TextView
-                    android:textSize="35sp"
+                    android:textSize="22sp"
                     android:text="个人简介"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
 
                 <EditText
+                    android:ellipsize="end"
                     android:id="@+id/et_introduction"
-                    android:layout_marginRight="20sp"
-                    android:layout_marginTop="15sp"
-                    android:textSize="26sp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginTop="12dp"
+                    android:textSize="18sp"
                     android:background="@null"
                     android:layout_width="match_parent"
-                    android:layout_height="70sp" />
+                    android:layout_height="60dp"
+                    android:layout_marginEnd="20dp" />
 
             </LinearLayout>
 
             <LinearLayout
-                android:layout_marginTop="15sp"
+                android:layout_marginTop="15dp"
                 android:background="#ede2dede"
                 android:layout_width="match_parent"
-                android:layout_height="20sp"/>
+                android:layout_height="20dp"/>
 
             <LinearLayout
-                android:layout_marginLeft="15sp"
-                android:layout_marginTop="15sp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
                 android:layout_width="match_parent"
-                android:layout_height="90sp">
+                android:layout_height="75dp">
 
                 <Button
-                    android:layout_marginTop="15sp"
+                    android:layout_marginTop="10dp"
                     android:id="@+id/btn_detail_save"
-                    android:layout_marginLeft="75sp"
-                    android:textSize="25sp"
+                    android:layout_marginLeft="28sp"
+                    android:textSize="15sp"
                     android:textColor="#fff"
                     android:text="保存"
                     android:background="@drawable/bg_button_style2"
-                    android:layout_width="180sp"
-                    android:layout_height="wrap_content" />
+                    android:layout_width="120sp"
+                    android:layout_height="35.6dp" />
 
                 <Button
-                    android:layout_marginTop="15sp"
+                    android:layout_marginTop="10dp"
                     android:id="@+id/btn_detail_cancel"
-                    android:layout_marginLeft="65sp"
-                    android:textSize="25sp"
+                    android:layout_marginLeft="45dp"
+                    android:textSize="15sp"
                     android:background="@drawable/bg_button_style3"
                     android:text="取消"
-                    android:layout_width="180sp"
-                    android:layout_height="wrap_content" />
+                    android:layout_width="120dp"
+                    android:layout_height="35.6dp" />
 
             </LinearLayout>
 

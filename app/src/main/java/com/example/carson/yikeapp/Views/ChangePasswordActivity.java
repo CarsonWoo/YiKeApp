@@ -4,10 +4,12 @@ import android.content.Intent;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
 
 import com.example.carson.yikeapp.R;
 import com.example.carson.yikeapp.Utils.ConstantValues;
@@ -32,10 +34,14 @@ public class ChangePasswordActivity extends AppCompatActivity implements View.On
 
     private Button btnSend, btnConfirm;
 
+    private Toolbar toolbar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_change_password);
+
+        setSupportActionBar(toolbar);
 
         initViews();
         initEvents();
@@ -44,6 +50,13 @@ public class ChangePasswordActivity extends AppCompatActivity implements View.On
     private void initEvents() {
         btnSend.setOnClickListener(this);
         btnConfirm.setOnClickListener(this);
+
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ChangePasswordActivity.this.finish();
+            }
+        });
     }
 
     private void initViews() {
@@ -53,6 +66,8 @@ public class ChangePasswordActivity extends AppCompatActivity implements View.On
         etCode = findViewById(R.id.et_change_code);
         btnSend = findViewById(R.id.btn_change_send_check_code);
         btnConfirm = findViewById(R.id.btn_confirm_change_pwd);
+
+        toolbar = findViewById(R.id.toolbar_change_psw);
     }
 
     @Override

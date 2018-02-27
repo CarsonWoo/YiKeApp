@@ -106,18 +106,22 @@ public class HomeActivity extends AppCompatActivity implements FragmentHome.OnFr
             case 0:
                 menu.findItem(R.id.action_scan).setVisible(true);
                 menu.findItem(R.id.action_setting).setVisible(false);
+                menu.findItem(R.id.action_publish).setVisible(false);
                 break;
             case 1:
                 menu.findItem(R.id.action_scan).setVisible(false);
                 menu.findItem(R.id.action_setting).setVisible(false);
+                menu.findItem(R.id.action_publish).setVisible(true);
                 break;
             case 2:
                 menu.findItem(R.id.action_scan).setVisible(false);
                 menu.findItem(R.id.action_setting).setVisible(false);
+                menu.findItem(R.id.action_publish).setVisible(false);
                 break;
             case 3:
                 menu.findItem(R.id.action_scan).setVisible(false);
                 menu.findItem(R.id.action_setting).setVisible(true);
+                menu.findItem(R.id.action_publish).setVisible(false);
                 break;
 
         }

@@ -8,6 +8,6 @@
     <ListView
         android:id="@+id/lv_area_detail"
         android:layout_width="match_parent"
-        android:layout_height="320sp"></ListView>
+        android:layout_height="320dp"></ListView>
 
 </LinearLayout>
