@@ -5,8 +5,8 @@
     <com.example.carson.yikeapp.Views.CircleImageView
         android:id="@+id/iv_head"
         android:src="@android:color/darker_gray"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+        android:layout_width="55dp"
+        android:layout_height="55dp"
         android:layout_centerVertical="true"
         android:layout_margin="20dp"
         />

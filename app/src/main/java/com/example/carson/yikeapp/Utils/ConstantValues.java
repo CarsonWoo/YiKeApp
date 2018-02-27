@@ -80,6 +80,8 @@ public class ConstantValues {
     public static final String KEY_PHONE_NUM = "phone";
     public static final String KEY_PSW = "password";
 
+    public static final String KEY_EXP_DETAIL_TITLE = "EXP_DETAIL_TITLE";
+    public static final String KEY_EXP_DETAIL_CONTENT = "EXP_DETAIL_CONTENT";
 
     //取得token
     public static String getCachedToken(Context context){

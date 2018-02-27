@@ -75,7 +75,7 @@ public class StoreDetailActivity extends AppCompatActivity{
         token = ConstantValues.getCachedToken(this);
 
         //FindViewById
-        toolbar = findViewById(R.id.toolbar_stroe_detail);
+        toolbar = findViewById(R.id.toolbar_store_detail);
         title = findViewById(R.id.title);
         headerStoreTime = findViewById(R.id.tv_store_time_header);
         headerStoreDura = findViewById(R.id.tv_store_duration_header);

@@ -3,10 +3,10 @@
     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:text="@string/yike_diary"
-        android:gravity="center"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_discuss_diary"
+        android:layout_marginTop="10dp"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"/>
 
 </android.support.constraint.ConstraintLayout>

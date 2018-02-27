@@ -21,14 +21,18 @@ import android.widget.Toast;
 import com.example.carson.yikeapp.R;
 import com.example.carson.yikeapp.Utils.ConstantValues;
 import com.example.carson.yikeapp.Views.dummy.ChatItem;
+import com.example.carson.yikeapp.Views.dummy.DiaryItem;
+import com.example.carson.yikeapp.Views.dummy.ExperienceItem;
 import com.example.carson.yikeapp.Views.dummy.HomeContent;
+import com.example.carson.yikeapp.Views.dummy.PartnerItem;
 
 import java.util.ArrayList;
 
 public class HomeActivity extends AppCompatActivity implements FragmentHome.OnFragmentInteractionListener,
-                                                               FragmentMessage.OnFragmentInteractionListener,
-                                                               FragmentUser.OnFragmentInteractionListener,
-                                                               FragmentDiscuss.OnFragmentInteractionListener {
+        FragmentMessage.OnFragmentInteractionListener, FragmentUser.OnFragmentInteractionListener,
+        FragmentDiscuss.OnFragmentInteractionListener, FragmentDiary.OnFragmentInteractionListener,
+        FragmentExp.OnFragmentInteractionListener, FragmentPartner.OnFragmentInteractionListener,
+        FragmentQuestion.OnFragmentInteractionListener{
 
     private final static String TAG = "HomeActivity";
 
@@ -151,7 +155,8 @@ public class HomeActivity extends AppCompatActivity implements FragmentHome.OnFr
                 startActivityForResult(toSetting, ConstantValues.REQUESTCODE_START_SETTING);
                 overridePendingTransition(R.anim.ani_right_get_into, R.anim.ani_left_sign_out);
                 break;
-
+            case R.id.action_publish:
+                break;
         }
 
         return super.onOptionsItemSelected(item);
@@ -187,6 +192,22 @@ public class HomeActivity extends AppCompatActivity implements FragmentHome.OnFr
                 overridePendingTransition(R.anim.ani_right_get_into, R.anim.ani_left_sign_out);
                 break;
             case 1:
+                if (item.get(0) instanceof DiaryItem.DItem) {
+                    Log.i(TAG, "点击了diaryItem");
+                } else if (item.get(0) instanceof ExperienceItem.ExpItem) {
+                    Log.i(TAG, "点击了ExpItem");
+                    Intent toExpDetail = new Intent(HomeActivity.this,
+                            ExpDetailActivity.class);
+                    //TODO 传递查询经验帖详细信息所需数据
+                    toExpDetail.putExtra(ConstantValues.KEY_EXP_DETAIL_TITLE, (((ExperienceItem.ExpItem) item.get(0)).title));
+                    toExpDetail.putExtra(ConstantValues.KEY_EXP_DETAIL_CONTENT, ((ExperienceItem.ExpItem) item.get(0)).content);
+                    startActivity(toExpDetail);
+                    overridePendingTransition(R.anim.ani_right_get_into, R.anim.ani_left_sign_out);
+                } else if (item.get(0) instanceof PartnerItem.PartItem) {
+                    Log.i(TAG, "点击了partItem");
+                    Toast.makeText(this, "Item " + ((PartnerItem.PartItem) (item.get(0))).id
+                                    + " clicked.", Toast.LENGTH_SHORT).show();
+                }
 
                 break;
             case 2:
@@ -206,15 +227,16 @@ public class HomeActivity extends AppCompatActivity implements FragmentHome.OnFr
     }
 
     @Override
-    public void onFragmentInteraction() {
-
-    }
-
-    @Override
-    public void onAttachFragment(Fragment fragment) {
-        super.onAttachFragment(fragment);
-        if (fragment instanceof FragmentDiscuss) {
-            Toast.makeText(this, "onAttachFragmentDiscuss", Toast.LENGTH_SHORT).show();
+    public void onFragmentInteraction(Fragment fragment) {
+        //进行数据交互
+        if (fragment instanceof FragmentExp) {
+            Log.i(TAG, "Instance of FragmentExp");
+        } else if (fragment instanceof FragmentPartner) {
+            Log.i(TAG, "Instance of FragmentPartner");
+        } else if (fragment instanceof FragmentQuestion) {
+            Log.i(TAG, "Instance of FragmentQuestion");
+        } else if (fragment instanceof FragmentDiary) {
+            Log.i(TAG, "Instance of FragmentDiary");
         }
     }
 
@@ -236,7 +258,7 @@ public class HomeActivity extends AppCompatActivity implements FragmentHome.OnFr
                 case 0:
                     return FragmentHome.newInstance();
                 case 1:
-                    return FragmentDiscuss.newInstance(position + 1);
+                    return FragmentDiscuss.newInstance();
                 case 2:
                     return FragmentMessage.newInstance();
                 case 3:

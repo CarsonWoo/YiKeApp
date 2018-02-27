@@ -35,10 +35,7 @@ import java.util.List;
  * Created by 84594 on 2018/2/24.
  */
 
-public class FragmentDiscuss extends Fragment implements FragmentDiary.OnFragmentInteractionListener,
-                                                         FragmentQuestion.OnFragmentInteractionListener,
-                                                         FragmentExp.OnFragmentInteractionListener,
-                                                         FragmentPartner.OnFragmentInteractionListener {
+public class FragmentDiscuss extends Fragment  {
 
     private static final String ARG_DISCUSS_PAGE_POSITION = "page_position";
 
@@ -52,17 +49,16 @@ public class FragmentDiscuss extends Fragment implements FragmentDiary.OnFragmen
 
     private String token;
 
+    private final List<Fragment> fragmentList = new ArrayList<>();
+
+    private Fragment tabSelected = null;
+
     public FragmentDiscuss() {
 
     }
 
-
-
-    public static FragmentDiscuss newInstance(int pos) {
+    public static FragmentDiscuss newInstance() {
         FragmentDiscuss fragment = new FragmentDiscuss();
-        Bundle args = new Bundle();
-        args.putInt(ARG_DISCUSS_PAGE_POSITION, pos);
-        fragment.setArguments(args);
         return fragment;
     }
 
@@ -83,13 +79,17 @@ public class FragmentDiscuss extends Fragment implements FragmentDiary.OnFragmen
                              @Nullable Bundle savedInstanceState) {
 
         Bundle args = getArguments();
-        int pagerPos = args.getInt(ARG_DISCUSS_PAGE_POSITION);
+//        int pagerPos = args.getInt(ARG_DISCUSS_PAGE_POSITION);
 
         token = ConstantValues.getCachedToken(getContext());
         View view;
-
+        fragmentList.add(FragmentExp.newInstance());
+        fragmentList.add(FragmentPartner.newInstance());
+        fragmentList.add(FragmentQuestion.newInstance());
+        fragmentList.add(FragmentDiary.newInstance());
         view = inflater.inflate(R.layout.fragment_discuss, container, false);
-        DiscussPagerAdapter pagerAdapter = new DiscussPagerAdapter(getChildFragmentManager());
+        DiscussPagerAdapter pagerAdapter = new DiscussPagerAdapter(getChildFragmentManager(),
+                fragmentList, mListener);
         vp = view.findViewById(R.id.vp_discuss_item);
         vp.setAdapter(pagerAdapter);
         TabLayout tabLayout = view.findViewById(R.id.tab_layout_discuss);
@@ -98,29 +98,6 @@ public class FragmentDiscuss extends Fragment implements FragmentDiary.OnFragmen
 
         return view;
 
-    }
-
-    @Override
-    public void onFragmentInteraction(ArrayList item) {
-        switch (vp.getCurrentItem()) {
-            case 0:
-                //进不了此方法？
-                Log.i(TAG, "Tab_Exp");
-                Toast.makeText(getContext(), "Item" + ((ExperienceItem.ExpItem)(item.get(0)))
-                        .title + " clicked", Toast.LENGTH_SHORT).show();
-                break;
-            case 1:
-                Log.i(TAG, "Tab_Partner");
-                Toast.makeText(getContext(), "Item " + ((PartnerItem.PartItem)(item.get(0))).name
-                        + " clicked", Toast.LENGTH_SHORT).show();
-                break;
-            case 2:
-                Log.i(TAG, "Tab_Question");
-                break;
-            case 3:
-                Log.i(TAG, "Tab_Diary");
-                break;
-        }
     }
 
     @Override
@@ -141,13 +118,24 @@ public class FragmentDiscuss extends Fragment implements FragmentDiary.OnFragmen
     }
 
     public interface OnFragmentInteractionListener {
-        void onFragmentInteraction();
+        void onFragmentInteraction(Fragment fragment);
     }
 
     class DiscussPagerAdapter extends FragmentPagerAdapter {
+        private final List<Fragment> mFragments;
+        private final OnFragmentInteractionListener mListener;
         //可能需要在这里加监听器
         public DiscussPagerAdapter(FragmentManager fm) {
             super(fm);
+            mFragments = null;
+            mListener = null;
+        }
+
+        public DiscussPagerAdapter(FragmentManager fm, List<Fragment> items,
+                                   OnFragmentInteractionListener listener) {
+            super(fm);
+            this.mFragments = items;
+            mListener = listener;
         }
 
         @Override
@@ -159,14 +147,34 @@ public class FragmentDiscuss extends Fragment implements FragmentDiary.OnFragmen
         public Fragment getItem(int position) {
             switch (position) {
                 case 0:
+                    if (mListener != null) {
+                        tabSelected = FragmentExp.newInstance();
+                        mListener.onFragmentInteraction(tabSelected);
+                    }
                     return FragmentExp.newInstance();
                 case 1:
+                    if (mListener != null) {
+                        tabSelected = FragmentPartner.newInstance();
+                        mListener.onFragmentInteraction(tabSelected);
+                    }
                     return FragmentPartner.newInstance();
                 case 2:
+                    if (mListener != null) {
+                        tabSelected = FragmentQuestion.newInstance();
+                        mListener.onFragmentInteraction(tabSelected);
+                    }
                     return FragmentQuestion.newInstance();
                 case 3:
+                    if (mListener != null) {
+                        tabSelected = FragmentDiary.newInstance();
+                        mListener.onFragmentInteraction(tabSelected);
+                    }
                     return FragmentDiary.newInstance();
                 default:
+                    if (mListener != null) {
+                        tabSelected = FragmentExp.newInstance();
+                        mListener.onFragmentInteraction(tabSelected);
+                    }
                     return FragmentExp.newInstance();
             }
         }

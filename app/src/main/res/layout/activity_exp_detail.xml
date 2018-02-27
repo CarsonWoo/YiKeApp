@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    tools:context="com.example.carson.yikeapp.Views.ExpDetailActivity">
+
+    <android.support.design.widget.AppBarLayout
+        android:background="@android:color/white"
+        android:id="@+id/appbar_exp_detail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:elevation="0dp">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar_exp_detail"
+            android:layout_width="match_parent"
+            android:layout_height="39dp"
+            app:navigationIcon="@drawable/ic_chevron_left">
+
+            <TextView
+                android:textColor="@android:color/black"
+                android:text="攻略"
+                android:textSize="18sp"
+                android:layout_gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </android.support.v7.widget.Toolbar>
+
+    </android.support.design.widget.AppBarLayout>
+    
+    <android.support.v4.widget.NestedScrollView
+        android:layout_marginTop="40dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:background="@android:color/white"
+                android:layout_width="match_parent"
+                android:layout_height="60dp">
+
+                <TextView
+                    android:id="@+id/tv_exp_detail_title"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
+                    android:textColor="@android:color/black"
+                    android:textStyle="bold"
+                    android:textSize="18sp"
+                    android:text="非985、211的本二学生怎样才能尽快提升自己并去英国留学?"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:background="#99f2f0f0"
+                android:layout_width="match_parent"
+                android:layout_height="8dp"></LinearLayout>
+
+            <RelativeLayout
+                android:background="@android:color/white"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/civ_exp_detail"
+                    android:layout_width="55dp"
+                    android:layout_height="55dp"
+                    android:layout_margin="15dp"
+                    android:src="@mipmap/ic_launcher"/>
+
+                <TextView
+                    android:id="@+id/tv_exp_detail_name"
+                    android:layout_marginTop="15dp"
+                    android:textSize="18sp"
+                    android:textColor="@android:color/black"
+                    android:textStyle="bold"
+                    android:text="Hank"
+                    android:layout_toRightOf="@id/civ_exp_detail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:textSize="12sp"
+                    android:id="@+id/tv_exp_detail_date"
+                    android:layout_toRightOf="@id/civ_exp_detail"
+                    android:text="2018-2-27"
+                    android:layout_below="@id/tv_exp_detail_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:id="@+id/tv_exp_detail_like_num"
+                    android:text="377"
+                    android:textSize="12sp"
+                    android:layout_toRightOf="@id/tv_exp_detail_date"
+                    android:layout_below="@id/tv_exp_detail_name"
+                    android:layout_marginLeft="10dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:textSize="12sp"
+                    android:layout_toRightOf="@id/tv_exp_detail_like_num"
+                    android:layout_below="@id/tv_exp_detail_name"
+                    android:text="赞同"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <Button
+                    android:id="@+id/btn_agree_exp_detail"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginRight="10dp"
+                    android:text="赞同"
+                    android:layout_below="@id/tv_exp_detail_name"
+                    android:background="@drawable/bg_button_style1"
+                    android:textColor="#e26323"
+                    android:textSize="9.5sp"
+                    android:layout_width="35.6dp"
+                    android:layout_height="17.6dp"
+                    android:layout_alignParentRight="true" />
+
+                <TextView
+                    android:textSize="18sp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
+                    android:layout_below="@id/civ_exp_detail"
+                    android:id="@+id/tv_exp_detail_content"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+    </android.support.v4.widget.NestedScrollView>
+
+</android.support.design.widget.CoordinatorLayout>

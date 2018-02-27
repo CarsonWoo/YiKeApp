@@ -67,8 +67,12 @@
         <activity
             android:name=".Views.StoreDetailActivity"
             android:theme="@style/TransparentTheme" />
-        <activity android:name=".Views.ResumeActivity"
-            android:theme="@style/MainTheme"></activity>
+        <activity
+            android:name=".Views.ResumeActivity"
+            android:theme="@style/MainTheme" />
+        <activity
+            android:name=".Views.ExpDetailActivity"
+            android:theme="@style/TransparentTheme"></activity>
     </application>
 
 </manifest>

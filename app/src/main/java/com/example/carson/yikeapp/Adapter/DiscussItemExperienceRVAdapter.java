@@ -61,7 +61,7 @@ public class DiscussItemExperienceRVAdapter extends RecyclerView.Adapter<Discuss
             public void onClick(View v) {
                 //识别到listener为空
                 if (null != mListener) {
-                    Log.i("ExpRVAdapter", "listener not null");
+//                    Log.i("ExpRVAdapter", "listener not null");
                     itemSelected.clear();
                     itemSelected.add(holder.item);
                     mListener.onFragmentInteraction(itemSelected);

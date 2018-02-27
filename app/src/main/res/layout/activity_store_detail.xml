@@ -14,10 +14,10 @@
         app:elevation="0dp">
 
         <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar_stroe_detail"
+            android:id="@+id/toolbar_store_detail"
             android:layout_width="match_parent"
             app:navigationIcon="@drawable/ic_chevron_left"
-            android:layout_height="39sp">
+            android:layout_height="39dp">
 
             <TextView
                 android:id="@+id/title"
@@ -271,7 +271,7 @@
                     <TextView
                         android:id="@+id/tv_store_other"
                         android:textColor="@android:color/black"
-                        android:textSize="21.3sp"
+                        android:textSize="16.3sp"
                         android:text="无"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />

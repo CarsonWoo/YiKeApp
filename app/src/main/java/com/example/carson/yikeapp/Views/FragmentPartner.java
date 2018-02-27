@@ -80,21 +80,22 @@ public class FragmentPartner extends Fragment {
 
         DiscussItemPartnerRVAdapter partnerRVAdapter = new
                 DiscussItemPartnerRVAdapter(PartnerItem.ITEMS, mListener);
+        rvPartner.setLayoutManager(new LinearLayoutManager(view.getContext()));
         rvPartner.setAdapter(partnerRVAdapter);
-        rvPartner.setLayoutManager(new LinearLayoutManager(view.getContext(),
-                LinearLayoutManager.VERTICAL, false));
+
         rvPartner.setHasFixedSize(true);
 
         return view;
     }
 
+
     @Override
-    public void onAttachFragment(Fragment childFragment) {
-        super.onAttachFragment(childFragment);
-        if (childFragment instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) childFragment;
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof OnFragmentInteractionListener) {
+            mListener = (OnFragmentInteractionListener) context;
         } else {
-            throw new RuntimeException(childFragment.toString()
+            throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
         }
     }

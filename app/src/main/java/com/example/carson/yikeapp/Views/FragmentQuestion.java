@@ -50,14 +50,13 @@ public class FragmentQuestion extends Fragment {
         return view;
     }
 
-
     @Override
-    public void onAttachFragment(Fragment childFragment) {
-        super.onAttachFragment(childFragment);
-        if (childFragment instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) childFragment;
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof  OnFragmentInteractionListener) {
+            mListener = (OnFragmentInteractionListener) context;
         } else {
-            throw new RuntimeException(childFragment.toString()
+            throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
         }
     }

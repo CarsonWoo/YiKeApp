@@ -80,7 +80,7 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
         animSet.setDuration(3000);
         animSet.start();
 
-
+        //JumpingBeans的用法如下一句
         jumpingSlogan = JumpingBeans.with(tvSlogan).makeTextJump(0, 6)
                 .setIsWave(false).setWavePerCharDelay(5).setLoopDuration(1000).build();
         Runnable runnableJumpSlogan = new Runnable() {
