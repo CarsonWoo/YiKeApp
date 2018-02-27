@@ -6,8 +6,10 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -32,6 +34,8 @@ import okhttp3.OkHttpClient;
 import okhttp3.Response;
 
 public class StoreDetailActivity extends AppCompatActivity{
+    //屏幕宽度
+    private float mScreenW = -1;
 
     //普通控件
     private TextView title, headerStoreTime, headerStoreDura, headerStorePeoLimit,
@@ -49,6 +53,14 @@ public class StoreDetailActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_store_detail);
+        //取得屏幕宽度
+        if (mScreenW == -1) {
+            DisplayMetrics metrics = new DisplayMetrics();
+            getWindowManager().getDefaultDisplay()
+                    .getMetrics(metrics);
+            mScreenW = metrics.widthPixels;
+        }
+
         //设置右滑退出
         SwipeBackHelper.onCreate(this);
         SwipeBackHelper.getCurrentPage(this)
@@ -78,6 +90,11 @@ public class StoreDetailActivity extends AppCompatActivity{
         storePhoto = findViewById(R.id.iv_store_photo);
         storeApply = findViewById(R.id.btn_store_detail_apply);
         storeContact = findViewById(R.id.btn_store_detail_contact);
+
+        //店家图片控件大小设为16：9
+        ViewGroup.LayoutParams layoutParams = storePhoto.getLayoutParams();
+        layoutParams.height = (int) mScreenW*9/16;
+        storePhoto.setLayoutParams(layoutParams);
 
         //设置toolbar
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {

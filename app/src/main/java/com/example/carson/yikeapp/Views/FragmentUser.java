@@ -21,6 +21,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -74,7 +75,7 @@ public class FragmentUser extends Fragment {
     private static Handler sendMsg;
     private File photoFile;
     private Uri photoUri;
-    private String token;
+    private String token,gender;
 
     public FragmentUser() {
         // Required empty public constructor
@@ -84,8 +85,6 @@ public class FragmentUser extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
      * @return A new instance of fragment FragmentUser.
      */
     // Rename and change types and number of parameters
@@ -125,6 +124,7 @@ public class FragmentUser extends Fragment {
             final TextView userArea = view.findViewById(R.id.tv_user_area_value);
             final TextView userCredit = view.findViewById(R.id.tv_user_credit_value);
             final TextView userExpPost = view.findViewById(R.id.tv_user_info_exp_post_value);
+            RelativeLayout itemResume = view.findViewById(R.id.item_user_normal_resume);
 
             //向服务器获取用户信息
             final JSONObject[] userInfo = {new JSONObject()};
@@ -143,6 +143,7 @@ public class FragmentUser extends Fragment {
                         userReserve.setText(userInfo[0].getString(ConstantValues.KEY_USER_RESERVE));
                         userCredit.setText(userInfo[0].getString(ConstantValues.KEY_USER_CREDIT));
                         userExpPost.setText(userInfo[0].getString(ConstantValues.KEY_USER_EXP_POST));
+                        gender = userInfo[0].getString(ConstantValues.KEY_USER_GENDER);
                         int exp = Integer.parseInt(userXp.getText().toString());
                         if(exp<200){
                             userLevel.setText("1");
@@ -158,6 +159,8 @@ public class FragmentUser extends Fragment {
 
                 }
             };
+
+            //设置点击头像更改头像
             userHead.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -179,8 +182,10 @@ public class FragmentUser extends Fragment {
                 }
             });
 
+            //获取当前页面用户信息
             getUserInfo();
 
+            //设置点击用户名填写资料
             userName.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -188,6 +193,18 @@ public class FragmentUser extends Fragment {
                             UserDetailActivity.class);
                     intent.putExtra("token", token);
                     startActivity(intent);
+                }
+            });
+
+            //简历点击
+            itemResume.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent toResume = new Intent(getContext(), ResumeActivity.class);
+                    toResume.putExtra("name",userName.getText());
+                    toResume.putExtra("gender",gender);
+                    startActivity(toResume);
+                    getActivity().overridePendingTransition(R.anim.ani_right_get_into, R.anim.ani_left_sign_out);
                 }
             });
             return view;

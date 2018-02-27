@@ -3,14 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/srl_refresh"
-    android:name="com.example.carson.yikeapp.Views.ItemFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context="com.example.carson.yikeapp.Views.FragmentHome"
-    tools:listitem="@layout/item_fragment_home">
+    tools:context="com.example.carson.yikeapp.Views.FragmentHome">
 
     <ScrollView
+        android:overScrollMode="ifContentScrolls"
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

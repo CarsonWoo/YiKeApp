@@ -1,5 +1,6 @@
 package com.example.carson.yikeapp.Views;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -39,6 +40,7 @@ public class SettingActivity extends AppCompatActivity {
     private RelativeLayout changePsw, callback, about, appUpdate, accountQuit;
     private Toolbar toolbar;
     private String token;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,18 +78,20 @@ public class SettingActivity extends AppCompatActivity {
                     public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
                     }
+
                     @Override
                     public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
                     }
+
                     @Override
                     public void afterTextChanged(Editable editable) {
-                        Log.d(TAG,editable.toString());
+                        Log.d(TAG, editable.toString());
                         if (editable.toString().isEmpty() || editable.toString().equals(newPsw.getText().toString())) {
                             if (warn.getVisibility() == View.VISIBLE) {
                                 warn.setVisibility(View.GONE);
                             }
-                        } else if(!editable.toString().isEmpty() && !editable.toString().equals(newPsw.getText().toString())){
+                        } else if (!editable.toString().isEmpty() && !editable.toString().equals(newPsw.getText().toString())) {
                             if (warn.getVisibility() == View.GONE) {
                                 warn.setVisibility(View.VISIBLE);
                             }
@@ -101,7 +105,7 @@ public class SettingActivity extends AppCompatActivity {
                         String newPswStr = newPsw.getText().toString();
                         String confirmPswStr = confirmPsw.getText().toString();
                         if (oldPswStr.equals(ConstantValues.getCachedPsw(SettingActivity.this))) {
-                            changePsw(oldPswStr,newPswStr,confirmPswStr);
+                            changePsw(oldPswStr, newPswStr, confirmPswStr);
                             dialog.cancel();
                         } else {
                             Toast.makeText(SettingActivity.this, "旧密码不正确,请重新输入", Toast.LENGTH_SHORT).show();
@@ -123,11 +127,33 @@ public class SettingActivity extends AppCompatActivity {
         accountQuit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ConstantValues.removeToken(SettingActivity.this);
-                setResult(ConstantValues.RESULTCODE_SETTING_ACCOUNT_QUIT);
-                Intent toStartAty = new Intent(SettingActivity.this, StartActivity.class);
-                startActivity(toStartAty);
-                finish();
+
+                //使用创建器创建单选对话框
+                AlertDialog.Builder builder = new AlertDialog.Builder(SettingActivity.this);
+
+                //设置对话框的标题
+                builder.setTitle("退出登录？");
+                //设置确定按钮
+                builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        ConstantValues.removeToken(SettingActivity.this);
+                        setResult(ConstantValues.RESULTCODE_SETTING_ACCOUNT_QUIT);
+                        Intent toStartAty = new Intent(SettingActivity.this, StartActivity.class);
+                        startActivity(toStartAty);
+                        finish();
+                    }
+                });
+                //设置取消按钮
+                builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+                //使用创建器生成一个对话框对象
+                AlertDialog ad = builder.create();
+                ad.show();
             }
         });
     }
@@ -138,7 +164,7 @@ public class SettingActivity extends AppCompatActivity {
         overridePendingTransition(R.anim.ani_left_get_into, R.anim.ani_right_sign_out);
     }
 
-    private void changePsw(final String oldPsw, final String newPsw, final String confirmPsw){
+    private void changePsw(final String oldPsw, final String newPsw, final String confirmPsw) {
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -168,14 +194,14 @@ public class SettingActivity extends AppCompatActivity {
                                     JSONObject object = new JSONObject(response
                                             .body().string());
                                     int code = object.getInt("code");
-                                    Log.d(TAG,object.toString());
+                                    Log.d(TAG, object.toString());
                                     if (code == 200) {
                                         runOnUiThread(new Runnable() {
                                             @Override
                                             public void run() {
                                                 Toast.makeText(SettingActivity.this,
                                                         "修改成功!", Toast.LENGTH_SHORT).show();
-                                                ConstantValues.cachPsw(SettingActivity.this,newPsw);
+                                                ConstantValues.cachPsw(SettingActivity.this, newPsw);
                                             }
                                         });
                                     } else {

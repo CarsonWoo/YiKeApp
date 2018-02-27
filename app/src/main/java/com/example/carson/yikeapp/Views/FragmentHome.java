@@ -11,6 +11,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -66,6 +67,11 @@ public class FragmentHome extends Fragment {
     private String token;
     private ScrollView scrollView;
 
+    /**
+     * 屏幕宽度
+     */
+    private static float mScreenW = -1;
+
     private static final String TAG = "FragmentHome";
 
     public FragmentHome() {
@@ -104,8 +110,13 @@ public class FragmentHome extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-
+        //获取屏幕宽度
+        if (mScreenW == -1) {
+            DisplayMetrics metrics = new DisplayMetrics();
+            getActivity().getWindowManager().getDefaultDisplay()
+                    .getMetrics(metrics);
+            mScreenW = metrics.widthPixels;
+        }
         token = ConstantValues.getCachedToken(getContext());
         View view;
         //PagerHome
@@ -121,6 +132,14 @@ public class FragmentHome extends Fragment {
         rvList.addItemDecoration(decoration);
         rvList.setHasFixedSize(true);
         rvList.setFocusable(false);
+        //设置recyclerView不滚动，从而恢复scrollview惯性滚动
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext()){
+            @Override
+            public boolean canScrollVertically() {
+                return false;
+            }
+        };
+        rvList.setLayoutManager(layoutManager);
 
         //下拉刷新
         final SwipeRefreshLayout refreshLayout = view.findViewById(R.id.srl_refresh);
@@ -159,6 +178,10 @@ public class FragmentHome extends Fragment {
         viewList.add(view1);
         viewList.add(view2);
         viewList.add(view3);
+        ViewGroup.LayoutParams layoutParams = header.getLayoutParams();
+        layoutParams.height = (int)mScreenW*9/16;
+        header.setLayoutParams(layoutParams);
+
 
         final ArrayList<View> finalViewList = viewList;
         PagerAdapter pagerAdapter = new PagerAdapter() {

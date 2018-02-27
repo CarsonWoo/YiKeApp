@@ -47,9 +47,10 @@
 
             <ImageView
                 android:src="@drawable/banner"
+                android:scaleType="centerCrop"
                 android:id="@+id/iv_store_photo"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"/>
+                android:layout_height="wrap_content"/>
 
             <LinearLayout
                 app:layout_constraintTop_toBottomOf="@+id/iv_store_photo"
@@ -130,11 +131,6 @@
                 </LinearLayout>
 
             </LinearLayout>
-
-            <View
-                android:background="#868282"
-                android:layout_width="match_parent"
-                android:layout_height="1dp" />
 
             <LinearLayout
                 android:layout_marginRight="20dp"
@@ -275,7 +271,7 @@
                     <TextView
                         android:id="@+id/tv_store_other"
                         android:textColor="@android:color/black"
-                        android:textSize="16.3sp"
+                        android:textSize="21.3sp"
                         android:text="无"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />

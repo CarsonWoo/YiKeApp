@@ -123,5 +123,4 @@ public class ConstantValues {
         editor.putString(KEY_PSW,psw);
         editor.apply();
     }
-
 }
