@@ -137,9 +137,6 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
         final String token = ConstantValues.getCachedToken(this);
 
         if (token != null) {
-            Intent intent = new Intent(StartActivity.this, HomeActivity.class);
-            startActivity(intent);
-            finish();
             new Thread(new Runnable() {
                 @Override
                 public void run() {

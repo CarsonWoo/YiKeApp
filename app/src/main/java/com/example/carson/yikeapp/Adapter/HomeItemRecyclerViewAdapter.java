@@ -12,7 +12,6 @@ import com.example.carson.yikeapp.Views.FragmentHome.OnFragmentInteractionListen
 import com.example.carson.yikeapp.Views.dummy.HomeContent.BNBHomeItem;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * {@link RecyclerView.Adapter} that can display a {@link BNBHomeItem} and makes a call to the
@@ -21,12 +20,12 @@ import java.util.List;
 public class HomeItemRecyclerViewAdapter extends RecyclerView.Adapter<HomeItemRecyclerViewAdapter.ViewHolder> {
     private final static String TAG = "HomeItemRViewAdapter";
 
-    private final List<BNBHomeItem> mValues;
+    private final ArrayList<BNBHomeItem> mValues;
     private final OnFragmentInteractionListener mListener;
     private final ArrayList<BNBHomeItem> itemSelected = new ArrayList<>();
 
-    public HomeItemRecyclerViewAdapter(List<BNBHomeItem> items, OnFragmentInteractionListener listener) {
-        mValues = items;
+    public HomeItemRecyclerViewAdapter(OnFragmentInteractionListener listener) {
+        mValues = new ArrayList<>();
         mListener = listener;
     }
 
@@ -63,6 +62,16 @@ public class HomeItemRecyclerViewAdapter extends RecyclerView.Adapter<HomeItemRe
     @Override
     public int getItemCount() {
         return mValues.size();
+    }
+
+    public void addData(ArrayList<BNBHomeItem> mValues){
+        this.mValues.addAll(mValues);
+        notifyDataSetChanged();
+    }
+
+    public void clearData(){
+        this.mValues.clear();
+        notifyDataSetChanged();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

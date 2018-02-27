@@ -211,7 +211,10 @@ public class HomeActivity extends AppCompatActivity implements FragmentHome.OnFr
 
                 break;
             case 2:
-                //TODO 点击了一个ChatFragment中RecycleView 的item
+                Intent toChatWin = new Intent(HomeActivity.this,ChatWindowActivity.class);
+                toChatWin.putExtra("chatTitle",((ChatItem.ChatWinItem) (item.get(0))).name);
+                startActivity(toChatWin);
+                overridePendingTransition(R.anim.ani_right_get_into, R.anim.ani_left_sign_out);
                 Toast.makeText(this, "Item " + ((ChatItem.ChatWinItem) (item.get(0))).name + " clicked.", Toast.LENGTH_SHORT).show();
                 break;
             case 3:

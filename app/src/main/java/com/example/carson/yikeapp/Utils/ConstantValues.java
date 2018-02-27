@@ -32,6 +32,8 @@ public class ConstantValues {
 
     public static final String URL_CHANGE_PWD_BY_OLD_PWD = "https://www.yiluzou.cn/yike/public/index.php/changepwd";
 
+    public static final String URL_HOME_LIST_URL = "https://www.yiluzou.cn/yike/public/index.php/show_top";
+
     public static final int CODE_TAKE_PHOTO = 1;
 
     public static final int TYPE_TAKE_PHOTO = 1;
@@ -79,6 +81,28 @@ public class ConstantValues {
     public static final String KEY_STORE_NAME = "storeName";
     public static final String KEY_PHONE_NUM = "phone";
     public static final String KEY_PSW = "password";
+    public static final String KEY_CHAT_MSG = "chatMsg";
+    public static final String KEY_CHAT_MSG_SENDER_ME = "senderMe";
+    public static final String KEY_CHAT_MSG_SENDER_OPP = "senderOpp";
+
+    //首页店家列表传递参数名称
+    public static final String KEY_HOME_LIST_PAGE = "page";
+    public static final String KEY_HOME_LIST_SIZE = "size";
+
+    public static final String KEY_HOME_LIST_ID = "id";
+    public static final String KEY_HOME_LIST_USERNAME = "username";
+    public static final String KEY_HOME_LIST_HOTELNAME = "hotel_name";
+    public static final String KEY_HOME_LIST_LOCATION = "location";
+    public static final String KEY_HOME_LIST_TIME = "time";
+    public static final String KEY_HOME_LIST_LAST = "last";
+    public static final String KEY_HOME_LIST_NEED_NUM = "need_number";
+    public static final String KEY_HOME_LIST_INTRO= "introduction";
+    public static final String KEY_HOME_LIST_REQUE = "requirement";
+    public static final String KEY_HOME_LIST_WORK = "work";
+    public static final String KEY_HOME_LIST_OTHER = "other";
+    public static final String KEY_HOME_LIST_PERSON_NUM = "person_number";
+    public static final String KEY_HOME_LIST_PUTIME = "publish_time";
+    public static final String KEY_HOME_LIST_PHOTO_URL = "photo_url";
 
     public static final String KEY_EXP_DETAIL_TITLE = "EXP_DETAIL_TITLE";
     public static final String KEY_EXP_DETAIL_CONTENT = "EXP_DETAIL_CONTENT";

@@ -1,9 +1,11 @@
 package com.example.carson.yikeapp.Views;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -17,7 +19,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.ScrollView;
 import android.widget.Toast;
 
 import com.example.carson.yikeapp.Adapter.HomeItemRecyclerViewAdapter;
@@ -26,6 +27,7 @@ import com.example.carson.yikeapp.Utils.ConstantValues;
 import com.example.carson.yikeapp.Utils.HttpUtils;
 import com.example.carson.yikeapp.Views.dummy.HomeContent;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -61,11 +63,12 @@ public class FragmentHome extends Fragment {
     private OnFragmentInteractionListener mListener;
 
     private static final int TIME = 3000;
-    private Handler mHandler = new Handler();
+    private Handler viewPagerScrollHandler = new Handler(), listDataHandler;
     private int itemPosition = 0;
 
-    private String token;
-    private ScrollView scrollView;
+    private String token, listID = "";
+    private ArrayList<HomeContent.BNBHomeItem> storeData = new ArrayList<>();
+    private HomeItemRecyclerViewAdapter rvAdapter;
 
     /**
      * 屏幕宽度
@@ -82,7 +85,6 @@ public class FragmentHome extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-
      * @return A new instance of fragment FragmentHome.
      */
     //Rename and change types and number of parameters
@@ -107,6 +109,7 @@ public class FragmentHome extends Fragment {
 //        }
     }
 
+    @SuppressLint("HandlerLeak")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -125,21 +128,57 @@ public class FragmentHome extends Fragment {
 
         //rv_homelist
         Context context = view.getContext();
+        rvAdapter = new HomeItemRecyclerViewAdapter(mListener);
         RecyclerView rvList = view.findViewById(R.id.rv_homelist);
         rvList.setLayoutManager(new LinearLayoutManager(context));
-        rvList.setAdapter(new HomeItemRecyclerViewAdapter(HomeContent.ITEMS, mListener));
+        rvList.setAdapter(rvAdapter);
         DividerItemDecoration decoration = new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL);
         rvList.addItemDecoration(decoration);
         rvList.setHasFixedSize(true);
         rvList.setFocusable(false);
         //设置recyclerView不滚动，从而恢复scrollview惯性滚动
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext()){
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext()) {
             @Override
             public boolean canScrollVertically() {
                 return false;
             }
         };
         rvList.setLayoutManager(layoutManager);
+        //处理返回的列表信息
+        listDataHandler = new Handler() {
+            @Override
+            public void handleMessage(Message msg) {
+                super.handleMessage(msg);
+                JSONArray listData = (JSONArray) msg.obj;
+                JSONObject oneData;
+                int listNum = storeData.size();
+                for (int i = 0; i < listData.length(); i++) {
+                    try {
+                        oneData = listData.getJSONObject(i);
+                        if (!listID.contains(oneData.getString(ConstantValues.KEY_HOME_LIST_ID))) {
+                            listID = listID + oneData.getString(ConstantValues.KEY_HOME_LIST_ID);
+                            storeData.add(new HomeContent.BNBHomeItem(oneData.getString(ConstantValues.KEY_HOME_LIST_ID)
+                                    , oneData.getString(ConstantValues.KEY_HOME_LIST_HOTELNAME)
+                                    , oneData.getString(ConstantValues.KEY_HOME_LIST_USERNAME)
+                                    , oneData.getString(ConstantValues.KEY_HOME_LIST_TIME)
+                                    , oneData.getString(ConstantValues.KEY_HOME_LIST_LAST)
+                                    , oneData.getString(ConstantValues.KEY_HOME_LIST_LOCATION)
+                            ));
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+                if(listNum == storeData.size()){
+                    Toast.makeText(getContext(), "暂时没有更多店家", Toast.LENGTH_SHORT).show();
+                }
+                rvAdapter.clearData();
+                rvAdapter.addData(storeData);
+            }
+        };
+        getHomeBNBList(1);
+
 
         //下拉刷新
         final SwipeRefreshLayout refreshLayout = view.findViewById(R.id.srl_refresh);
@@ -152,7 +191,7 @@ public class FragmentHome extends Fragment {
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                Toast.makeText(getContext(),"refreshing",Toast.LENGTH_SHORT);
+                getHomeBNBList(rvAdapter.getItemCount() / 7 + 1);
                 new Handler().postDelayed(new Runnable() {
 
                     @Override
@@ -179,7 +218,7 @@ public class FragmentHome extends Fragment {
         viewList.add(view2);
         viewList.add(view3);
         ViewGroup.LayoutParams layoutParams = header.getLayoutParams();
-        layoutParams.height = (int)mScreenW*9/16;
+        layoutParams.height = (int) mScreenW * 9 / 16;
         header.setLayoutParams(layoutParams);
 
 
@@ -221,20 +260,20 @@ public class FragmentHome extends Fragment {
             public void run() {
                 try {
                     itemPosition++;
-                    mHandler.postDelayed(this, TIME);
+                    viewPagerScrollHandler.postDelayed(this, TIME);
                     header.setCurrentItem(itemPosition % finalViewList1.size());
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
         };
-        mHandler.postDelayed(runnableForViewPager, TIME);
+        viewPagerScrollHandler.postDelayed(runnableForViewPager, TIME);
         return view;
     }
 
 
     //首页店家列表获取
-    private void getHomeBNBList(){
+    private void getHomeBNBList(final int page) {
 
         new Thread(new Runnable() {
             @Override
@@ -248,10 +287,10 @@ public class FragmentHome extends Fragment {
                     e.printStackTrace();
                 }
                 FormBody.Builder builder = new FormBody.Builder();
-                //TODO 设置HomeBNBList传递参数
-                builder.add("token", token);
-                //TODO 设置HomeBNBList接口链接。
-                HttpUtils.sendRequest(client, ConstantValues.URL_GET_USER_INFO,
+                builder.add(ConstantValues.KEY_TOKEN, token);
+                builder.add(ConstantValues.KEY_HOME_LIST_PAGE, page + "");
+                builder.add(ConstantValues.KEY_HOME_LIST_SIZE, "7");
+                HttpUtils.sendRequest(client, ConstantValues.URL_HOME_LIST_URL,
                         builder, new Callback() {
                             @Override
                             public void onFailure(Call call, IOException e) {
@@ -264,9 +303,12 @@ public class FragmentHome extends Fragment {
                                     JSONObject object = new JSONObject(response
                                             .body().string());
                                     int code = object.getInt("code");
-                                    Log.d(TAG,object.toString());
+                                    Log.d(TAG, object.toString());
                                     if (code == 200) {
-                                        //TODO 正常返回首页店家HomeBNBList，处理返回信息
+                                        JSONArray jsonArray = object.getJSONArray("msg");
+                                        Message msg = new Message();
+                                        msg.obj = jsonArray;
+                                        listDataHandler.sendMessage(msg);
                                     } else {
                                         final String msg = object.getString("msg");
                                         getActivity().runOnUiThread(new Runnable() {

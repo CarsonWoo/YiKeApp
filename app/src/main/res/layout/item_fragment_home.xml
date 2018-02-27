@@ -31,7 +31,7 @@
 
         <Button
             android:id="@+id/bnb_location"
-            android:layout_width="44dp"
+            android:layout_width="wrap_content"
             android:layout_height="16.3dp"
             android:background="@drawable/bg_bnb_loca"
             android:text="云南"

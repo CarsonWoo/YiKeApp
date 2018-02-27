@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.carson.yikeapp.Views.ChatWindowActivity">
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_alignParentTop="true"
+        android:id="@+id/appbar_chat_win"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:elevation="0dp">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar_chat_win"
+            android:layout_width="match_parent"
+            app:navigationIcon="@drawable/ic_chevron_left"
+            android:layout_height="39sp">
+
+            <TextView
+                android:id="@+id/title"
+                android:text="义客"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textColor="@android:color/black"
+                android:textSize="18sp" />
+
+        </android.support.v7.widget.Toolbar>
+
+    </android.support.design.widget.AppBarLayout>
+
+    <RelativeLayout
+        android:layout_below="@+id/appbar_chat_win"
+        android:layout_above="@+id/rl_chat_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_chat_win"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    </android.support.v7.widget.RecyclerView>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_chat_bottom"
+        android:layout_width="match_parent"
+        android:padding="5dp"
+        android:layout_alignParentBottom="true"
+        android:layout_height="40dp">
+
+        <EditText
+            android:paddingTop="4dp"
+            android:paddingLeft="6dp"
+            android:paddingRight="6dp"
+            android:paddingBottom="4dp"
+            android:id="@+id/et_chat_win"
+            android:layout_marginRight="5dp"
+            android:background="@drawable/bg_edittext_normal"
+            android:layout_toLeftOf="@+id/btn_chat_send"
+            android:layout_alignParentBottom="true"
+            android:layout_width="match_parent"
+            android:textSize="18sp"
+            android:layout_height="wrap_content" />
+
+        <ImageButton
+            android:layout_marginRight="5dp"
+            android:layout_alignParentBottom="true"
+            android:src="@drawable/ic_keyboard_arrow_right_black_36dp"
+            android:id="@+id/btn_chat_send"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/bg_button_style2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </RelativeLayout>
+
+</RelativeLayout>
