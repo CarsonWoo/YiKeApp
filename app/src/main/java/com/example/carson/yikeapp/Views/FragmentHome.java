@@ -21,6 +21,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.carson.yikeapp.Adapter.HomeItemRecyclerViewAdapter;
 import com.example.carson.yikeapp.R;
 import com.example.carson.yikeapp.Utils.ConstantValues;
@@ -53,14 +54,15 @@ import okhttp3.Response;
 public class FragmentHome extends Fragment {
     //Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private static final int ARG_BANNER = 1;
+    private static final int ARG_LIST = 2;
 
     //Rename and change types of parameters
 //    private String mParam1;
 //    private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+
 
     private static final int TIME = 3000;
     private Handler viewPagerScrollHandler = new Handler(), listDataHandler;
@@ -69,6 +71,9 @@ public class FragmentHome extends Fragment {
     private String token, listID = "";
     private ArrayList<HomeContent.BNBHomeItem> storeData = new ArrayList<>();
     private HomeItemRecyclerViewAdapter rvAdapter;
+    private ArrayList<ImageView> viewList = new ArrayList<>();
+    private ArrayList<String> bannerList = new ArrayList<>();
+    private PagerAdapter pagerAdapter;
 
     /**
      * 屏幕宽度
@@ -124,7 +129,7 @@ public class FragmentHome extends Fragment {
         view = inflater.inflate(R.layout.fragment_home, container, false);
 
         //rv_homelist
-        Context context = view.getContext();
+        final Context context = view.getContext();
         rvAdapter = new HomeItemRecyclerViewAdapter(mListener);
         RecyclerView rvList = view.findViewById(R.id.rv_homelist);
         rvList.setLayoutManager(new LinearLayoutManager(context));
@@ -141,41 +146,6 @@ public class FragmentHome extends Fragment {
             }
         };
         rvList.setLayoutManager(layoutManager);
-        //处理返回的列表信息
-        listDataHandler = new Handler() {
-            @Override
-            public void handleMessage(Message msg) {
-                super.handleMessage(msg);
-                JSONArray listData = (JSONArray) msg.obj;
-                JSONObject oneData;
-                int listNum = storeData.size();
-                for (int i = 0; i < listData.length(); i++) {
-                    try {
-                        oneData = listData.getJSONObject(i);
-                        if (!listID.contains(oneData.getString(ConstantValues.KEY_HOME_LIST_ID))) {
-                            listID = listID + oneData.getString(ConstantValues.KEY_HOME_LIST_ID);
-                            storeData.add(new HomeContent.BNBHomeItem(oneData.getString(ConstantValues.KEY_HOME_LIST_ID)
-                                    , oneData.getString(ConstantValues.KEY_HOME_LIST_HOTELNAME)
-                                    , oneData.getString(ConstantValues.KEY_HOME_LIST_USERNAME)
-                                    , oneData.getString(ConstantValues.KEY_HOME_LIST_TIME)
-                                    , oneData.getString(ConstantValues.KEY_HOME_LIST_LAST)
-                                    , oneData.getString(ConstantValues.KEY_HOME_LIST_LOCATION)
-                            ));
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-
-                }
-                if(listNum == storeData.size()){
-                    Toast.makeText(getContext(), "暂时没有更多店家", Toast.LENGTH_SHORT).show();
-                }
-                rvAdapter.clearData();
-                rvAdapter.addData(storeData);
-            }
-        };
-        getHomeBNBList(1);
-
 
         //下拉刷新
         final SwipeRefreshLayout refreshLayout = view.findViewById(R.id.srl_refresh);
@@ -189,38 +159,73 @@ public class FragmentHome extends Fragment {
             @Override
             public void onRefresh() {
                 getHomeBNBList(rvAdapter.getItemCount() / 7 + 1);
-                new Handler().postDelayed(new Runnable() {
-
-                    @Override
-                    public void run() {
-                        refreshLayout.setRefreshing(false);
-                    }
-                }, 1000);
             }
         });
 
+        //处理返回的列表信息
+        listDataHandler = new Handler() {
+            @Override
+            public void handleMessage(Message msg) {
+                super.handleMessage(msg);
+                if (msg.arg1 == ARG_LIST) {
+                    JSONArray listData = (JSONArray) msg.obj;
+                    JSONObject oneData;
+                    int listNum = storeData.size();
+                    for (int i = 0; i < listData.length(); i++) {
+                        try {
+                            oneData = listData.getJSONObject(i);
+                            if (!listID.contains(oneData.getString(ConstantValues.KEY_HOME_LIST_ID))) {
+                                listID = listID + oneData.getString(ConstantValues.KEY_HOME_LIST_ID);
+                                storeData.add(new HomeContent.BNBHomeItem(oneData.getString(ConstantValues.KEY_HOME_LIST_ID)
+                                        , oneData.getString(ConstantValues.KEY_HOME_LIST_HOTELNAME)
+                                        , oneData.getString(ConstantValues.KEY_HOME_LIST_USERNAME)
+                                        , oneData.getString(ConstantValues.KEY_HOME_LIST_TIME)
+                                        , oneData.getString(ConstantValues.KEY_HOME_LIST_LAST)
+                                        , oneData.getString(ConstantValues.KEY_HOME_LIST_LOCATION),
+                                        oneData.toString())
+                                );
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                    if (listNum == storeData.size() && refreshLayout.isRefreshing()) {
+                        Toast.makeText(getContext(), "暂时没有更多店家", Toast.LENGTH_SHORT).show();
+                    }
+                    refreshLayout.setRefreshing(false);
+                    rvAdapter.clearData();
+                    rvAdapter.addData(storeData);
+                }else {
+                    JSONArray listUrl = (JSONArray) msg.obj;
+                    for (int i = 0; i < listUrl.length() ; i++){
+                        try {
+                            bannerList.add(listUrl.getString(i));
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    for (int i = 0; i < bannerList.size() ; i++) {
+                        ImageView view = new ImageView(context);
+                        view.setBackgroundColor(Color.WHITE);
+                        Glide.with(getContext()).load(bannerList.get(i)).into(view);//设置头像
+                        view.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                        viewList.add(view);
+                        pagerAdapter.notifyDataSetChanged();
+                    }
+
+                }
+            }
+        };
+        getHomeBNBList(1);
+
         //headerViewPager
         final ViewPager header = view.findViewById(R.id.vp_home_header);
-        ArrayList<View> viewList = null;
-        ImageView view1 = new ImageView(context);
-        ImageView view2 = new ImageView(context);
-        ImageView view3 = new ImageView(context);
-
-        view1.setBackgroundColor(Color.GREEN);
-        view2.setBackgroundColor(Color.BLUE);
-        view3.setBackgroundColor(Color.RED);
-
-        viewList = new ArrayList<View>();// 将要分页显示的View装入数组中
-        viewList.add(view1);
-        viewList.add(view2);
-        viewList.add(view3);
         ViewGroup.LayoutParams layoutParams = header.getLayoutParams();
         layoutParams.height = (int) mScreenW * 9 / 16;
         header.setLayoutParams(layoutParams);
 
-
-        final ArrayList<View> finalViewList = viewList;
-        PagerAdapter pagerAdapter = new PagerAdapter() {
+        pagerAdapter = new PagerAdapter() {
 
             @Override
             public boolean isViewFromObject(View arg0, Object arg1) {
@@ -229,29 +234,29 @@ public class FragmentHome extends Fragment {
 
             @Override
             public int getCount() {
-                return finalViewList.size();
+                return viewList.size();
             }
 
             @Override
             public void destroyItem(ViewGroup container, int position,
                                     Object object) {
-                container.removeView(finalViewList.get(position));
+                container.removeView(viewList.get(position));
             }
 
             @Override
             public Object instantiateItem(ViewGroup container, int position) {
-                container.addView(finalViewList.get(position));
+                container.addView(viewList.get(position));
 
-
-                return finalViewList.get(position);
+                return viewList.get(position);
             }
         };
-
         header.setAdapter(pagerAdapter);
+
+        getHeaderPhoto();
         /**
          * ViewPager的定时器
          */
-        final ArrayList<View> finalViewList1 = viewList;
+        final ArrayList<ImageView> finalViewList1 = viewList;
         Runnable runnableForViewPager = new Runnable() {
             @Override
             public void run() {
@@ -304,6 +309,7 @@ public class FragmentHome extends Fragment {
                                     if (code == 200) {
                                         JSONArray jsonArray = object.getJSONArray("msg");
                                         Message msg = new Message();
+                                        msg.arg1 = ARG_LIST;
                                         msg.obj = jsonArray;
                                         listDataHandler.sendMessage(msg);
                                     } else {
@@ -325,12 +331,60 @@ public class FragmentHome extends Fragment {
         }).start();
     }
 
-    // Rename method, update argument and hook method into UI event
-//    public void onButtonPressed(Uri uri) {
-//        if (mListener != null) {
-//            mListener.onFragmentInteraction(uri);
-//        }
-//    }
+
+    //获取青旅详细信息
+    private void getHeaderPhoto() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                OkHttpClient client = null;
+                try {
+                    client = HttpUtils.getUnsafeOkHttpClient();
+                } catch (NoSuchAlgorithmException e) {
+                    e.printStackTrace();
+                } catch (KeyManagementException e) {
+                    e.printStackTrace();
+                }
+                FormBody.Builder builder = new FormBody.Builder();
+                builder.add("token", token);
+                HttpUtils.sendRequest(client, ConstantValues.URL_GET_BANNER_PHOTO,
+                        builder, new Callback() {
+                            @Override
+                            public void onFailure(Call call, IOException e) {
+
+                            }
+
+                            @Override
+                            public void onResponse(Call call, Response response) throws IOException {
+                                try {
+                                    JSONObject object = new JSONObject(response
+                                            .body().string());
+                                    int code = object.getInt("code");
+                                    Log.d(TAG, object.toString());
+                                    if (code == 200) {
+                                        JSONArray jsonArray = object.getJSONArray("msg");
+                                        Message msg = new Message();
+                                        msg.arg1 = ARG_BANNER;
+                                        msg.obj = jsonArray;
+                                        listDataHandler.sendMessage(msg);
+                                    } else {
+                                        final String msg = object.getString("msg");
+                                        getActivity().runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                Toast.makeText(getContext(),
+                                                        msg, Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
+                                    }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        });
+            }
+        }).start();
+    }
 
     @Override
     public void onAttach(Context context) {

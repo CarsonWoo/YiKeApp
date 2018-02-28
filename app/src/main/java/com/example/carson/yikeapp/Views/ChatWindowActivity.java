@@ -19,6 +19,7 @@ import android.widget.TextView;
 import com.example.carson.yikeapp.Adapter.ChatMsgAdapter;
 import com.example.carson.yikeapp.R;
 import com.example.carson.yikeapp.Utils.ConstantValues;
+import com.jude.swipbackhelper.SwipeBackHelper;
 
 public class ChatWindowActivity extends AppCompatActivity {
     private final static String TAG = "ChatWindowActivity";
@@ -45,6 +46,16 @@ public class ChatWindowActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat_window);
 
+        //设置右滑退出
+        SwipeBackHelper.onCreate(this);
+        SwipeBackHelper.getCurrentPage(this)
+                .setSwipeBackEnable(true)
+                .setSwipeSensitivity(1.0f)
+                .setSwipeRelateEnable(true)
+                .setSwipeRelateOffset(300)
+                .setSwipeEdgePercent(0.15f)
+                .setClosePercent(0.5f);
+
         //findview
         title = findViewById(R.id.title);
         toolbar = findViewById(R.id.toolbar_chat_win);
@@ -69,7 +80,7 @@ public class ChatWindowActivity extends AppCompatActivity {
 
         //Intent
         initData = getIntent();
-        title.setText(initData.getStringExtra("chatTitle"));
+        title.setText(initData.getStringExtra(ConstantValues.KEY_HOME_LIST_USERNAME));
 
         //设置edittext动态高度
         setUpEditText();
@@ -171,6 +182,12 @@ public class ChatWindowActivity extends AppCompatActivity {
         //动态计算字符串的长度
         etMsgSend.addTextChangedListener(mTextWatcher);
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        SwipeBackHelper.onDestroy(this);
+        super.onDestroy();
     }
 
     @Override

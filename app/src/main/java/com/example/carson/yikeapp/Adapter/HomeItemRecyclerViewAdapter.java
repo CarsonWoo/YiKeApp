@@ -1,6 +1,7 @@
 package com.example.carson.yikeapp.Adapter;
 
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -66,6 +67,7 @@ public class HomeItemRecyclerViewAdapter extends RecyclerView.Adapter<HomeItemRe
 
     public void addData(ArrayList<BNBHomeItem> mValues){
         this.mValues.addAll(mValues);
+        Log.d(TAG,mValues.toString());
         notifyDataSetChanged();
     }
 

@@ -27,7 +27,6 @@ import com.example.carson.yikeapp.Views.dummy.ExperienceItem;
 import com.example.carson.yikeapp.Views.dummy.HomeContent;
 import com.example.carson.yikeapp.Views.dummy.PartnerItem;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -205,7 +204,7 @@ public class HomeActivity extends AppCompatActivity implements FragmentHome.OnFr
                 Log.d(TAG, ((HomeContent.BNBHomeItem) (item.get(0))).id + "");
                 Toast.makeText(this, "Item " + ((HomeContent.BNBHomeItem) (item.get(0))).id + " clicked.", Toast.LENGTH_SHORT).show();
                 Intent toStoreDetail = new Intent(HomeActivity.this, StoreDetailActivity.class);
-                //TODO 传递查询店家详细信息所需数据
+                toStoreDetail.putExtra(ConstantValues.KEY_STORE_MORE_DETAIL,((HomeContent.BNBHomeItem) (item.get(0))).moreDetail);
                 toStoreDetail.putExtra(ConstantValues.KEY_STORE_NAME, ((HomeContent.BNBHomeItem) (item.get(0))).name);
                 startActivity(toStoreDetail);
                 overridePendingTransition(R.anim.ani_right_get_into, R.anim.ani_left_sign_out);
@@ -235,7 +234,7 @@ public class HomeActivity extends AppCompatActivity implements FragmentHome.OnFr
                 break;
             case 2:
                 Intent toChatWin = new Intent(HomeActivity.this,ChatWindowActivity.class);
-                toChatWin.putExtra("chatTitle",((ChatItem.ChatWinItem) (item.get(0))).name);
+                toChatWin.putExtra(ConstantValues.KEY_HOME_LIST_USERNAME,((ChatItem.ChatWinItem) (item.get(0))).name);
                 startActivity(toChatWin);
                 overridePendingTransition(R.anim.ani_right_get_into, R.anim.ani_left_sign_out);
                 Toast.makeText(this, "Item " + ((ChatItem.ChatWinItem) (item.get(0))).name + " clicked.", Toast.LENGTH_SHORT).show();

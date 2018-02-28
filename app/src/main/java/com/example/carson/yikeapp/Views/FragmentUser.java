@@ -1,6 +1,7 @@
 package com.example.carson.yikeapp.Views;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -106,6 +107,7 @@ public class FragmentUser extends Fragment {
 //        }
     }
 
+    @SuppressLint("HandlerLeak")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

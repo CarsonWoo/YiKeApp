@@ -1,9 +1,9 @@
 package com.example.carson.yikeapp.Views;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
@@ -13,27 +13,16 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.carson.yikeapp.R;
 import com.example.carson.yikeapp.Utils.ConstantValues;
-import com.example.carson.yikeapp.Utils.HttpUtils;
 import com.jude.swipbackhelper.SwipeBackHelper;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
-import java.security.KeyManagementException;
-import java.security.NoSuchAlgorithmException;
-
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.FormBody;
-import okhttp3.OkHttpClient;
-import okhttp3.Response;
-
-public class StoreDetailActivity extends AppCompatActivity{
+public class StoreDetailActivity extends AppCompatActivity {
     //屏幕宽度
     private float mScreenW = -1;
 
@@ -44,11 +33,11 @@ public class StoreDetailActivity extends AppCompatActivity{
     private ImageView storePhoto;
     private Button storeApply, storeContact;
     private Intent dataFrom;
-    private String titleStr, token;
+    private String titleStr, token, photoUrl,userName,applyNum;
     private static final String TAG = "StoreDetailActivity";
-    private static Handler handler;
     private Toolbar toolbar;
 
+    @SuppressLint("HandlerLeak")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -93,7 +82,7 @@ public class StoreDetailActivity extends AppCompatActivity{
 
         //店家图片控件大小设为16：9
         ViewGroup.LayoutParams layoutParams = storePhoto.getLayoutParams();
-        layoutParams.height = (int) mScreenW*9/16;
+        layoutParams.height = (int) mScreenW * 9 / 16;
         storePhoto.setLayoutParams(layoutParams);
 
         //设置toolbar
@@ -109,68 +98,53 @@ public class StoreDetailActivity extends AppCompatActivity{
         dataFrom = getIntent();
         titleStr = dataFrom.getStringExtra(ConstantValues.KEY_STORE_NAME);
         title.setText(titleStr);
+        //设置内容
+        try {
+            final JSONObject detail = new JSONObject(dataFrom.getStringExtra(ConstantValues.KEY_STORE_MORE_DETAIL));
+            userName = detail.getString(ConstantValues.KEY_HOME_LIST_USERNAME);
+            photoUrl = detail.getString(ConstantValues.KEY_HOME_LIST_PHOTO_URL);
+            applyNum = detail.getString(ConstantValues.KEY_APPLY_NUM);
+            Glide.with(this).load(photoUrl).into(storePhoto);//设置头像
+            headerStoreTime.setText(detail.getString(ConstantValues.KEY_HOME_LIST_TIME));
+            headerStoreDura.setText(detail.getString(ConstantValues.KEY_HOME_LIST_LAST));
+            headerStorePeoLimit.setText(detail.getString(ConstantValues.KEY_HOME_LIST_NEED_NUM));
+            storeIntroContent.setText(detail.getString(ConstantValues.KEY_HOME_LIST_INTRO));
+            storePeoNeeded.setText(detail.getString(ConstantValues.KEY_HOME_LIST_NEED_NUM));
+            storeVolunRequ.setText(detail.getString(ConstantValues.KEY_HOME_LIST_REQUE));
+            storeWorkCon.setText(detail.getString(ConstantValues.KEY_HOME_LIST_WORK));
+            storeTimeDetl.setText(detail.getString(ConstantValues.KEY_HOME_LIST_TIME));
+            storeOther.setText(detail.getString(ConstantValues.KEY_HOME_LIST_OTHER));
+            storeMoreInfo.setText(detail.getString(ConstantValues.KEY_HOME_LIST_OTHER));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
-        //设置handler
-        handler = new Handler() {
+        //报名按钮
+        storeApply.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void handleMessage(Message msg) {
-                //TODO 处理服务器返回的msg body。
-                super.handleMessage(msg);
-            }
-        };
-        getStoreDetail(titleStr);
-    }
-
-    //获取青旅详细信息
-    private void getStoreDetail(String storeName) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                OkHttpClient client = null;
-                try {
-                    client = HttpUtils.getUnsafeOkHttpClient();
-                } catch (NoSuchAlgorithmException e) {
-                    e.printStackTrace();
-                } catch (KeyManagementException e) {
-                    e.printStackTrace();
+            public void onClick(View view) {
+                if (photoUrl != null) {
+                    Log.d("photoUrl: ", photoUrl);
                 }
-                FormBody.Builder builder = new FormBody.Builder();
-                //TODO 设置获取店家详细信息传递参数
-                builder.add("token", token);
-                //TODO 设置获取店家详细信息接口链接。
-                HttpUtils.sendRequest(client, ConstantValues.URL_GET_USER_INFO,
-                        builder, new Callback() {
-                            @Override
-                            public void onFailure(Call call, IOException e) {
-
-                            }
-
-                            @Override
-                            public void onResponse(Call call, Response response) throws IOException {
-                                try {
-                                    JSONObject object = new JSONObject(response
-                                            .body().string());
-                                    int code = object.getInt("code");
-                                    Log.d(TAG, object.toString());
-                                    if (code == 200) {
-                                        //TODO 正常返回店家详细信息，处理返回信息
-                                    } else {
-                                        final String msg = object.getString("msg");
-                                        runOnUiThread(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                Toast.makeText(StoreDetailActivity.this,
-                                                        msg, Toast.LENGTH_SHORT).show();
-                                            }
-                                        });
-                                    }
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        });
             }
-        }).start();
+        });
+        if(Integer.parseInt(storePeoNeeded.getText().toString()) == Integer.parseInt(applyNum)){
+            storeApply.setOnClickListener(null);
+            storeApply.setText("报名人数已满");
+            storeApply.setTextColor(Color.GRAY);
+        }
+
+        //咨询客服按钮
+        storeContact.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent toContact = new Intent(StoreDetailActivity.this,ChatWindowActivity.class);
+                toContact.putExtra(ConstantValues.KEY_HOME_LIST_USERNAME,userName);
+                startActivity(toContact);
+                overridePendingTransition(R.anim.ani_right_get_into, R.anim.ani_left_sign_out);
+            }
+        });
+
     }
 
     @Override

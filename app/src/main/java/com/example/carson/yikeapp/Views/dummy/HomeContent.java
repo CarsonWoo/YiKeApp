@@ -40,7 +40,7 @@ public class HomeContent {
     private static BNBHomeItem createBNBHomeItem(int position) {
         //返回一个新的item
         return new BNBHomeItem(String.valueOf(position), "大理梦飞扬客栈","张晓明-"+String.valueOf(position),
-                "7-8月","时长一个月","云南");
+                "7-8月","时长一个月","云南",null);
     }
 
     private static String makeDetails(int position) {
@@ -56,6 +56,7 @@ public class HomeContent {
      * A dummy item representing a piece of content.
      */
     public static class BNBHomeItem {
+        public final String moreDetail;
         public final String id;
         public final String name;
         public final String host;
@@ -64,13 +65,14 @@ public class HomeContent {
         public final String loca;
 
         //设置传入值-id-name-host-time-duration
-        public BNBHomeItem(String id,String name, String host, String time,String duration,String loca) {
+        public BNBHomeItem(String id,String name, String host, String time,String duration,String loca,String moreDetail) {
             this.id = id;
             this.name = name;
             this.host = host;
             this.time = time;
             this.duration = duration;
             this.loca = loca;
+            this.moreDetail = moreDetail;
         }
 
         @Override

@@ -42,6 +42,8 @@ public class ConstantValues {
 
     public static final String URL_EXP_SINGLE_POST = "https://www.yiluzou.cn/yike/public/index.php/single_experience";
 
+    public static final String URL_GET_BANNER_PHOTO = "https://www.yiluzou.cn/yike/public/index.php/get_banner";
+
     public static final int CODE_TAKE_PHOTO = 1;
 
     public static final int TYPE_TAKE_PHOTO = 1;
@@ -89,6 +91,7 @@ public class ConstantValues {
 
     public static final String KEY_TOKEN = "token";
     public static final String KEY_STORE_NAME = "storeName";
+    public static final String KEY_STORE_MORE_DETAIL = "moreDetail";
     public static final String KEY_PHONE_NUM = "phone";
     public static final String KEY_PSW = "password";
     public static final String KEY_CHAT_MSG = "chatMsg";
@@ -143,6 +146,7 @@ public class ConstantValues {
     public static final String KEY_PART_LIST_COMMENT_NUMBER = "comment_number";
     public static final String KEY_PART_LIST_IS_AGREE = "is_agree";//0代表未点赞，1代表已点赞
     public static final String KEY_PART_LIST_AGREE_NUM = "agree_number";
+    public static final String KEY_APPLY_NUM = "person_number";
 
     //取得token
     public static String getCachedToken(Context context){

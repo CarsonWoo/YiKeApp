@@ -11,6 +11,8 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
@@ -74,7 +76,7 @@
             android:name=".Views.ExpDetailActivity"
             android:theme="@style/TransparentTheme"></activity>
         <activity android:name=".Views.ChatWindowActivity"
-            android:theme="@style/MainTheme"
+            android:theme="@style/TransparentTheme"
             android:configChanges="keyboardHidden|orientation|screenSize" ></activity>
     </application>
 
