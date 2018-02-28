@@ -196,7 +196,7 @@ public class FragmentHome extends Fragment {
                     refreshLayout.setRefreshing(false);
                     rvAdapter.clearData();
                     rvAdapter.addData(storeData);
-                }else {
+                } else {
                     JSONArray listUrl = (JSONArray) msg.obj;
                     for (int i = 0; i < listUrl.length() ; i++){
                         try {

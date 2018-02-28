@@ -214,21 +214,13 @@ public class HomeActivity extends AppCompatActivity implements FragmentHome.OnFr
                     Log.i(TAG, "点击了diaryItem");
                 } else if (item.get(0) instanceof ExperienceItem.ExpItem) {
                     Log.i(TAG, "点击了ExpItem");
-
                     getToSingleExpPost(((ExperienceItem.ExpItem) item.get(0)).id,
                             ((ExperienceItem.ExpItem) item.get(0)).isAgree);
-//                    Intent toExpDetail = new Intent(HomeActivity.this,
-//                            ExpDetailActivity.class);
-//                    //TODO 传递查询经验帖详细信息所需数据
-//                    toExpDetail.putExtra(ConstantValues.KEY_EXP_LIST_ID, ((ExperienceItem.ExpItem) item.get(0)).id);
-//                    toExpDetail.putExtra(ConstantValues.KEY_EXP_DETAIL_TITLE, (((ExperienceItem.ExpItem) item.get(0)).title));
-//                    toExpDetail.putExtra(ConstantValues.KEY_EXP_DETAIL_CONTENT, ((ExperienceItem.ExpItem) item.get(0)).content);
-//                    startActivity(toExpDetail);
-//                    overridePendingTransition(R.anim.ani_right_get_into, R.anim.ani_left_sign_out);
                 } else if (item.get(0) instanceof PartnerItem.PartItem) {
                     Log.i(TAG, "点击了partItem");
-                    Toast.makeText(this, "Item " + ((PartnerItem.PartItem) (item.get(0))).id
-                                    + " clicked.", Toast.LENGTH_SHORT).show();
+                    Log.i(TAG, ((PartnerItem.PartItem) item.get(0)).id + " " + ((PartnerItem.PartItem) item.get(0)).isAgree);
+                    getToSinglePartPost(((PartnerItem.PartItem) item.get(0)).id,
+                            ((PartnerItem.PartItem) item.get(0)).isAgree);
                 }
 
                 break;
@@ -246,6 +238,13 @@ public class HomeActivity extends AppCompatActivity implements FragmentHome.OnFr
         }
     }
 
+    private void getToSinglePartPost(String id, int isAgree) {
+        boolean isLike = isAgree == 0 ? false : true;
+        Toast.makeText(this, "you click item " + id + " and its like condition is " +
+            isLike, Toast.LENGTH_SHORT).show();
+    }
+
+    //TODO 传递查询经验帖详细信息所需数据
     private void getToSingleExpPost(final String id, final int isAgree) {
         new Thread(new Runnable() {
             @Override

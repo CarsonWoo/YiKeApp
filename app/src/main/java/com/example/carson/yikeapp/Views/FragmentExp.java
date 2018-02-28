@@ -130,6 +130,7 @@ public class FragmentExp extends Fragment {
                 JSONArray jsonArray = (JSONArray) msg.obj;
                 JSONObject object;
                 int dataSize = expPostData.size();
+                //TODO 需要对sortCode进行判断 从而改变不同排序的列表展示
                 for (int i = 0; i < jsonArray.length(); i++) {
                     try {
                         object = jsonArray.getJSONObject(i);
@@ -218,7 +219,6 @@ public class FragmentExp extends Fragment {
                                         Message msg = new Message();
                                         msg.obj = jsonArray;
                                         mDataHandler.sendMessage(msg);
-
                                     } else {
                                         getActivity().runOnUiThread(new Runnable() {
                                             @Override

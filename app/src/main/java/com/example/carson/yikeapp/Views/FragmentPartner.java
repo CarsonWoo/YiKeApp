@@ -1,7 +1,11 @@
 package com.example.carson.yikeapp.Views;
 
+import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -10,11 +14,17 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.carson.yikeapp.Adapter.DiscussItemPartnerRVAdapter;
 import com.example.carson.yikeapp.R;
 import com.example.carson.yikeapp.Utils.ConstantValues;
@@ -29,19 +39,25 @@ import java.io.IOException;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
+import de.hdodenhof.circleimageview.*;
+import de.hdodenhof.circleimageview.CircleImageView;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Response;
 
+import static com.example.carson.yikeapp.Adapter.DiscussItemPartnerRVAdapter.*;
+
 /**
  * Created by 84594 on 2018/2/26.
  */
 
-public class FragmentPartner extends Fragment {
+public class FragmentPartner extends Fragment implements OnHeadViewClickedListener,
+        OnLikeClickedListener {
 
     private String token, listID = "";
 
@@ -52,6 +68,166 @@ public class FragmentPartner extends Fragment {
     private ArrayList<PartnerItem.PartItem> mPartnerPostData = new ArrayList<>();
 
     private Handler mDataHandler;
+
+    private ImageView ivLike;
+
+    private CircleImageView headView;
+
+    @Override
+    public void onLikeClicked(View view) {
+        ivLike = (ImageView) view;
+        if (mPartnerPostData.get(0).isAgree == 0) {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    OkHttpClient client = null;
+                    try {
+                        client = HttpUtils.getUnsafeOkHttpClient();
+                    } catch (NoSuchAlgorithmException e) {
+                        e.printStackTrace();
+                    } catch (KeyManagementException e) {
+                        e.printStackTrace();
+                    }
+                    FormBody.Builder builder = new FormBody.Builder();
+                    builder.add(ConstantValues.KEY_TOKEN, token);
+                    builder.add(ConstantValues.KEY_PART_LIST_ID, mPartnerPostData.get(0).id);
+                    HttpUtils.sendRequest(client, ConstantValues.URL_PARTNER_AGREE, builder,
+                            new Callback() {
+                                @Override
+                                public void onFailure(Call call, IOException e) {
+
+                                }
+
+                                @Override
+                                public void onResponse(Call call, Response response) throws IOException {
+                                    try {
+                                        final JSONObject object = new JSONObject(response.body().string());
+                                        int code = object.getInt(ConstantValues.KEY_CODE);
+                                        if (code == 200) {
+                                            getActivity().runOnUiThread(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    Glide.with(getContext())
+                                                            .load(R.drawable.ic_like).into(ivLike);
+                                                }
+                                            });
+                                        } else {
+                                            getActivity().runOnUiThread(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    try {
+                                                        Toast.makeText(getContext(),
+                                                                object.getString("msg"),
+                                                                Toast.LENGTH_SHORT).show();
+                                                    } catch (JSONException e) {
+                                                        e.printStackTrace();
+                                                    }
+                                                }
+                                            });
+                                        }
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            });
+                }
+            }).start();
+        } else {
+            Glide.with(getContext()).load(R.drawable.ic_like).into(ivLike);
+            Toast.makeText(getContext(), "您已经点过赞了", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public void onHeadViewClicked(View view) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                OkHttpClient client = null;
+                try {
+                    client = HttpUtils.getUnsafeOkHttpClient();
+                } catch (NoSuchAlgorithmException e) {
+                    e.printStackTrace();
+                } catch (KeyManagementException e) {
+                    e.printStackTrace();
+                }
+                FormBody.Builder builder = new FormBody.Builder();
+                builder.add(ConstantValues.KEY_TOKEN, token);
+                builder.add(ConstantValues.KEY_PART_LIST_ID, mPartnerPostData.get(0).id);
+                HttpUtils.sendRequest(client, ConstantValues.URL_GET_TARGET_USER_INFO,
+                        builder, new Callback() {
+                            @Override
+                            public void onFailure(Call call, IOException e) {
+                                e.printStackTrace();
+                            }
+
+                            @Override
+                            public void onResponse(Call call, Response response) throws IOException {
+                                try {
+                                    JSONObject object = new JSONObject(response.body().string());
+                                    int code = object.getInt(ConstantValues.KEY_CODE);
+                                    final ArrayList<String> datas = new ArrayList<>();
+                                    if (code == 200) {
+                                        JSONObject detailObj = object.getJSONObject("msg");
+                                        Iterator iterator = detailObj.keys();
+                                        while (iterator.hasNext()) {
+                                            String key = (String) iterator.next();
+                                            datas.add(detailObj.getString(key));
+                                        }
+                                        getActivity().runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                AlertDialog.Builder dialogBuilder =
+                                                        new AlertDialog.Builder(getContext());
+                                                final AlertDialog dialog = dialogBuilder.create();
+                                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                                                    View dialogView = LayoutInflater.from(getContext())
+                                                            .inflate(R.layout.dialog_show_target_user, null);
+                                                    CircleImageView head = dialogView
+                                                            .findViewById(R.id.civ_dialog_show_target);
+                                                    ArchRivalTextView userName = dialogView
+                                                            .findViewById(R.id.artv_dialog_name);
+                                                    TextView info = dialogView
+                                                            .findViewById(R.id.tv_dialog_info);
+                                                    Button btnFollow = dialogView
+                                                            .findViewById(R.id.btn_dialog_follow);
+                                                    Button btnChat = dialogView
+                                                            .findViewById(R.id.btn_dialog_chat);
+                                                    ImageView back = dialogView
+                                                            .findViewById(R.id.iv_dialog_back);
+                                                    Glide.with(getContext()).load(datas.get(1))
+                                                            .into(head);
+                                                    userName.setText(datas.get(0));
+                                                    info.setText(datas.get(2));
+                                                    back.setOnClickListener(new View.OnClickListener() {
+                                                        @Override
+                                                        public void onClick(View v) {
+                                                            dialog.dismiss();
+                                                        }
+                                                    });
+                                                    dialog.setView(dialogView);
+                                                    dialog.show();
+                                                    WindowManager m = getActivity().getWindowManager();
+                                                    //获取屏幕的宽高
+                                                    Display d = m.getDefaultDisplay();
+                                                    //获取当前对话框的宽高
+                                                    WindowManager.LayoutParams p = dialog.getWindow()
+                                                            .getAttributes();
+                                                    p.height = (int) (d.getHeight() * 0.7);
+                                                    p.width = (int) (d.getWidth() * 0.8);
+                                                    dialog.getWindow().setAttributes(p);
+                                                }
+                                            }
+                                        });
+                                    }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        });
+            }
+        }).start();
+    }
 
     /**
      * This interface must be implemented by activities that contain this
@@ -93,7 +269,8 @@ public class FragmentPartner extends Fragment {
                 false);
         RecyclerView rvPartner = view.findViewById(R.id.rv_discuss_partner);
 
-        partnerRVAdapter = new DiscussItemPartnerRVAdapter(PartnerItem.ITEMS, mListener);
+        partnerRVAdapter = new DiscussItemPartnerRVAdapter(PartnerItem.ITEMS, mListener,
+                this, this);
         rvPartner.setLayoutManager(new LinearLayoutManager(view.getContext()));
         rvPartner.setAdapter(partnerRVAdapter);
         rvPartner.setHasFixedSize(true);
@@ -125,14 +302,14 @@ public class FragmentPartner extends Fragment {
                             listID = listID + object.getString(ConstantValues.KEY_PART_LIST_ID);
                             mPartnerPostData.add(new PartnerItem.PartItem(
                                     object.getString(ConstantValues.KEY_PART_LIST_ID),
+                                    object.getString(ConstantValues.KEY_PART_LIST_PHOTO_URL),
                                     object.getString(ConstantValues.KEY_PART_LIST_NAME),
                                     object.getString(ConstantValues.KEY_PART_LIST_COMMENT),
                                     Integer.parseInt(object.getString(ConstantValues.KEY_PART_LIST_VIEW)),
-                                    Integer.parseInt(object.getString(ConstantValues.KEY_PART_LIST_COMMENT_NUMBER))
+                                    Integer.parseInt(object.getString(ConstantValues.KEY_PART_LIST_COMMENT_NUMBER)),
+                                    Integer.parseInt(object.getString(ConstantValues.KEY_PART_LIST_IS_AGREE))
                             ));
                         }
-
-
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -147,6 +324,7 @@ public class FragmentPartner extends Fragment {
         };
 
         getPartnerPostList();
+
 
         return view;
     }
@@ -165,6 +343,7 @@ public class FragmentPartner extends Fragment {
                 }
                 FormBody.Builder builder = new FormBody.Builder();
                 builder.add(ConstantValues.KEY_TOKEN, token);
+                //都传0值代表展示全部
                 builder.add(ConstantValues.KEY_PART_LIST_PAGE, "0");
                 builder.add(ConstantValues.KEY_PART_LIST_SIZE, "0");
                 HttpUtils.sendRequest(client, ConstantValues.URL_PARTNER_LIST_SHOW,
@@ -177,13 +356,26 @@ public class FragmentPartner extends Fragment {
                             @Override
                             public void onResponse(Call call, Response response) throws IOException {
                                 try {
-                                    JSONObject object = new JSONObject(response.body().string());
+                                    final JSONObject object = new JSONObject(response.body().string());
                                     int code = object.getInt(ConstantValues.KEY_CODE);
                                     if (code == 200) {
                                         JSONArray array = object.getJSONArray("msg");
                                         Message msg = new Message();
                                         msg.obj = array;
                                         mDataHandler.sendMessage(msg);
+                                    } else {
+                                        getActivity().runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                try {
+                                                    Toast.makeText(getContext(),
+                                                            object.getString("msg"),
+                                                            Toast.LENGTH_SHORT).show();
+                                                } catch (JSONException e) {
+                                                    e.printStackTrace();
+                                                }
+                                            }
+                                        });
                                     }
                                 } catch (JSONException e) {
                                     e.printStackTrace();

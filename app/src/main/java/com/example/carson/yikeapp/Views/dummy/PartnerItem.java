@@ -1,5 +1,7 @@
 package com.example.carson.yikeapp.Views.dummy;
 
+import com.example.carson.yikeapp.R;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -37,27 +39,29 @@ public class PartnerItem {
     }
 
     private static PartItem createPartItem(int pos) {
-        return new PartItem(String.valueOf(pos), "Name" + pos, "Comment" + pos,
-                pos * 10, pos);
+        return new PartItem(String.valueOf(pos), String.valueOf(R.mipmap.ic_launcher),
+                "Name" + pos, "Comment" + pos, pos * 10, pos, 0);
     }
 
 
     public static class PartItem {
         public final String id;
-//        public final String headResFile;
+        public final String headResFile;
         public final String name;
         public final String comment;
         public final int viewNum;
         public final int replyNum;
+        public final int isAgree;
 
-        public PartItem(String id, String name, String comment,
-                        int viewNum, int replyNum) {
+        public PartItem(String id, String headResFile, String name, String comment,
+                        int viewNum, int replyNum, int isAgree) {
             this.id = id;
-//            this.headResFile = headResFile;
+            this.headResFile = headResFile;
             this.name = name;
             this.comment = comment;
             this.viewNum = viewNum;
             this.replyNum = replyNum;
+            this.isAgree = isAgree;
         }
 
         @Override

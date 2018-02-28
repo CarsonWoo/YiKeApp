@@ -7,30 +7,46 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.example.carson.yikeapp.R;
+import com.example.carson.yikeapp.Utils.ConstantValues;
+import com.example.carson.yikeapp.Utils.HttpUtils;
 import com.example.carson.yikeapp.Views.ArchRivalTextView;
 import com.example.carson.yikeapp.Views.FragmentPartner;
+import com.example.carson.yikeapp.Views.HomeActivity;
 import com.example.carson.yikeapp.Views.dummy.PartnerItem;
 
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import okhttp3.FormBody;
+import okhttp3.OkHttpClient;
 
 /**
  * Created by 84594 on 2018/2/25.
  */
 
-public class DiscussItemPartnerRVAdapter extends RecyclerView.Adapter<DiscussItemPartnerRVAdapter.PartnerVH> {
+public class DiscussItemPartnerRVAdapter extends RecyclerView
+        .Adapter<DiscussItemPartnerRVAdapter.PartnerVH> {
 
     private final List<PartnerItem.PartItem> mValues;
     private final FragmentPartner.OnFragmentInteractionListener mListener;
     private final ArrayList<PartnerItem.PartItem> itemSelected = new ArrayList<>();
 
+    private final OnLikeClickedListener onLikeClickedListener;
+    private final OnHeadViewClickedListener onHeadViewClickedListener;
+
     public DiscussItemPartnerRVAdapter(List<PartnerItem.PartItem> items,
-                                       FragmentPartner.OnFragmentInteractionListener listener) {
+                                       FragmentPartner.OnFragmentInteractionListener listener,
+                                       OnLikeClickedListener onLikeClickedListener,
+                                       OnHeadViewClickedListener onHeadViewClickedListener) {
         this.mValues = items;
         this.mListener = listener;
+        this.onLikeClickedListener = onLikeClickedListener;
+        this.onHeadViewClickedListener = onHeadViewClickedListener;
     }
 
     class PartnerVH extends RecyclerView.ViewHolder {
@@ -50,7 +66,7 @@ public class DiscussItemPartnerRVAdapter extends RecyclerView.Adapter<DiscussIte
             tvComment = itemView.findViewById(R.id.tv_discuss_rv_item_part_comment);
             tvView = itemView.findViewById(R.id.tv_discuss_rv_item_part_view);
             tvReply = itemView.findViewById(R.id.tv_discuss_rv_item_part_reply);
-            ivLike = itemView.findViewById(R.id.iv_discuss_rv_item_like);
+            ivLike = itemView.findViewById(R.id.iv_discuss_rv_part_like);
             this.itemView = itemView;
         }
     }
@@ -64,12 +80,14 @@ public class DiscussItemPartnerRVAdapter extends RecyclerView.Adapter<DiscussIte
     }
 
     @Override
-    public void onBindViewHolder(final PartnerVH holder, int position) {
+    public void onBindViewHolder(final PartnerVH holder, final int position) {
         holder.item = mValues.get(position);
         holder.tvName.setText(mValues.get(position).name);
         holder.tvComment.setText(mValues.get(position).comment);
         holder.tvView.setText(mValues.get(position).viewNum + "浏览");
         holder.tvReply.setText(mValues.get(position).replyNum + "回复");
+        Glide.with(holder.headView.getContext()).load(mValues.get(position).headResFile)
+                .into(holder.headView);
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -87,9 +105,18 @@ public class DiscussItemPartnerRVAdapter extends RecyclerView.Adapter<DiscussIte
         holder.ivLike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                holder.ivLike.setImageResource(R.drawable.ic_like);
+                onLikeClickedListener.onLikeClicked(v);
             }
         });
+
+        holder.headView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onHeadViewClickedListener.onHeadViewClicked(v);
+            }
+        });
+
+
 
     }
 
@@ -101,6 +128,16 @@ public class DiscussItemPartnerRVAdapter extends RecyclerView.Adapter<DiscussIte
     public void clearData() {
         this.mValues.clear();
         notifyDataSetChanged();
+    }
+
+    //设置点赞按钮的接口回调
+    public interface OnLikeClickedListener {
+        void onLikeClicked(View view);
+    }
+
+    //设置头像的接口回调
+    public interface OnHeadViewClickedListener {
+        void onHeadViewClicked(View view);
     }
 
     @Override
