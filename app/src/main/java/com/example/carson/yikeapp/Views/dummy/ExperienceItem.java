@@ -38,7 +38,7 @@ public class ExperienceItem {
 
     private static ExpItem createExpItem(int pos) {
         return new ExpItem(String.valueOf(pos), "Title" + pos, "Content" + pos,
-                "美国", "2018-2-27", pos * 10);
+                "美国", "2018-2-27", pos * 10, 1);
     }
 
 
@@ -49,15 +49,17 @@ public class ExperienceItem {
         public final String tag;
         public final String latestTime;
         public final int likeNum;
+        public final int isAgree;
 
         public ExpItem(String id, String title, String content, String tag, String latestTime,
-                       int likeNum) {
+                       int likeNum, int isAgree) {
             this.id = id;
             this.title = title;
             this.content = content;
             this.tag = tag;
             this.latestTime = latestTime;
             this.likeNum = likeNum;
+            this.isAgree = isAgree;
         }
 
         @Override

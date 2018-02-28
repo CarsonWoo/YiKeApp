@@ -40,6 +40,16 @@ public class DiscussItemExperienceRVAdapter extends RecyclerView.Adapter<Discuss
         return vh;
     }
 
+    public void addData(ArrayList<ExperienceItem.ExpItem> mValues) {
+        this.mValues.addAll(mValues);
+        notifyDataSetChanged();
+    }
+
+    public void clearData() {
+        this.mValues.clear();
+        notifyDataSetChanged();
+    }
+
     @Override
     public void onBindViewHolder(final DiscussVH holder, int position) {
         holder.item = mValues.get(position);

@@ -91,7 +91,16 @@ public class DiscussItemPartnerRVAdapter extends RecyclerView.Adapter<DiscussIte
             }
         });
 
+    }
 
+    public void addData(ArrayList<PartnerItem.PartItem> mValues) {
+        this.mValues.addAll(mValues);
+        notifyDataSetChanged();
+    }
+
+    public void clearData() {
+        this.mValues.clear();
+        notifyDataSetChanged();
     }
 
     @Override

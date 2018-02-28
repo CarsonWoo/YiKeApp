@@ -20,13 +20,28 @@ import android.widget.Toast;
 
 import com.example.carson.yikeapp.R;
 import com.example.carson.yikeapp.Utils.ConstantValues;
+import com.example.carson.yikeapp.Utils.HttpUtils;
 import com.example.carson.yikeapp.Views.dummy.ChatItem;
 import com.example.carson.yikeapp.Views.dummy.DiaryItem;
 import com.example.carson.yikeapp.Views.dummy.ExperienceItem;
 import com.example.carson.yikeapp.Views.dummy.HomeContent;
 import com.example.carson.yikeapp.Views.dummy.PartnerItem;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.Iterator;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.FormBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Response;
 
 public class HomeActivity extends AppCompatActivity implements FragmentHome.OnFragmentInteractionListener,
         FragmentMessage.OnFragmentInteractionListener, FragmentUser.OnFragmentInteractionListener,
@@ -55,6 +70,8 @@ public class HomeActivity extends AppCompatActivity implements FragmentHome.OnFr
 
     private String[] titles = new String[]{"义客", "交流", "消息", ""};
 
+    private String token;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,6 +79,8 @@ public class HomeActivity extends AppCompatActivity implements FragmentHome.OnFr
 
         final Toolbar toolbar = findViewById(R.id.toolbar_home);
         setSupportActionBar(toolbar);
+
+        token = ConstantValues.getCachedToken(this);
 
         // Create the adapter that will return a fragment for each of the four
         // primary sections of the activity.
@@ -196,13 +215,17 @@ public class HomeActivity extends AppCompatActivity implements FragmentHome.OnFr
                     Log.i(TAG, "点击了diaryItem");
                 } else if (item.get(0) instanceof ExperienceItem.ExpItem) {
                     Log.i(TAG, "点击了ExpItem");
-                    Intent toExpDetail = new Intent(HomeActivity.this,
-                            ExpDetailActivity.class);
-                    //TODO 传递查询经验帖详细信息所需数据
-                    toExpDetail.putExtra(ConstantValues.KEY_EXP_DETAIL_TITLE, (((ExperienceItem.ExpItem) item.get(0)).title));
-                    toExpDetail.putExtra(ConstantValues.KEY_EXP_DETAIL_CONTENT, ((ExperienceItem.ExpItem) item.get(0)).content);
-                    startActivity(toExpDetail);
-                    overridePendingTransition(R.anim.ani_right_get_into, R.anim.ani_left_sign_out);
+
+                    getToSingleExpPost(((ExperienceItem.ExpItem) item.get(0)).id,
+                            ((ExperienceItem.ExpItem) item.get(0)).isAgree);
+//                    Intent toExpDetail = new Intent(HomeActivity.this,
+//                            ExpDetailActivity.class);
+//                    //TODO 传递查询经验帖详细信息所需数据
+//                    toExpDetail.putExtra(ConstantValues.KEY_EXP_LIST_ID, ((ExperienceItem.ExpItem) item.get(0)).id);
+//                    toExpDetail.putExtra(ConstantValues.KEY_EXP_DETAIL_TITLE, (((ExperienceItem.ExpItem) item.get(0)).title));
+//                    toExpDetail.putExtra(ConstantValues.KEY_EXP_DETAIL_CONTENT, ((ExperienceItem.ExpItem) item.get(0)).content);
+//                    startActivity(toExpDetail);
+//                    overridePendingTransition(R.anim.ani_right_get_into, R.anim.ani_left_sign_out);
                 } else if (item.get(0) instanceof PartnerItem.PartItem) {
                     Log.i(TAG, "点击了partItem");
                     Toast.makeText(this, "Item " + ((PartnerItem.PartItem) (item.get(0))).id
@@ -222,6 +245,83 @@ public class HomeActivity extends AppCompatActivity implements FragmentHome.OnFr
             default:
                 break;
         }
+    }
+
+    private void getToSingleExpPost(final String id, final int isAgree) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                OkHttpClient client = null;
+                try {
+                    client = HttpUtils.getUnsafeOkHttpClient();
+                } catch (NoSuchAlgorithmException e) {
+                    e.printStackTrace();
+                } catch (KeyManagementException e) {
+                    e.printStackTrace();
+                }
+                FormBody.Builder builder = new FormBody.Builder();
+                builder.add(ConstantValues.KEY_TOKEN, token);
+                builder.add("experience_id", id);
+                HttpUtils.sendRequest(client, ConstantValues.URL_EXP_SINGLE_POST, builder,
+                        new Callback() {
+                            @Override
+                            public void onFailure(Call call, IOException e) {
+
+                            }
+
+                            @Override
+                            public void onResponse(Call call, Response response) throws IOException {
+                                try {
+                                    final JSONObject object = new JSONObject(response.body().string());
+                                    int code = object.getInt(ConstantValues.KEY_CODE);
+                                    if (code == 200) {
+                                        Intent toExpDetail = new Intent(HomeActivity.this,
+                                                ExpDetailActivity.class);
+                                        ArrayList<String> dataList = new ArrayList<>();
+                                        JSONObject detailObj = object.getJSONObject("msg");
+                                        Iterator iterator = detailObj.keys();
+                                        while (iterator.hasNext()) {
+                                            String key = (String) iterator.next();
+                                            dataList.add(detailObj.getString(key));
+                                        }
+                                        toExpDetail.putExtra(ConstantValues.KEY_EXP_LIST_ID, id)
+                                                .putExtra(ConstantValues.KEY_EXP_DETAIL_TITLE,
+                                                        dataList.get(0))
+                                                .putExtra(ConstantValues.KEY_EXP_DETAIL_CONTENT,
+                                                        dataList.get(1))
+                                                .putExtra(ConstantValues.KEY_EXP_LIST_AGREE_NUM,
+                                                        dataList.get(4))
+                                                .putExtra(ConstantValues.KEY_EXP_LIST_TIME,
+                                                        dataList.get(5))
+                                                .putExtra(ConstantValues.KEY_EXP_DETAIL_USER_PORTRAIT,
+                                                        dataList.get(6))
+                                                .putExtra(ConstantValues.KEY_EXP_DETAIL_USER_NAME,
+                                                        dataList.get(7))
+                                                .putExtra(ConstantValues.KEY_EXP_LIST_IS_AGREE, isAgree);
+                                        startActivity(toExpDetail);
+                                        overridePendingTransition(R.anim.ani_right_get_into
+                                                , R.anim.ani_left_sign_out);
+                                    } else {
+                                        runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                try {
+                                                    Toast.makeText(HomeActivity.this,
+                                                            object.getString("msg"),
+                                                            Toast.LENGTH_SHORT).show();
+                                                } catch (JSONException e) {
+                                                    e.printStackTrace();
+                                                }
+                                            }
+                                        });
+                                    }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        });
+            }
+        }).start();
     }
 
     @Override

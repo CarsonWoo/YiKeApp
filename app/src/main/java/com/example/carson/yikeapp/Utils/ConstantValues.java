@@ -34,6 +34,14 @@ public class ConstantValues {
 
     public static final String URL_HOME_LIST_URL = "https://www.yiluzou.cn/yike/public/index.php/show_top";
 
+    public static final String URL_EXP_LIST_SHOW = "https://www.yiluzou.cn/yike/public/index.php/show_experience";
+
+    public static final String URL_PARTNER_LIST_SHOW = "https://www.yiluzou.cn/yike/public/index.php/show_call";
+
+    public static final String URL_EXP_AGREE = "https://www.yiluzou.cn/yike/public/index.php/agree_experience";
+
+    public static final String URL_EXP_SINGLE_POST = "https://www.yiluzou.cn/yike/public/index.php/single_experience";
+
     public static final int CODE_TAKE_PHOTO = 1;
 
     public static final int TYPE_TAKE_PHOTO = 1;
@@ -47,6 +55,8 @@ public class ConstantValues {
     public static final String USER_TYPE_STORE = "店家";
 
     public static final String USER_TYPE_NORMAL = "用户";
+
+    public static final String KEY_CODE = "code";
 
     //获取用户信息时服务器返回json数据key名
     //义工
@@ -104,8 +114,35 @@ public class ConstantValues {
     public static final String KEY_HOME_LIST_PUTIME = "publish_time";
     public static final String KEY_HOME_LIST_PHOTO_URL = "photo_url";
 
+    //经验帖传递参数名称
+    public static final String KEY_EXP_LIST_PAGE = "page";
+    public static final String KEY_EXP_LIST_SIZE = "size";
+    public static final String KEY_EXP_LIST_RULE = "rule";//1是按时间，2是按点赞数
+
+    public static final String KEY_EXP_LIST_ID = "id";
+    public static final String KEY_EXP_LIST_TITLE = "title";
+    public static final String KEY_EXP_LIST_CONTENT = "text";
+    public static final String KEY_EXP_LIST_POSITION = "position";
+    public static final String KEY_EXP_LIST_TIME = "time";
+    public static final String KEY_EXP_LIST_AGREE_NUM = "agree_number";
+    public static final String KEY_EXP_LIST_IS_AGREE = "is_agree";//0代表本用户未点赞，1代表已点赞
     public static final String KEY_EXP_DETAIL_TITLE = "EXP_DETAIL_TITLE";
     public static final String KEY_EXP_DETAIL_CONTENT = "EXP_DETAIL_CONTENT";
+    public static final String KEY_EXP_DETAIL_USER_PORTRAIT = "user_portrait";
+    public static final String KEY_EXP_DETAIL_USER_NAME = "username";
+
+    //约伴传递参数名称
+    public static final String KEY_PART_LIST_PAGE = "page";
+    public static final String KEY_PART_LIST_SIZE = "size";
+
+    public static final String KEY_PART_LIST_ID = "id";
+    public static final String KEY_PART_LIST_NAME = "username";
+    public static final String KEY_PART_LIST_PHOTO_URL = "photo_url";
+    public static final String KEY_PART_LIST_COMMENT = "text";
+    public static final String KEY_PART_LIST_VIEW = "see";
+    public static final String KEY_PART_LIST_COMMENT_NUMBER = "comment_number";
+    public static final String KEY_PART_LIST_IS_AGREE = "is_agree";//0代表未点赞，1代表已点赞
+    public static final String KEY_PART_LIST_AGREE_NUM = "agree_number";
 
     //取得token
     public static String getCachedToken(Context context){
