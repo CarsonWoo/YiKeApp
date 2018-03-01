@@ -1,14 +1,18 @@
 package com.example.carson.yikeapp.Views;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.TextView;
@@ -49,9 +53,11 @@ public class ResumeActivity extends AppCompatActivity {
     private Button btnSave;
     private Toolbar toolbar;
 
+    private Handler handler;
     private SharedPreferences sharedPreferences;
     private boolean hasSavedContent = false;
 
+    @SuppressLint("HandlerLeak")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -143,19 +149,48 @@ public class ResumeActivity extends AppCompatActivity {
             loadContent();
         }
 
-        //配置工作状况选择
-        rtnStu.setOnClickListener(new View.OnClickListener() {
+        //从服务器恢复
+        handler = new Handler(){
             @Override
-            public void onClick(View view) {
-                if (rtnStu.isChecked()) {
+            public void handleMessage(Message msg) {
+                super.handleMessage(msg);
+                JSONObject jsonObject = (JSONObject) msg.obj;
+
+                try {
+                    etPhone.setText(jsonObject.getString(ConstantValues.KEY_RESUME_TELEPHONE));
+                    etWechat.setText(jsonObject.getString(ConstantValues.KEY_RESUME_WECHAT));
+                    etEmail.setText(jsonObject.getString(ConstantValues.KEY_RESUME_EMAIL));
+                    etCity.setText(jsonObject.getString(ConstantValues.KEY_RESUME_POSITION));
+                    etBirth.setText(jsonObject.getString(ConstantValues.KEY_RESUME_BIRTH));
+                    etEmContact.setText(jsonObject.getString(ConstantValues.KEY_RESUME_CONTACT));
+                    etEmPhone.setText(jsonObject.getString(ConstantValues.KEY_RESUME_PHONE));
+                    etSkills.setText(jsonObject.getString(ConstantValues.KEY_RESUME_POWER));
+                    etIntro.setText(jsonObject.getString(ConstantValues.KEY_RESUME_RESUME));
+                    etExps.setText(jsonObject.getString(ConstantValues.KEY_RESUME_OTHER));
+                    etThought.setText(jsonObject.getString(ConstantValues.KEY_RESUME_ATTITUDE));
+                    if(jsonObject.getString(ConstantValues.KEY_RESUME_STATUS).equals(rtnStu.getText().toString())){
+                        rtnStu.setChecked(true);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        };
+
+        //配置status选择
+        rtnStu.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (b) {
                     rtnNotStu.setChecked(false);
                 }
             }
         });
-        rtnNotStu.setOnClickListener(new View.OnClickListener() {
+        rtnNotStu.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onClick(View view) {
-                if (rtnNotStu.isChecked()) {
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (b) {
                     rtnStu.setChecked(false);
                 }
             }
@@ -167,20 +202,7 @@ public class ResumeActivity extends AppCompatActivity {
             public void onClick(View view) {
                 saveContent();
                 if (!hasEmpty()) {
-                    HashMap<String, String> resumeData = new HashMap<>();
-                    resumeData.put("phone", etPhone.getText().toString());
-                    resumeData.put("wechat", etWechat.getText().toString());
-                    resumeData.put("email", etEmail.getText().toString());
-                    resumeData.put("birth", etBirth.getText().toString());
-                    resumeData.put("emContact", etEmContact.getText().toString());
-                    resumeData.put("emPhone", etEmPhone.getText().toString());
-                    resumeData.put("skills", etSkills.getText().toString());
-                    resumeData.put("intro", etIntro.getText().toString());
-                    resumeData.put("etExps", etExps.getText().toString());
-                    resumeData.put("thought", etThought.getText().toString());
-                    resumeData.put("city", etCity.getText().toString());
-                    resumeData.put("ifStu", rtnStu.isChecked() ? rtnStu.getText().toString() : rtnNotStu.getText().toString());
-                    uploadResume(resumeData);
+                    uploadResume();
                 } else {
                     saveContent();
                     Toast.makeText(ResumeActivity.this, "已保存(简历尚未完成,暂未上传)", Toast.LENGTH_SHORT).show();
@@ -323,7 +345,20 @@ public class ResumeActivity extends AppCompatActivity {
     }
 
     //上传简历
-    private void uploadResume(final HashMap<String, String> resumeData) {
+    private void uploadResume() {
+        final HashMap<String, String> resumeData = new HashMap<>();
+        resumeData.put("phone", etPhone.getText().toString());
+        resumeData.put("wechat", etWechat.getText().toString());
+        resumeData.put("email", etEmail.getText().toString());
+        resumeData.put("birth", etBirth.getText().toString());
+        resumeData.put("emContact", etEmContact.getText().toString());
+        resumeData.put("emPhone", etEmPhone.getText().toString());
+        resumeData.put("skills", etSkills.getText().toString());
+        resumeData.put("intro", etIntro.getText().toString());
+        resumeData.put("etExps", etExps.getText().toString());
+        resumeData.put("thought", etThought.getText().toString());
+        resumeData.put("city", etCity.getText().toString());
+        resumeData.put("ifStu", rtnStu.isChecked() ? rtnStu.getText().toString() : rtnNotStu.getText().toString());
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -372,6 +407,59 @@ public class ResumeActivity extends AppCompatActivity {
                                                         "已上传保存", Toast.LENGTH_SHORT).show();
                                             }
                                         });
+                                    } else {
+                                        final String msg = object.getString("msg");
+                                        runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                Toast.makeText(ResumeActivity.this,
+                                                        msg, Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
+                                    }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        });
+            }
+        }).start();
+    }
+
+    //下载简历并加载
+    private void loadResumeByUrl(){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                OkHttpClient client = null;
+                try {
+                    client = HttpUtils.getUnsafeOkHttpClient();
+                } catch (NoSuchAlgorithmException e) {
+                    e.printStackTrace();
+                } catch (KeyManagementException e) {
+                    e.printStackTrace();
+                }
+                FormBody.Builder builder = new FormBody.Builder();
+                builder.add("token", token);
+                HttpUtils.sendRequest(client, ConstantValues.URL_SHOW_RESUME,
+                        builder, new Callback() {
+                            @Override
+                            public void onFailure(Call call, IOException e) {
+
+                            }
+
+                            @Override
+                            public void onResponse(Call call, Response response) throws IOException {
+                                try {
+                                    JSONObject object = new JSONObject(response
+                                            .body().string());
+                                    int code = object.getInt("code");
+                                    Log.d(TAG, object.toString());
+                                    if (code == 200) {
+                                        JSONObject jsonObject = object.getJSONObject("msg");
+                                        Message msg = new Message();
+                                        msg.obj = jsonObject;
+                                        handler.sendMessage(msg);
                                     } else {
                                         final String msg = object.getString("msg");
                                         runOnUiThread(new Runnable() {
@@ -461,6 +549,7 @@ public class ResumeActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+        loadResumeByUrl();
         loadContent();
     }
 

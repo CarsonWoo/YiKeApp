@@ -86,7 +86,7 @@ public class FragmentMessage extends Fragment {
         //列表初始化
         RecyclerView recyclerView = (RecyclerView) chatPage;
         recyclerView.setLayoutManager(new LinearLayoutManager(chatContext));
-        adapter = new ChatItemRVAdapter(chatWinItems, mListener);
+        adapter = new ChatItemRVAdapter(getContext(),chatWinItems, mListener);
         recyclerView.setAdapter(adapter);
         DividerItemDecoration chatDecoration = new DividerItemDecoration(getContext(),
                 DividerItemDecoration.VERTICAL);
@@ -108,7 +108,7 @@ public class FragmentMessage extends Fragment {
                 }
                 listId.add(chatWinData.getId());
                 ChatItem.ChatWinItem chatWinItem = new ChatItem.ChatWinItem(chatWinData.getId()
-                        , chatWinData.getName(), chatWinData.getLatestTime(), chatWinData.getLatestMsg());
+                        , chatWinData.getName(), chatWinData.getLatestTime(), chatWinData.getLatestMsg(),chatWinData.getHeadPhotoUrl());
                 Log.d(TAG, "WIN_id:" + chatWinData.getId());
                 chatWinItems.add(chatWinItem);
                 if(adapter!=null) {

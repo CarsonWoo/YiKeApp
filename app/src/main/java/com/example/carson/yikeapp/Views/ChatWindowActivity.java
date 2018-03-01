@@ -1,7 +1,10 @@
 package com.example.carson.yikeapp.Views;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -20,6 +23,7 @@ import android.widget.Toast;
 import com.example.carson.yikeapp.Adapter.ChatMsgAdapter;
 import com.example.carson.yikeapp.R;
 import com.example.carson.yikeapp.Utils.ConstantValues;
+import com.example.carson.yikeapp.Utils.HttpUtils;
 import com.example.carson.yikeapp.Views.dummy.ChatWinData;
 import com.jude.swipbackhelper.SwipeBackHelper;
 
@@ -27,10 +31,19 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.litepal.crud.DataSupport;
 
+import java.io.IOException;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.FormBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Response;
 
 public class ChatWindowActivity extends AppCompatActivity {
     private final static String TAG = "ChatWindowActivity";
@@ -51,14 +64,19 @@ public class ChatWindowActivity extends AppCompatActivity {
     private int etHeight, rlHeight;
     private int etMiddleHeight, rlMiddleHeight;
     private int etMaxHeight, rlMaxHeight;
+    private Handler headHandler;
 
+    private String userHeadUrl,token;
     private Intent initData;
 
+    @SuppressLint("HandlerLeak")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat_window);
 
+        //token
+        token = ConstantValues.getCachedToken(ChatWindowActivity.this);
         //Intent
         initData = getIntent();
         titleStr = initData.getStringExtra(ConstantValues.KEY_HOME_LIST_USERNAME);
@@ -89,6 +107,27 @@ public class ChatWindowActivity extends AppCompatActivity {
         rvChatWin.setLayoutManager(manager);
         rvChatWin.setAdapter(chatMsgAdapter);
         rvChatWin.setHasFixedSize(true);
+
+        rvChatWin.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+            @Override
+            public void onLayoutChange(View view, int i, int i1, int i2, int i3, int i4, int i5, int i6, int i7) {
+                rvChatWin.scrollToPosition(chatMsgAdapter.getData().size() - 1);
+            }
+        });
+
+        //得到头像链接
+        headHandler = new Handler(){
+            @Override
+            public void handleMessage(Message msg) {
+                super.handleMessage(msg);
+                JSONObject jsonObject = (JSONObject) msg.obj;
+                try {
+                    userHeadUrl = jsonObject.getString("portrait");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
 
         //设置toolbar
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -151,7 +190,7 @@ public class ChatWindowActivity extends AppCompatActivity {
                 rlBottom.getViewTreeObserver().removeGlobalOnLayoutListener(this);
                 rlHeight = rlBottom.getHeight();
                 Log.d(TAG, "mHeight: " + rlHeight);
-                rlMiddleHeight = 8 * rlHeight / 5;
+                rlMiddleHeight = 15 * rlHeight / 10;
                 rlMaxHeight = 21 * rlHeight / 10;
             }
         });
@@ -204,6 +243,7 @@ public class ChatWindowActivity extends AppCompatActivity {
                     rlBottom.setLayoutParams(rlParams);
                     rvChatWin.scrollToPosition(chatMsgAdapter.getData().size() - 1);
                 }
+                rvChatWin.scrollToPosition(chatMsgAdapter.getData().size() - 1);
             }
         };
 
@@ -258,10 +298,65 @@ public class ChatWindowActivity extends AppCompatActivity {
         setResult(ConstantValues.RESULTCODE_NEED_REFRESH);
     }
 
+    //获得头像链接
+    private void getHeadUrl(){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                OkHttpClient client = null;
+                try {
+                    client = HttpUtils.getUnsafeOkHttpClient();
+                } catch (NoSuchAlgorithmException e) {
+                    e.printStackTrace();
+                } catch (KeyManagementException e) {
+                    e.printStackTrace();
+                }
+                FormBody.Builder builder = new FormBody.Builder();
+                builder.add("token", token);
+                builder.add("token", token);
+                HttpUtils.sendRequest(client, ConstantValues.URL_GET_BANNER_PHOTO,
+                        builder, new Callback() {
+                            @Override
+                            public void onFailure(Call call, IOException e) {
+
+                            }
+
+                            @Override
+                            public void onResponse(Call call, Response response) throws IOException {
+                                try {
+                                    JSONObject object = new JSONObject(response
+                                            .body().string());
+                                    int code = object.getInt("code");
+                                    Log.d(TAG, object.toString());
+                                    if (code == 200) {
+                                        JSONObject jsonObject = object.getJSONObject("msg");
+                                        Message msg = new Message();
+                                        msg.obj = jsonObject;
+                                        headHandler.sendMessage(msg);
+                                    } else {
+                                        final String msg = object.getString("msg");
+                                        runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                Toast.makeText(ChatWindowActivity.this,
+                                                        msg, Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
+                                    }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        });
+            }
+        }).start();
+    }
+
     @Override
     protected void onStart() {
         super.onStart();
         loadHistoryMsg();
+        rvChatWin.scrollToPosition(chatMsgAdapter.getData().size() - 1);
     }
 
     @Override

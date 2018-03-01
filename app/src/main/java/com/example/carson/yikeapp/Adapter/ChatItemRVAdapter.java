@@ -1,5 +1,6 @@
 package com.example.carson.yikeapp.Adapter;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -8,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.example.carson.yikeapp.R;
 import com.example.carson.yikeapp.Views.FragmentMessage;
 import com.example.carson.yikeapp.Views.dummy.ChatItem;
@@ -20,11 +22,13 @@ import java.util.ArrayList;
 
 public class ChatItemRVAdapter extends RecyclerView.Adapter<ChatItemRVAdapter.ViewHolder> {
 
+    private Context context;
     private final ArrayList<ChatItem.ChatWinItem> mValues;
     private final FragmentMessage.OnFragmentInteractionListener mListener;
     private final ArrayList<ChatItem.ChatWinItem> itemSelected = new ArrayList<>();
 
-    public ChatItemRVAdapter(ArrayList<ChatItem.ChatWinItem> items, FragmentMessage.OnFragmentInteractionListener listener) {
+    public ChatItemRVAdapter(Context context, ArrayList<ChatItem.ChatWinItem> items, FragmentMessage.OnFragmentInteractionListener listener) {
+        this.context = context;
         mValues = items;
         mListener = listener;
     }
@@ -43,6 +47,7 @@ public class ChatItemRVAdapter extends RecyclerView.Adapter<ChatItemRVAdapter.Vi
         holder.tvName.setText(mValues.get(position).name);
         holder.tvLatestTime.setText(mValues.get(position).latestTime);
         holder.tvLatestMsg.setText(mValues.get(position).latestMsg);
+        Glide.with(context).load(mValues.get(position).userHeadUrl).into(holder.ivHead);
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override

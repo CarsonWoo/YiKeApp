@@ -52,6 +52,8 @@ public class ConstantValues {
 
     public static final String URL_SET_RESUME = "https://www.yiluzou.cn/yike/public/index.php/set_resume";
 
+    public static final String URL_SHOW_RESUME = "https://www.yiluzou.cn/yike/public/index.php/show_resume";
+
     public static final int CODE_TAKE_PHOTO = 1;
 
     public static final int TYPE_TAKE_PHOTO = 1;

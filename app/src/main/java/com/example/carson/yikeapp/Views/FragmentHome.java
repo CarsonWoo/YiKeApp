@@ -36,6 +36,8 @@ import java.io.IOException;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -51,7 +53,7 @@ import okhttp3.Response;
  * Use the {@link FragmentHome#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class FragmentHome extends Fragment {
+public class FragmentHome extends Fragment implements HomeItemRecyclerViewAdapter.OnItemClickListener{
     //Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final int ARG_BANNER = 1;
@@ -63,7 +65,6 @@ public class FragmentHome extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-
     private static final int TIME = 3000;
     private Handler viewPagerScrollHandler = new Handler(), listDataHandler;
     private int itemPosition = 0;
@@ -72,9 +73,14 @@ public class FragmentHome extends Fragment {
     private ArrayList<HomeContent.BNBHomeItem> storeData = new ArrayList<>();
     private HomeItemRecyclerViewAdapter rvAdapter;
     private ArrayList<ImageView> viewList = new ArrayList<>();
-    private ArrayList<String> bannerList = new ArrayList<>(),listId = new ArrayList();
+    private ArrayList<String> bannerList = new ArrayList<>(), listId = new ArrayList();
     private PagerAdapter pagerAdapter;
-
+    private boolean pagerScrolling = false;
+    private Runnable runnableForViewPager;
+    private Timer timer;
+    private TimerTask timerTask;
+    private SwipeRefreshLayout refreshLayout;
+    private boolean loadingMore = false;
     /**
      * 屏幕宽度
      */
@@ -130,7 +136,7 @@ public class FragmentHome extends Fragment {
 
         //rv_homelist
         final Context context = view.getContext();
-        rvAdapter = new HomeItemRecyclerViewAdapter(mListener);
+        rvAdapter = new HomeItemRecyclerViewAdapter(mListener,this);
         RecyclerView rvList = view.findViewById(R.id.rv_homelist);
         rvList.setLayoutManager(new LinearLayoutManager(context));
         rvList.setAdapter(rvAdapter);
@@ -148,7 +154,7 @@ public class FragmentHome extends Fragment {
         rvList.setLayoutManager(layoutManager);
 
         //下拉刷新
-        final SwipeRefreshLayout refreshLayout = view.findViewById(R.id.srl_refresh);
+        refreshLayout = view.findViewById(R.id.srl_refresh);
         refreshLayout.setColorSchemeResources(
                 android.R.color.holo_blue_light,
                 android.R.color.holo_green_light,
@@ -158,7 +164,7 @@ public class FragmentHome extends Fragment {
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                getHomeBNBList(rvAdapter.getItemCount() / 7 + 1);
+                getHomeBNBList( 1);
             }
         });
 
@@ -193,22 +199,23 @@ public class FragmentHome extends Fragment {
                         }
 
                     }
-                    if (listNum == storeData.size() && refreshLayout.isRefreshing()) {
+                    if ((listNum == storeData.size() && refreshLayout.isRefreshing())||loadingMore) {
                         Toast.makeText(getContext(), "暂时没有更多店家", Toast.LENGTH_SHORT).show();
+                        refreshLayout.setRefreshing(false);
+                        loadingMore = false;
                     }
-                    refreshLayout.setRefreshing(false);
                     rvAdapter.clearData();
                     rvAdapter.addData(storeData);
-                } else {
+                } else if (msg.arg1 == ARG_BANNER) {
                     JSONArray listUrl = (JSONArray) msg.obj;
-                    for (int i = 0; i < listUrl.length() ; i++){
+                    for (int i = 0; i < listUrl.length(); i++) {
                         try {
                             bannerList.add(listUrl.getString(i));
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
                     }
-                    for (int i = 0; i < bannerList.size() ; i++) {
+                    for (int i = 0; i < bannerList.size(); i++) {
                         ImageView view = new ImageView(context);
                         view.setBackgroundColor(Color.WHITE);
                         Glide.with(getContext()).load(bannerList.get(i)).into(view);//设置头像
@@ -255,27 +262,50 @@ public class FragmentHome extends Fragment {
         };
         header.setAdapter(pagerAdapter);
 
+        header.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                itemPosition = position;
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+
         getHeaderPhoto();
         /**
          * ViewPager的定时器
          */
         final ArrayList<ImageView> finalViewList1 = viewList;
-        Runnable runnableForViewPager = new Runnable() {
+        viewPagerScrollHandler = new Handler() {
             @Override
-            public void run() {
-                try {
-                    itemPosition++;
-                    viewPagerScrollHandler.postDelayed(this, TIME);
-                    header.setCurrentItem(itemPosition % finalViewList1.size());
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+            public void handleMessage(Message msg) {
+                super.handleMessage(msg);
+                itemPosition++;
+                header.setCurrentItem(itemPosition % finalViewList1.size());
             }
         };
-        viewPagerScrollHandler.postDelayed(runnableForViewPager, TIME);
+
+        timer = new Timer();
+        timerTask = new TimerTask() {
+            @Override
+            public void run() {
+                viewPagerScrollHandler.sendEmptyMessage(1);
+            }
+        };
+        if (!pagerScrolling) {
+            timer.schedule(timerTask, 3000, 3000);
+            pagerScrolling = true;
+        }
         return view;
     }
-
 
     //首页店家列表获取
     private void getHomeBNBList(final int page) {
@@ -405,6 +435,12 @@ public class FragmentHome extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void onItemClick(ArrayList item) {
+        loadingMore = true;
+        getHomeBNBList(rvAdapter.getItemCount() / 7 + 1);
     }
 
     /**

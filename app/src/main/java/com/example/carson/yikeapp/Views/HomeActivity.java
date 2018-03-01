@@ -205,14 +205,18 @@ public class HomeActivity extends AppCompatActivity implements FragmentHome.OnFr
     public void onFragmentInteraction(ArrayList item) {
         switch (mViewPager.getCurrentItem()) {
             case 0:
-                Log.d(TAG, "点击了首页的item");
-                Log.d(TAG, ((HomeContent.BNBHomeItem) (item.get(0))).id + "");
-                Toast.makeText(this, "Item " + ((HomeContent.BNBHomeItem) (item.get(0))).id + " clicked.", Toast.LENGTH_SHORT).show();
-                Intent toStoreDetail = new Intent(HomeActivity.this, StoreDetailActivity.class);
-                toStoreDetail.putExtra(ConstantValues.KEY_STORE_MORE_DETAIL, ((HomeContent.BNBHomeItem) (item.get(0))).moreDetail);
-                toStoreDetail.putExtra(ConstantValues.KEY_STORE_NAME, ((HomeContent.BNBHomeItem) (item.get(0))).name);
-                startActivity(toStoreDetail);
-                overridePendingTransition(R.anim.ani_right_get_into, R.anim.ani_left_sign_out);
+                if(item.get(0).getClass().isInstance(HomeContent.BNBHomeItem.class)) {
+                    Log.d(TAG, "点击了首页的item");
+                    Log.d(TAG, ((HomeContent.BNBHomeItem) (item.get(0))).id + "");
+                    Toast.makeText(this, "Item " + ((HomeContent.BNBHomeItem) (item.get(0))).id + " clicked.", Toast.LENGTH_SHORT).show();
+                    Intent toStoreDetail = new Intent(HomeActivity.this, StoreDetailActivity.class);
+                    toStoreDetail.putExtra(ConstantValues.KEY_STORE_MORE_DETAIL, ((HomeContent.BNBHomeItem) (item.get(0))).moreDetail);
+                    toStoreDetail.putExtra(ConstantValues.KEY_STORE_NAME, ((HomeContent.BNBHomeItem) (item.get(0))).name);
+                    startActivity(toStoreDetail);
+                    overridePendingTransition(R.anim.ani_right_get_into, R.anim.ani_left_sign_out);
+                }else {
+
+                }
                 break;
             case 1:
                 if (item.get(0) instanceof DiaryItem.DItem) {
@@ -234,7 +238,6 @@ public class HomeActivity extends AppCompatActivity implements FragmentHome.OnFr
                 toChatWin.putExtra(ConstantValues.KEY_HOME_LIST_USERNAME, ((ChatItem.ChatWinItem) (item.get(0))).name);
                 startActivityForResult(toChatWin, ConstantValues.REQUESTCODE_IF_MESSAGE_NEED_REFRESH);
                 overridePendingTransition(R.anim.ani_right_get_into, R.anim.ani_left_sign_out);
-                Toast.makeText(this, "Item " + ((ChatItem.ChatWinItem) (item.get(0))).name + " clicked.", Toast.LENGTH_SHORT).show();
                 break;
             case 3:
                 break;
