@@ -155,7 +155,8 @@ public class StoreDetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent toContact = new Intent(StoreDetailActivity.this,ChatWindowActivity.class);
-                toContact.putExtra(ConstantValues.KEY_HOME_LIST_USERNAME,userName);
+                toContact.putExtra(ConstantValues.KEY_CHAT_WIN_USERNAME,userName);
+                toContact.putExtra(ConstantValues.KEY_CHAT_WIN_USER_ID,dataFrom.getStringExtra(ConstantValues.KEY_HOME_LIST_HOTEL_ID));
                 startActivity(toContact);
                 overridePendingTransition(R.anim.ani_right_get_into, R.anim.ani_left_sign_out);
             }

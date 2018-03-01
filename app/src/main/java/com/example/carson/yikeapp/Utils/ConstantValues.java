@@ -115,7 +115,7 @@ public class ConstantValues {
     //首页店家列表传递参数名称
     public static final String KEY_HOME_LIST_PAGE = "page";
     public static final String KEY_HOME_LIST_SIZE = "size";
-
+    public static final String KEY_HOME_LIST_HOTEL_ID = "hotel_id";
     public static final String KEY_HOME_LIST_ID = "id";
     public static final String KEY_HOME_LIST_USERNAME = "username";
     public static final String KEY_HOME_LIST_HOTELNAME = "hotel_name";
@@ -177,6 +177,8 @@ public class ConstantValues {
 
     public static final String KEY_APPLY_NUM = "person_number";
     public static final String KEY_STORE_ID = "id";
+    public static final String KEY_CHAT_WIN_USERNAME = "username";
+    public static final String KEY_CHAT_WIN_USER_ID = "userId";
 
     //取得token
     public static String getCachedToken(Context context){

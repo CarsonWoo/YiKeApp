@@ -47,4 +47,8 @@
     <string name="new_user_register">新用户注册</string>
     <string name="login_chinese">登录</string>
     <string name="login_tab_title">登录义客</string>
+
+    <string-array name="option_message">
+        <item>删除该聊天</item>
+    </string-array>
 </resources>

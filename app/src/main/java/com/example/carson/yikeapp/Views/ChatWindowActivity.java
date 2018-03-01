@@ -66,7 +66,8 @@ public class ChatWindowActivity extends AppCompatActivity {
     private int etMaxHeight, rlMaxHeight;
     private Handler headHandler;
 
-    private String userHeadUrl,token;
+    private String userHeadUrl, token;
+    private int userId;
     private Intent initData;
 
     @SuppressLint("HandlerLeak")
@@ -79,7 +80,8 @@ public class ChatWindowActivity extends AppCompatActivity {
         token = ConstantValues.getCachedToken(ChatWindowActivity.this);
         //Intent
         initData = getIntent();
-        titleStr = initData.getStringExtra(ConstantValues.KEY_HOME_LIST_USERNAME);
+        titleStr = initData.getStringExtra(ConstantValues.KEY_CHAT_WIN_USERNAME);
+        userId = initData.getIntExtra(ConstantValues.KEY_HOME_LIST_HOTEL_ID, -1);
 
         //数据库预处理
         chatWinDBList = DataSupport.where("name = ?", titleStr).find(ChatWinData.class);
@@ -116,7 +118,7 @@ public class ChatWindowActivity extends AppCompatActivity {
         });
 
         //得到头像链接
-        headHandler = new Handler(){
+        headHandler = new Handler() {
             @Override
             public void handleMessage(Message msg) {
                 super.handleMessage(msg);
@@ -137,7 +139,6 @@ public class ChatWindowActivity extends AppCompatActivity {
             }
         });
         title.setText(titleStr);
-
 
         //设置edittext动态高度
         setUpEditText();
@@ -162,7 +163,7 @@ public class ChatWindowActivity extends AppCompatActivity {
                 }
             }
         });
-
+        getHeadUrl();
     }
 
     private void setUpEditText() {
@@ -267,7 +268,8 @@ public class ChatWindowActivity extends AppCompatActivity {
             Log.d(TAG, "chatMsgData: " + chatMsgData.toString());
             this.chatMsgData.add(chatMsgData);
             ChatWinData chatWinData = new ChatWinData();
-
+            chatWinData.setId(userId);
+            chatWinData.setHeadPhotoUrl(userHeadUrl);
             try {
                 JSONObject msg = new JSONObject(chatMsgData);
                 chatWinData.setLatestMsg(msg.getString("msg"));
@@ -283,6 +285,8 @@ public class ChatWindowActivity extends AppCompatActivity {
             Log.d(TAG, "msgNum: " + arrayList.size() + "");
         } else {
             ChatWinData chatWinData = new ChatWinData();
+            chatWinData.setId(userId);
+            chatWinData.setHeadPhotoUrl(userHeadUrl);
             chatWinData.setName(titleStr);
             try {
                 JSONObject msg = new JSONObject(chatMsgData);
@@ -299,7 +303,7 @@ public class ChatWindowActivity extends AppCompatActivity {
     }
 
     //获得头像链接
-    private void getHeadUrl(){
+    private void getHeadUrl() {
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -313,8 +317,8 @@ public class ChatWindowActivity extends AppCompatActivity {
                 }
                 FormBody.Builder builder = new FormBody.Builder();
                 builder.add("token", token);
-                builder.add("token", token);
-                HttpUtils.sendRequest(client, ConstantValues.URL_GET_BANNER_PHOTO,
+                builder.add("id", userId + "");
+                HttpUtils.sendRequest(client, ConstantValues.URL_GET_TARGET_USER_INFO,
                         builder, new Callback() {
                             @Override
                             public void onFailure(Call call, IOException e) {
@@ -350,6 +354,7 @@ public class ChatWindowActivity extends AppCompatActivity {
                         });
             }
         }).start();
+
     }
 
     @Override

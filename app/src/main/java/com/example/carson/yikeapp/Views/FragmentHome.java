@@ -189,6 +189,7 @@ public class FragmentHome extends Fragment implements HomeItemRecyclerViewAdapte
                             storeData.add(new HomeContent.BNBHomeItem(oneData.getString(ConstantValues.KEY_HOME_LIST_ID)
                                     , oneData.getString(ConstantValues.KEY_HOME_LIST_HOTELNAME)
                                     , oneData.getString(ConstantValues.KEY_HOME_LIST_USERNAME)
+                                    , oneData.getString(ConstantValues.KEY_HOME_LIST_HOTEL_ID)
                                     , oneData.getString(ConstantValues.KEY_HOME_LIST_TIME)
                                     , oneData.getString(ConstantValues.KEY_HOME_LIST_LAST)
                                     , oneData.getString(ConstantValues.KEY_HOME_LIST_LOCATION),
