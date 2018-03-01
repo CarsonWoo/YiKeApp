@@ -48,9 +48,19 @@ public class ConstantValues {
 
     public static final String URL_PARTNER_AGREE = "https://www.yiluzou.cn/yike/public/index.php/agree_friend";
 
+    public static final String URL_DIARY_LIST_SHOW = "https://www.yiluzou.cn/yike/public/index.php/show_diary";
+
     public static final String URL_STORE_APPLY = "https://www.yiluzou.cn/yike/public/index.php/sign";
 
     public static final String URL_SET_RESUME = "https://www.yiluzou.cn/yike/public/index.php/set_resume";
+
+    public static final String URL_DIARY_AGREE = "https://www.yiluzou.cn/yike/public/index.php/agree_diary";
+
+    public static final String URL_EXP_PUBLISH = "https://www.yiluzou.cn/yike/public/index.php/experience_user";
+
+    public static final String URL_PARTNER_PUBLISH = "https://www.yiluzou.cn/yike/public/index.php/call_friend";
+
+    public static final String URL_DIARY_PUBLISH = "https://www.yiluzou.cn/yike/public/index.php/diary";
 
     public static final String URL_SHOW_RESUME = "https://www.yiluzou.cn/yike/public/index.php/show_resume";
 
@@ -177,6 +187,33 @@ public class ConstantValues {
 
     public static final String KEY_APPLY_NUM = "person_number";
     public static final String KEY_STORE_ID = "id";
+
+    //日记传递参数名称
+    public static final String KEY_DIARY_LIST_PAGE = "page";
+    public static final String KEY_DIARY_LIST_SIZE = "size";
+
+    public static final String KEY_DIARY_LIST_ID = "id";
+    public static final String KEY_DIARY_LIST_NAME = "username";
+    public static final String KEY_DIARY_LIST_USER_PORTRAIT = "user_portrait";
+    public static final String KEY_DIARY_LIST_CONTENT = "text";
+    public static final String KEY_DIARY_LIST_AGREE_NUM = "agree_number";
+    public static final String KEY_DIARY_LIST_VIEW = "see_time";
+    public static final String KEY_DIARY_LIST_DATE = "time";
+    public static final String KEY_DIARY_LIST_IS_AGREE = "is_agree";
+    public static final String KEY_DIARY_LIST_PHOTO_URL = "photo";
+
+    //发布经验帖传递参数名
+    public static final String KEY_PUBLISH_EXP_TITLE = "title";
+    public static final String KEY_PUBLISH_EXP_CONTENT = "text";
+    public static final String KEY_PUBLISH_EXP_AREA = "position";
+    public static final String KEY_PUBLISH_EXP_PHOTO = "photo";
+
+    //发布约伴帖传递参数名
+    public static final String KEY_PUBLISH_PART_COMMENT = "text";
+
+    //发布日记传递参数名
+    public static final String KEY_PUBLISH_DIARY_TEXT = "text";
+    public static final String KEY_PUBLISH_DIARY_PHOTO = "photo";
 
     //取得token
     public static String getCachedToken(Context context){

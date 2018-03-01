@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#f3f5f3f3"
+    tools:context="com.example.carson.yikeapp.Views.PublishPartActivity">
+
+    <android.support.v7.widget.Toolbar
+        android:background="@android:color/white"
+        android:id="@+id/toolbar_publish_partner"
+        app:navigationIcon="@drawable/ic_chevron_left"
+        app:titleMarginStart="90dp"
+        app:title="约行帖"
+        android:layout_width="match_parent"
+        android:layout_height="39dp"></android.support.v7.widget.Toolbar>
+
+    <LinearLayout
+        android:background="@android:color/white"
+        android:layout_marginTop="41.5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:textSize="18sp"
+            android:textAlignment="textStart"
+            android:hint="写下你在游览之地的一点点心情\n说不定有人相约哦~"
+            android:id="@+id/et_part_post_comment"
+            android:layout_margin="15dp"
+            android:background="@android:color/white"
+            android:layout_width="match_parent"
+            android:layout_height="195dp"
+            android:gravity="start" />
+
+    </LinearLayout>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_publish_part"
+        android:layout_margin="19dp"
+        app:layout_anchorGravity="bottom|end"
+        app:layout_anchor="@id/et_part_post_comment"
+        app:srcCompat="@drawable/ic_publish"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+</android.support.design.widget.CoordinatorLayout>

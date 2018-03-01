@@ -75,10 +75,19 @@
             android:theme="@style/MainTheme" />
         <activity
             android:name=".Views.ExpDetailActivity"
+            android:theme="@style/TransparentTheme" />
+        <activity
+            android:name=".Views.ChatWindowActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:theme="@style/TransparentTheme" />
+        <activity
+            android:name=".Views.PublishExpActivity"
+            android:theme="@style/TransparentTheme" />
+        <activity
+            android:name=".Views.PublishPartActivity"
+            android:theme="@style/TransparentTheme" />
+        <activity android:name=".Views.PublishDiaryActivity"
             android:theme="@style/TransparentTheme"></activity>
-        <activity android:name=".Views.ChatWindowActivity"
-            android:theme="@style/TransparentTheme"
-            android:configChanges="keyboardHidden|orientation|screenSize" ></activity>
     </application>
 
 </manifest>

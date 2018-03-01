@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#f3f5f3f3"
+    tools:context="com.example.carson.yikeapp.Views.PublishExpActivity">
+
+    <android.support.v7.widget.Toolbar
+        android:background="@android:color/white"
+        android:id="@+id/toolbar_publish_exp"
+        android:gravity="fill_horizontal"
+        app:navigationIcon="@drawable/ic_chevron_left"
+        app:title="经验帖"
+        app:titleMarginStart="90dp"
+        android:layout_width="match_parent"
+        android:layout_height="39dp">
+
+    </android.support.v7.widget.Toolbar>
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_marginTop="40.5dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:background="@android:color/white"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/et_exp_post_title"
+                    android:layout_margin="15dp"
+                    android:hint="标题（3-45字以内）"
+                    android:textSize="18sp"
+                    android:textAlignment="textStart"
+                    android:background="@android:color/white"
+                    android:layout_width="match_parent"
+                    android:layout_height="65dp"
+                    android:gravity="start" />
+            </LinearLayout>
+            
+            <LinearLayout
+                android:layout_marginTop="5dp"
+                android:background="@android:color/white"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                
+                <EditText
+                    android:id="@+id/et_exp_post_area"
+                    android:textSize="18sp"
+                    android:layout_margin="15dp"
+                    android:hint="地点："
+                    android:background="@android:color/white"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp" />
+                
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_marginTop="5dp"
+                android:background="@android:color/white"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/et_exp_post_content"
+                    android:hint="经验详情"
+                    android:gravity="start"
+                    android:textAlignment="textStart"
+                    android:textSize="18sp"
+                    android:layout_margin="15dp"
+                    android:background="@android:color/white"
+                    android:layout_width="match_parent"
+                    android:layout_height="400dp" />
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
+
+    <Button
+        android:id="@+id/btn_publish_exp_post"
+        android:layout_marginLeft="2dp"
+        android:layout_marginRight="2dp"
+        android:layout_alignParentBottom="true"
+        android:textColor="@android:color/white"
+        android:text="发布"
+        android:background="@drawable/bg_button_style2"
+        android:layout_width="match_parent"
+        android:layout_height="45dp" />
+
+</RelativeLayout>

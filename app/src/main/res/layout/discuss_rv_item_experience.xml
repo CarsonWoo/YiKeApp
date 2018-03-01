@@ -25,14 +25,14 @@
 
     <Button
         android:id="@+id/btn_discuss_rv_item_ex_tag"
-        android:textSize="9.2sp"
+        android:textSize="7.8sp"
         android:textColor="#e26232"
         android:text="@string/textDemo_3"
         android:background="@drawable/bg_bnb_loca"
         android:layout_marginTop="10dp"
         android:layout_below="@id/tv_discuss_rv_item_ex_content"
-        android:layout_width="44dp"
-        android:layout_height="16.3dp" />
+        android:layout_width="73.8dp"
+        android:layout_height="14.3dp" />
 
     <TextView
         android:id="@+id/tv_discuss_rv_item_ex_date"
@@ -63,7 +63,7 @@
     <TextView
         android:id="@+id/tv_discuss_rv_item_ex_collect"
         android:clickable="true"
-        android:layout_marginLeft="135dp"
+        android:layout_marginLeft="95dp"
         android:layout_toRightOf="@id/tv_discuss_rv_item_ex_likes"
         android:textColor="#e26323"
         android:layout_marginTop="11dp"
@@ -73,7 +73,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:focusable="true"
-        android:layout_marginStart="135dp"
+        android:layout_marginStart="95dp"
         android:layout_toEndOf="@id/tv_discuss_rv_item_ex_likes" />
 
 </RelativeLayout>

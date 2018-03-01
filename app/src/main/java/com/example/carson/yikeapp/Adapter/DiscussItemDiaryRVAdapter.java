@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.example.carson.yikeapp.R;
 import com.example.carson.yikeapp.Views.FragmentDiary;
 import com.example.carson.yikeapp.Views.dummy.DiaryItem;
@@ -25,11 +26,14 @@ public class DiscussItemDiaryRVAdapter extends RecyclerView.Adapter<DiscussItemD
     private final List<DiaryItem.DItem> mValues;
     private final ArrayList<DiaryItem.DItem> itemSelected = new ArrayList<>();
     private final FragmentDiary.OnFragmentInteractionListener mListener;
+    private final OnLikeClickedListener mOnLikeClickedListener;
 
     public DiscussItemDiaryRVAdapter(List<DiaryItem.DItem> items,
-                                     FragmentDiary.OnFragmentInteractionListener listener) {
+                                     FragmentDiary.OnFragmentInteractionListener listener,
+                                     OnLikeClickedListener onLikeClickedListener) {
         mValues = items;
         mListener = listener;
+        mOnLikeClickedListener = onLikeClickedListener;
     }
 
     @Override
@@ -40,17 +44,24 @@ public class DiscussItemDiaryRVAdapter extends RecyclerView.Adapter<DiscussItemD
     }
 
     @Override
-    public void onBindViewHolder(final DiaryVH holder, int position) {
+    public void onBindViewHolder(final DiaryVH holder, final int position) {
         holder.item = mValues.get(position);
         holder.name.setText(mValues.get(position).name);
         holder.views.setText(mValues.get(position).views);
         holder.content.setText(mValues.get(position).content);
         holder.date.setText(mValues.get(position).date);
 
+        Glide.with(holder.head.getContext()).load(mValues.get(position).headResFile)
+                .into(holder.head);
+
+        Glide.with(holder.photo.getContext()).load(mValues.get(position).photoFile)
+                .into(holder.photo);
+
         holder.like.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                holder.like.setImageResource(R.drawable.ic_like);
+                mOnLikeClickedListener.onLikeClicked(v, mValues.get(position).id,
+                        mValues.get(position).isAgree);
             }
         });
 
@@ -65,6 +76,24 @@ public class DiscussItemDiaryRVAdapter extends RecyclerView.Adapter<DiscussItemD
             }
         });
 
+        holder.showAll.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //TODO 显示全文
+                holder.showAll.setVisibility(View.GONE);
+            }
+        });
+
+    }
+
+    public void addData(ArrayList<DiaryItem.DItem> items) {
+        mValues.addAll(items);
+        notifyDataSetChanged();
+    }
+
+    public void clearData() {
+        mValues.clear();
+        notifyDataSetChanged();
     }
 
     @Override
@@ -78,7 +107,7 @@ public class DiscussItemDiaryRVAdapter extends RecyclerView.Adapter<DiscussItemD
 
         ImageView photo, like;
 
-        TextView name, content, date, views;
+        TextView name, content, date, views, showAll;
 
         View itemView;
 
@@ -93,8 +122,13 @@ public class DiscussItemDiaryRVAdapter extends RecyclerView.Adapter<DiscussItemD
             date = itemView.findViewById(R.id.tv_discuss_rv_item_diary_date);
             views = itemView.findViewById(R.id.tv_discuss_rv_item_diary_view);
             like = itemView.findViewById(R.id.iv_discuss_rv_diary_like);
+            showAll = itemView.findViewById(R.id.tv_discuss_rv_item_diary_show_all_content);
             this.itemView = itemView;
         }
+    }
+
+    public interface OnLikeClickedListener {
+        void onLikeClicked(View v, String id, int isAgree);
     }
 
 }
