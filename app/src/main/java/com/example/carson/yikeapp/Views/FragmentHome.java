@@ -72,7 +72,7 @@ public class FragmentHome extends Fragment {
     private ArrayList<HomeContent.BNBHomeItem> storeData = new ArrayList<>();
     private HomeItemRecyclerViewAdapter rvAdapter;
     private ArrayList<ImageView> viewList = new ArrayList<>();
-    private ArrayList<String> bannerList = new ArrayList<>();
+    private ArrayList<String> bannerList = new ArrayList<>(),listId = new ArrayList();
     private PagerAdapter pagerAdapter;
 
     /**
@@ -174,17 +174,20 @@ public class FragmentHome extends Fragment {
                     for (int i = 0; i < listData.length(); i++) {
                         try {
                             oneData = listData.getJSONObject(i);
-                            if (!listID.contains(oneData.getString(ConstantValues.KEY_HOME_LIST_ID))) {
-                                listID = listID + oneData.getString(ConstantValues.KEY_HOME_LIST_ID);
-                                storeData.add(new HomeContent.BNBHomeItem(oneData.getString(ConstantValues.KEY_HOME_LIST_ID)
-                                        , oneData.getString(ConstantValues.KEY_HOME_LIST_HOTELNAME)
-                                        , oneData.getString(ConstantValues.KEY_HOME_LIST_USERNAME)
-                                        , oneData.getString(ConstantValues.KEY_HOME_LIST_TIME)
-                                        , oneData.getString(ConstantValues.KEY_HOME_LIST_LAST)
-                                        , oneData.getString(ConstantValues.KEY_HOME_LIST_LOCATION),
-                                        oneData.toString())
-                                );
+                            if (listId.contains(oneData.getString(ConstantValues.KEY_HOME_LIST_ID))) {
+                                int index = listId.indexOf(oneData.getString(ConstantValues.KEY_HOME_LIST_ID));
+                                listId.remove(index);
+                                storeData.remove(index);
                             }
+                            listId.add(oneData.getString(ConstantValues.KEY_HOME_LIST_ID));
+                            storeData.add(new HomeContent.BNBHomeItem(oneData.getString(ConstantValues.KEY_HOME_LIST_ID)
+                                    , oneData.getString(ConstantValues.KEY_HOME_LIST_HOTELNAME)
+                                    , oneData.getString(ConstantValues.KEY_HOME_LIST_USERNAME)
+                                    , oneData.getString(ConstantValues.KEY_HOME_LIST_TIME)
+                                    , oneData.getString(ConstantValues.KEY_HOME_LIST_LAST)
+                                    , oneData.getString(ConstantValues.KEY_HOME_LIST_LOCATION),
+                                    oneData.toString())
+                            );
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }

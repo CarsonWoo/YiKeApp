@@ -48,6 +48,10 @@ public class ConstantValues {
 
     public static final String URL_PARTNER_AGREE = "https://www.yiluzou.cn/yike/public/index.php/agree_friend";
 
+    public static final String URL_STORE_APPLY = "https://www.yiluzou.cn/yike/public/index.php/sign";
+
+    public static final String URL_SET_RESUME = "https://www.yiluzou.cn/yike/public/index.php/set_resume";
+
     public static final int CODE_TAKE_PHOTO = 1;
 
     public static final int TYPE_TAKE_PHOTO = 1;
@@ -151,7 +155,22 @@ public class ConstantValues {
     public static final String KEY_PART_LIST_IS_AGREE = "is_agree";//0代表未点赞，1代表已点赞
     public static final String KEY_PART_LIST_AGREE_NUM = "agree_number";
 
+    //简历界面传递参数名称
+    public static final String KEY_RESUME_TELEPHONE = "telephone";
+    public static final String KEY_RESUME_WECHAT = "wechat";
+    public static final String KEY_RESUME_EMAIL = "email";
+    public static final String KEY_RESUME_POSITION = "position";
+    public static final String KEY_RESUME_BIRTH = "birth";
+    public static final String KEY_RESUME_CONTACT = "contact";
+    public static final String KEY_RESUME_PHONE = "phone";
+    public static final String KEY_RESUME_STATUS = "status";
+    public static final String KEY_RESUME_POWER = "power";
+    public static final String KEY_RESUME_RESUME = "resume";
+    public static final String KEY_RESUME_OTHER = "other";
+    public static final String KEY_RESUME_ATTITUDE = "attitude";
+
     public static final String KEY_APPLY_NUM = "person_number";
+    public static final String KEY_STORE_ID = "id";
 
     //取得token
     public static String getCachedToken(Context context){

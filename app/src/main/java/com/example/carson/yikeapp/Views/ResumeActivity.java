@@ -2,6 +2,7 @@ package com.example.carson.yikeapp.Views;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -14,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.carson.yikeapp.R;
+import com.example.carson.yikeapp.Utils.AddressPickTask;
 import com.example.carson.yikeapp.Utils.ConstantValues;
 import com.example.carson.yikeapp.Utils.HttpUtils;
 import com.jude.swipbackhelper.SwipeBackHelper;
@@ -24,8 +26,14 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
+import java.util.Calendar;
 import java.util.HashMap;
 
+import cn.qqtheme.framework.entity.City;
+import cn.qqtheme.framework.entity.County;
+import cn.qqtheme.framework.entity.Province;
+import cn.qqtheme.framework.picker.DatePicker;
+import cn.qqtheme.framework.util.ConvertUtils;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.FormBody;
@@ -84,6 +92,39 @@ public class ResumeActivity extends AppCompatActivity {
         rtnNotStu = findViewById(R.id.rb_not_stu);
         btnSave = findViewById(R.id.btn_resume_save);
         toolbar = findViewById(R.id.toolbar_resume);
+
+        //选择生日
+        etBirth.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if (b) {
+                    onYearMonthDayPicker(etBirth);
+                }
+            }
+        });
+        etBirth.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onYearMonthDayPicker(etBirth);
+            }
+        });
+
+        //选择地区
+        etCity.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showDressDialog(etCity);
+            }
+        });
+
+        etCity.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if (b) {
+                    showDressDialog(etCity);
+                }
+            }
+        });
 
         tvName.setText(data.getStringExtra("name"));
         tvGender.setText(data.getStringExtra("gender"));
@@ -148,7 +189,7 @@ public class ResumeActivity extends AppCompatActivity {
         });
     }
 
-    //检测是否为空，并将不为空的保存到preference
+    //检测是否有空的et
     private boolean hasEmpty() {
         if (etPhone.getText().toString().isEmpty()) {
             return true;
@@ -183,15 +224,90 @@ public class ResumeActivity extends AppCompatActivity {
         if (etCity.getText().toString().isEmpty()) {
             return true;
         }
-        if (!rtnStu.isChecked() && !rtnStu.isChecked()) {
+        if (!rtnStu.isChecked() && !rtnNotStu.isChecked()) {
             return true;
         }
         return false;
     }
 
+    //选择日期
+    public void onYearMonthDayPicker(final EditText view) {
+        final DatePicker picker = new DatePicker(this);
+
+        //当前日期
+        Calendar c = Calendar.getInstance();
+        int year = c.get(Calendar.YEAR);
+        int month = c.get(Calendar.MONTH);
+        int day = c.get(Calendar.DAY_OF_MONTH);
+
+        picker.setCanceledOnTouchOutside(true);
+        picker.setUseWeight(true);
+        picker.setTopPadding(ConvertUtils.toPx(this, 10));
+        picker.setRangeEnd(year, month, day);
+        picker.setRangeStart(1940, 1, 1);
+        picker.setSelectedItem(year, month, day);
+        int color = getResources().getColor(R.color.bg_bnb_loca);
+        picker.setDividerVisible(false);
+        picker.setTextColor(color);
+        picker.setLabelTextColor(color);
+        picker.setTopLineColor(Color.WHITE);
+        picker.setCancelTextColor(Color.GRAY);
+        picker.setSubmitTextColor(color);
+        picker.setResetWhileWheel(false);
+
+        picker.setOnDatePickListener(new DatePicker.OnYearMonthDayPickListener() {
+            @Override
+            public void onDatePicked(String year, String month, String day) {
+                view.setText(year + "-" + month + "-" + day);
+            }
+        });
+
+        picker.setOnWheelListener(new DatePicker.OnWheelListener() {
+            @Override
+            public void onYearWheeled(int index, String year) {
+                picker.setTitleText(year + "-" + picker.getSelectedMonth() + "-" + picker.getSelectedDay());
+            }
+
+            @Override
+            public void onMonthWheeled(int index, String month) {
+                picker.setTitleText(picker.getSelectedYear() + "-" + month + "-" + picker.getSelectedDay());
+            }
+
+            @Override
+            public void onDayWheeled(int index, String day) {
+                picker.setTitleText(picker.getSelectedYear() + "-" + picker.getSelectedMonth() + "-" + day);
+            }
+        });
+        picker.show();
+    }
+
+    //选择地区
+    public void showDressDialog(View view) {
+        AddressPickTask task = new AddressPickTask(this);
+        task.setHideCounty(true);
+        task.setCallback(new AddressPickTask.Callback() {
+            @Override
+            public void onAddressInitFailed() {
+                showToast("数据初始化失败");
+            }
+
+            @Override
+            public void onAddressPicked(Province province, City city, County county) {
+                etCity.setText(province.getAreaName() + "-" + city.getAreaName());
+            }
+        });
+        task.execute("四川", "阿坝");
+    }
+
+    //showtoast
+    private void showToast(String msg) {
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+    }
+
+
     //保存edittext内容
     private void saveContent() {
-        Log.d(TAG,"saveContent");
+        Log.d(TAG, "saveContent");
         saveEtContent(etPhone, null);
         saveEtContent(etWechat, null);
         saveEtContent(etEmail, null);
@@ -221,20 +337,21 @@ public class ResumeActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
                 FormBody.Builder builder = new FormBody.Builder();
-                builder.add("token", token);
-                builder.add("", resumeData.get("phone"));
-                builder.add("", resumeData.get("wechat"));
-                builder.add("", resumeData.get("email"));
-                builder.add("", resumeData.get("birth"));
-                builder.add("", resumeData.get("emContact"));
-                builder.add("", resumeData.get("emPhone"));
-                builder.add("", resumeData.get("skills"));
-                builder.add("", resumeData.get("intro"));
-                builder.add("", resumeData.get("etExps"));
-                builder.add("", resumeData.get("thought"));
-                builder.add("", resumeData.get("city"));
-                builder.add("", resumeData.get("ifStu"));
-                HttpUtils.sendRequest(client, ConstantValues.URL_CHANGE_PWD_BY_OLD_PWD,
+                builder.add(ConstantValues.KEY_TOKEN, token);
+                builder.add(ConstantValues.KEY_RESUME_TELEPHONE, resumeData.get("phone"));
+                builder.add(ConstantValues.KEY_RESUME_WECHAT, resumeData.get("wechat"));
+                builder.add(ConstantValues.KEY_RESUME_EMAIL, resumeData.get("email"));
+                builder.add(ConstantValues.KEY_RESUME_BIRTH, resumeData.get("birth"));
+                builder.add(ConstantValues.KEY_RESUME_CONTACT, resumeData.get("emContact"));
+                builder.add(ConstantValues.KEY_RESUME_PHONE, resumeData.get("emPhone"));
+                builder.add(ConstantValues.KEY_RESUME_POWER, resumeData.get("skills"));
+                builder.add(ConstantValues.KEY_RESUME_RESUME, resumeData.get("intro"));
+                builder.add(ConstantValues.KEY_RESUME_OTHER, resumeData.get("etExps"));
+                builder.add(ConstantValues.KEY_RESUME_ATTITUDE
+                        , resumeData.get("thought"));
+                builder.add(ConstantValues.KEY_RESUME_POSITION, resumeData.get("city"));
+                builder.add(ConstantValues.KEY_RESUME_STATUS, resumeData.get("ifStu"));
+                HttpUtils.sendRequest(client, ConstantValues.URL_SET_RESUME,
                         builder, new Callback() {
                             @Override
                             public void onFailure(Call call, IOException e) {
@@ -253,7 +370,7 @@ public class ResumeActivity extends AppCompatActivity {
                                             @Override
                                             public void run() {
                                                 Toast.makeText(ResumeActivity.this,
-                                                        "已保存", Toast.LENGTH_SHORT).show();
+                                                        "已上传保存", Toast.LENGTH_SHORT).show();
                                             }
                                         });
                                     } else {
@@ -329,7 +446,7 @@ public class ResumeActivity extends AppCompatActivity {
 
     //加载保存的内容
     private void loadContent() {
-        Log.d(TAG,"loadContent");
+        Log.d(TAG, "loadContent");
         getContentFromPre(etPhone, null);
         getContentFromPre(etWechat, null);
         getContentFromPre(etEmail, null);
@@ -339,6 +456,7 @@ public class ResumeActivity extends AppCompatActivity {
         getContentFromPre(etSkills, null);
         getContentFromPre(etIntro, null);
         getContentFromPre(etExps, null);
+        getContentFromPre(etCity, null);
         getContentFromPre(etThought, null);
         getContentFromPre(null, rtnStu);
         getContentFromPre(null, rtnNotStu);
