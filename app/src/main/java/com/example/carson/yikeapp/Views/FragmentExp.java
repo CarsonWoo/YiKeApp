@@ -82,6 +82,8 @@ public class FragmentExp extends Fragment {
         if (mListener != null) {
             Log.i(TAG, "listener not null");
         }
+        token = ConstantValues.getCachedToken(getContext());
+        getExpPostList(1);
     }
 
     @SuppressLint("HandlerLeak")
@@ -90,7 +92,7 @@ public class FragmentExp extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable final ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
 
-        token = ConstantValues.getCachedToken(getContext());
+//        token = ConstantValues.getCachedToken(getContext());
 
         View view;
         view = inflater.inflate(R.layout.tab_fragment_discuss_experience, container,
@@ -158,7 +160,7 @@ public class FragmentExp extends Fragment {
                 adapter.addData(expPostData);
             }
         };
-        getExpPostList(1);
+//        getExpPostList(1);
 
         tvSortByTime = view.findViewById(R.id.tv_discuss_sort_time);
         tvSortByLike = view.findViewById(R.id.tv_discuss_sort_like);

@@ -5,15 +5,18 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -59,11 +62,15 @@ import static com.example.carson.yikeapp.Adapter.DiscussItemPartnerRVAdapter.*;
 public class FragmentPartner extends Fragment implements OnHeadViewClickedListener,
         OnLikeClickedListener {
 
+    public static final String TAG = "FragmentPartner";
+
     private String token, listID = "";
 
     private DiscussItemPartnerRVAdapter partnerRVAdapter;
 
     private OnFragmentInteractionListener mListener;
+
+    private FloatingActionButton fabPublish;
 
     private ArrayList<PartnerItem.PartItem> mPartnerPostData = new ArrayList<>();
 
@@ -71,12 +78,10 @@ public class FragmentPartner extends Fragment implements OnHeadViewClickedListen
 
     private ImageView ivLike;
 
-    private CircleImageView headView;
-
     @Override
-    public void onLikeClicked(View view) {
+    public void onLikeClicked(View view, final String id, int isAgree) {
         ivLike = (ImageView) view;
-        if (mPartnerPostData.get(0).isAgree == 0) {
+        if (isAgree == 0) {
             new Thread(new Runnable() {
                 @Override
                 public void run() {
@@ -90,7 +95,7 @@ public class FragmentPartner extends Fragment implements OnHeadViewClickedListen
                     }
                     FormBody.Builder builder = new FormBody.Builder();
                     builder.add(ConstantValues.KEY_TOKEN, token);
-                    builder.add(ConstantValues.KEY_PART_LIST_ID, mPartnerPostData.get(0).id);
+                    builder.add(ConstantValues.KEY_PART_LIST_ID, id);
                     HttpUtils.sendRequest(client, ConstantValues.URL_PARTNER_AGREE, builder,
                             new Callback() {
                                 @Override
@@ -139,7 +144,7 @@ public class FragmentPartner extends Fragment implements OnHeadViewClickedListen
     }
 
     @Override
-    public void onHeadViewClicked(View view) {
+    public void onHeadViewClicked(View view, final String id) {
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -153,7 +158,8 @@ public class FragmentPartner extends Fragment implements OnHeadViewClickedListen
                 }
                 FormBody.Builder builder = new FormBody.Builder();
                 builder.add(ConstantValues.KEY_TOKEN, token);
-                builder.add(ConstantValues.KEY_PART_LIST_ID, mPartnerPostData.get(0).id);
+                builder.add(ConstantValues.KEY_PART_LIST_ID, id);
+                Log.i(TAG, id);
                 HttpUtils.sendRequest(client, ConstantValues.URL_GET_TARGET_USER_INFO,
                         builder, new Callback() {
                             @Override
@@ -174,6 +180,7 @@ public class FragmentPartner extends Fragment implements OnHeadViewClickedListen
                                             String key = (String) iterator.next();
                                             datas.add(detailObj.getString(key));
                                         }
+                                        Log.i(TAG, "responseName = " + datas.get(0));
                                         getActivity().runOnUiThread(new Runnable() {
                                             @Override
                                             public void run() {
@@ -255,6 +262,10 @@ public class FragmentPartner extends Fragment implements OnHeadViewClickedListen
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        token = ConstantValues.getCachedToken(getContext());
+        View view = LayoutInflater.from(getContext()).inflate(R.layout.discuss_rv_item_partner, null);
+        ivLike = view.findViewById(R.id.iv_discuss_rv_part_like);
+        getPartnerPostList();
     }
 
     @SuppressLint("HandlerLeak")
@@ -262,12 +273,14 @@ public class FragmentPartner extends Fragment implements OnHeadViewClickedListen
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        token = ConstantValues.getCachedToken(getContext());
+//        token = ConstantValues.getCachedToken(getContext());
 
         View view;
         view = inflater.inflate(R.layout.tab_fragment_discuss_partner, container,
                 false);
         RecyclerView rvPartner = view.findViewById(R.id.rv_discuss_partner);
+
+        fabPublish = view.findViewById(R.id.fab_to_publish_part);
 
         partnerRVAdapter = new DiscussItemPartnerRVAdapter(PartnerItem.ITEMS, mListener,
                 this, this);
@@ -289,6 +302,15 @@ public class FragmentPartner extends Fragment implements OnHeadViewClickedListen
             }
         });
 
+        fabPublish.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent toPublishPartner = new Intent(getContext(), PublishPartActivity.class);
+                startActivity(toPublishPartner);
+                getActivity().overridePendingTransition(R.anim.ani_right_get_into, R.anim.ani_left_sign_out);
+            }
+        });
+
         mDataHandler = new Handler() {
             @Override
             public void handleMessage(Message msg) {
@@ -298,6 +320,9 @@ public class FragmentPartner extends Fragment implements OnHeadViewClickedListen
                 for (int i = 0; i < array.length(); i++) {
                     try {
                         JSONObject object = array.getJSONObject(i);
+                        if (Integer.parseInt(object.getString(ConstantValues.KEY_PART_LIST_IS_AGREE)) == 1) {
+                            Glide.with(ivLike.getContext()).load(R.drawable.ic_like).into(ivLike);
+                        }
                         if (!listID.contains(object.getString(ConstantValues.KEY_PART_LIST_ID))) {
                             listID = listID + object.getString(ConstantValues.KEY_PART_LIST_ID);
                             mPartnerPostData.add(new PartnerItem.PartItem(
@@ -313,7 +338,6 @@ public class FragmentPartner extends Fragment implements OnHeadViewClickedListen
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-
                 }
                 if (dataSize == mPartnerPostData.size()) {
                     Toast.makeText(getContext(), "No more details", Toast.LENGTH_SHORT).show();
@@ -323,7 +347,7 @@ public class FragmentPartner extends Fragment implements OnHeadViewClickedListen
             }
         };
 
-        getPartnerPostList();
+//        getPartnerPostList();
 
 
         return view;

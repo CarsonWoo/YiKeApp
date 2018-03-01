@@ -105,17 +105,17 @@ public class DiscussItemPartnerRVAdapter extends RecyclerView
         holder.ivLike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onLikeClickedListener.onLikeClicked(v);
+                onLikeClickedListener.onLikeClicked(v, mValues.get(position).id,
+                        mValues.get(position).isAgree);
             }
         });
 
         holder.headView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onHeadViewClickedListener.onHeadViewClicked(v);
+                onHeadViewClickedListener.onHeadViewClicked(v, mValues.get(position).id);
             }
         });
-
 
 
     }
@@ -132,12 +132,12 @@ public class DiscussItemPartnerRVAdapter extends RecyclerView
 
     //设置点赞按钮的接口回调
     public interface OnLikeClickedListener {
-        void onLikeClicked(View view);
+        void onLikeClicked(View view, String id, int isAgree);
     }
 
     //设置头像的接口回调
     public interface OnHeadViewClickedListener {
-        void onHeadViewClicked(View view);
+        void onHeadViewClicked(View view, String id);
     }
 
     @Override

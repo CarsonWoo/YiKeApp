@@ -13,11 +13,14 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.carson.yikeapp.Adapter.DiscussItemPartnerRVAdapter;
 import com.example.carson.yikeapp.R;
 import com.example.carson.yikeapp.Utils.ConstantValues;
 import com.example.carson.yikeapp.Utils.HttpUtils;
@@ -47,7 +50,7 @@ public class HomeActivity extends AppCompatActivity implements FragmentHome.OnFr
         FragmentMessage.OnFragmentInteractionListener, FragmentUser.OnFragmentInteractionListener,
         FragmentDiscuss.OnFragmentInteractionListener, FragmentDiary.OnFragmentInteractionListener,
         FragmentExp.OnFragmentInteractionListener, FragmentPartner.OnFragmentInteractionListener,
-        FragmentQuestion.OnFragmentInteractionListener {
+        FragmentQuestion.OnFragmentInteractionListener, DiscussItemPartnerRVAdapter.OnHeadViewClickedListener {
 
     private final static String TAG = "HomeActivity";
 
@@ -95,6 +98,9 @@ public class HomeActivity extends AppCompatActivity implements FragmentHome.OnFr
         mViewPager.addOnPageChangeListener(new TabLayoutOnPageChangeListener(tabLayout));
         mViewPager.setOffscreenPageLimit(1);
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
+
+        View partItemView = LayoutInflater.from(this).inflate(R.layout.discuss_rv_item_partner, null);
+
 
 
         //title
@@ -175,6 +181,9 @@ public class HomeActivity extends AppCompatActivity implements FragmentHome.OnFr
                 overridePendingTransition(R.anim.ani_right_get_into, R.anim.ani_left_sign_out);
                 break;
             case R.id.action_publish:
+                Intent toPublish = new Intent(this, PublishExpActivity.class);
+                startActivity(toPublish);
+                overridePendingTransition(R.anim.ani_right_get_into, R.anim.ani_left_sign_out);
                 break;
         }
 
@@ -345,6 +354,11 @@ public class HomeActivity extends AppCompatActivity implements FragmentHome.OnFr
         } else if (fragment instanceof FragmentDiary) {
             Log.i(TAG, "Instance of FragmentDiary");
         }
+    }
+
+    @Override
+    public void onHeadViewClicked(View view, String id) {
+
     }
 
     /**

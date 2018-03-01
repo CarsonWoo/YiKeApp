@@ -1,5 +1,7 @@
 package com.example.carson.yikeapp.Views.dummy;
 
+import com.example.carson.yikeapp.R;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -25,8 +27,9 @@ public class DiaryItem {
     }
 
     private static DItem createDiaryItem(int pos) {
-        return new DItem(String.valueOf(pos), "Name" + pos,
-                "Content" + pos, pos * 10 + "浏览", "2018-2-27");
+        return new DItem(String.valueOf(pos), String.valueOf(R.mipmap.ic_launcher), "Name" + pos,
+                "Content" + pos, pos * 10 + "浏览", "2018-2-27", 0,
+                String.valueOf(R.mipmap.ic_launcher));
     }
 
     private static void addItem(DItem item) {
@@ -42,14 +45,20 @@ public class DiaryItem {
         public final String content;
         public final String views;
         public final String date;
+        public final String headResFile;
+        public final String photoFile;
+        public final int isAgree;
 
-        public DItem(String id, String name, String content, String views, String date) {
-            //还缺图片及头像的绑定
+        public DItem(String id, String headResFile,String name, String content,
+                     String views, String date, int isAgree, String photoFile) {
             this.id = id;
+            this.headResFile = headResFile;
             this.name = name;
             this.content = content;
             this.views = views;
             this.date = date;
+            this.isAgree = isAgree;
+            this.photoFile = photoFile;
         }
 
     }
