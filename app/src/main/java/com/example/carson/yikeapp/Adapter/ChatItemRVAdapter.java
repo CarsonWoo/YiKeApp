@@ -13,7 +13,6 @@ import com.example.carson.yikeapp.Views.FragmentMessage;
 import com.example.carson.yikeapp.Views.dummy.ChatItem;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Administrator on 2018/2/23.
@@ -21,11 +20,11 @@ import java.util.List;
 
 public class ChatItemRVAdapter extends RecyclerView.Adapter<ChatItemRVAdapter.ViewHolder> {
 
-    private final List<ChatItem.ChatWinItem> mValues;
+    private final ArrayList<ChatItem.ChatWinItem> mValues;
     private final FragmentMessage.OnFragmentInteractionListener mListener;
     private final ArrayList<ChatItem.ChatWinItem> itemSelected = new ArrayList<>();
 
-    public ChatItemRVAdapter(List<ChatItem.ChatWinItem> items, FragmentMessage.OnFragmentInteractionListener listener) {
+    public ChatItemRVAdapter(ArrayList<ChatItem.ChatWinItem> items, FragmentMessage.OnFragmentInteractionListener listener) {
         mValues = items;
         mListener = listener;
     }

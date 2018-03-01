@@ -45,5 +45,6 @@ dependencies {
     compile 'com.alibaba:fastjson:1.1.55.android'
     compile project(path: ':library:WheelPicker')
     compile project(path: ':library:Common')
+    compile 'org.litepal.android:core:1.6.1'
     implementation 'com.android.support:support-annotations:27.0.2'
 }

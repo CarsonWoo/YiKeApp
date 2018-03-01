@@ -1,20 +1,27 @@
 package com.example.carson.yikeapp.Views;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.carson.yikeapp.Adapter.ChatItemRVAdapter;
 import com.example.carson.yikeapp.R;
+import com.example.carson.yikeapp.Utils.ConstantValues;
 import com.example.carson.yikeapp.Views.dummy.ChatItem;
+import com.example.carson.yikeapp.Views.dummy.ChatWinData;
+
+import org.litepal.crud.DataSupport;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -34,7 +41,11 @@ public class FragmentMessage extends Fragment {
     private String mParam1;
     private String mParam2;
 
+    private final static String TAG = "FragmentMessage";
     private OnFragmentInteractionListener mListener;
+    private ArrayList<ChatItem.ChatWinItem> chatWinItems;
+    private ArrayList<Integer> listId;
+    private ChatItemRVAdapter adapter;
 
     public FragmentMessage() {
         // Required empty public constructor
@@ -44,8 +55,6 @@ public class FragmentMessage extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
      * @return A new instance of fragment FragmentMessage.
      */
     // Rename and change types and number of parameters
@@ -61,33 +70,53 @@ public class FragmentMessage extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        if (getArguments() != null) {
-//            mParam1 = getArguments().getString(ARG_PARAM1);
-//            mParam2 = getArguments().getString(ARG_PARAM2);
-//        }
+        chatWinItems = new ArrayList<>();
+        listId = new ArrayList<>();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View chatPage = inflater.inflate(R.layout.fragment_message,container,false);
+        View chatPage = inflater.inflate(R.layout.fragment_message, container, false);
         Context chatContext = chatPage.getContext();
+
+        //从数据库获取聊天窗口预览版
+        loadChatWin();
+
+        //列表初始化
         RecyclerView recyclerView = (RecyclerView) chatPage;
         recyclerView.setLayoutManager(new LinearLayoutManager(chatContext));
-        recyclerView.setAdapter(new ChatItemRVAdapter(ChatItem.ITEMS, mListener));
+        adapter = new ChatItemRVAdapter(chatWinItems, mListener);
+        recyclerView.setAdapter(adapter);
         DividerItemDecoration chatDecoration = new DividerItemDecoration(getContext(),
                 DividerItemDecoration.VERTICAL);
         recyclerView.addItemDecoration(chatDecoration);
         recyclerView.setHasFixedSize(true);
+
         return chatPage;
     }
 
-    //Rename method, update argument and hook method into UI event
-//    public void onButtonPressed(Uri uri) {
-//        if (mListener != null) {
-//            mListener.onFragmentInteraction(uri);
-//        }
-//    }
+    public void loadChatWin() {
+        List<ChatWinData> chatWinDataList = DataSupport.findAll(ChatWinData.class);
+        if (!chatWinDataList.isEmpty()) {
+            for (ChatWinData chatWinData : chatWinDataList) {
+
+                if (listId.contains(chatWinData.getId())) {
+                    int index = listId.indexOf(chatWinData.getId());
+                    listId.remove(index);
+                    chatWinItems.remove(index);
+                }
+                listId.add(chatWinData.getId());
+                ChatItem.ChatWinItem chatWinItem = new ChatItem.ChatWinItem(chatWinData.getId()
+                        , chatWinData.getName(), chatWinData.getLatestTime(), chatWinData.getLatestMsg());
+                Log.d(TAG, "WIN_id:" + chatWinData.getId());
+                chatWinItems.add(chatWinItem);
+                if(adapter!=null) {
+                    adapter.notifyDataSetChanged();
+                }
+            }
+        }
+    }
 
     @Override
     public void onAttach(Context context) {
@@ -98,6 +127,31 @@ public class FragmentMessage extends Fragment {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
         }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.d(TAG,"onActivityResult");
+        switch (resultCode) {
+            case ConstantValues.RESULTCODE_NEED_REFRESH:
+                loadChatWin();
+                break;
+            default:
+                break;
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        loadChatWin();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        loadChatWin();
     }
 
     @Override

@@ -304,7 +304,6 @@ public class ResumeActivity extends AppCompatActivity {
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
     }
 
-
     //保存edittext内容
     private void saveContent() {
         Log.d(TAG, "saveContent");
@@ -392,44 +391,6 @@ public class ResumeActivity extends AppCompatActivity {
         }).start();
     }
 
-    @Override
-    protected void onDestroy() {
-        SwipeBackHelper.onDestroy(this);
-        super.onDestroy();
-        saveContent();
-    }
-
-    @Override
-    protected void onRestart() {
-        super.onRestart();
-        loadContent();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        loadContent();
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        loadContent();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        saveContent();
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        saveContent();
-        overridePendingTransition(R.anim.ani_left_get_into, R.anim.ani_right_sign_out);
-    }
-
     //保存控件内容
     private void saveEtContent(EditText view, RadioButton rb) {
         if (rb != null) {
@@ -476,6 +437,44 @@ public class ResumeActivity extends AppCompatActivity {
                 }
             }
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        SwipeBackHelper.onDestroy(this);
+        super.onDestroy();
+        saveContent();
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        loadContent();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        loadContent();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        loadContent();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        saveContent();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        saveContent();
+        overridePendingTransition(R.anim.ani_left_get_into, R.anim.ani_right_sign_out);
     }
 
 }

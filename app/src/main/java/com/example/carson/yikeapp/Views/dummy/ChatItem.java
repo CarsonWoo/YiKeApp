@@ -33,12 +33,12 @@ public class ChatItem {
 
     private static void addItem(ChatWinItem item) {
         ITEMS.add(item);
-        ITEM_MAP.put(item.id, item);
+        ITEM_MAP.put(item.id+"", item);
     }
 
     private static ChatWinItem createChatWinItem(int position) {
         //返回一个新的item
-        return new ChatWinItem(String.valueOf(position), "Item " + position, "15:15",makeDetails(position));
+        return new ChatWinItem(position, "Item " + position, "15:15",makeDetails(position));
     }
 
     private static String makeDetails(int position) {
@@ -52,13 +52,13 @@ public class ChatItem {
 
 
     public static class ChatWinItem {
-        public final String id;
+        public final int id;
         public final String name;
         public final String latestTime;
         public final String latestMsg;
 
         //设置传入值
-        public ChatWinItem(String id, String name, String latestTime,String latestMsg) {
+        public ChatWinItem(int id, String name, String latestTime,String latestMsg) {
             this.id = id;
             this.name = name;
             this.latestTime = latestTime;

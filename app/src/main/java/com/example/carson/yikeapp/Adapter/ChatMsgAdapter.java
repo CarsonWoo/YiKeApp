@@ -10,6 +10,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.carson.yikeapp.R;
+import com.example.carson.yikeapp.Utils.ConstantValues;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -18,9 +22,9 @@ import java.util.ArrayList;
  */
 
 public class ChatMsgAdapter extends RecyclerView.Adapter<ChatMsgAdapter.ViewHolder> {
-    private ArrayList<String[]> data ;
+    private ArrayList<String> data;
 
-    public ChatMsgAdapter(){
+    public ChatMsgAdapter() {
         data = new ArrayList<>();
     }
 
@@ -34,10 +38,17 @@ public class ChatMsgAdapter extends RecyclerView.Adapter<ChatMsgAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        String sender = data.get(position)[0]
-                ,msg = data.get(position)[1];
+        String sender = null, msg = null;
+        try {
+            JSONObject msgData = new JSONObject(data.get(position));
+            sender = msgData.getString("sender");
+            msg = msgData.getString("msg");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
         holder.tvChatMsg.setText(msg);
-        if(position%2==0){
+        if (sender.equals(ConstantValues.KEY_CHAT_MSG_SENDER_ME)) {
             RelativeLayout relativeLayout = (RelativeLayout) holder.cvChatMsg.getParent();
             relativeLayout.setGravity(Gravity.END);
         }
@@ -49,17 +60,22 @@ public class ChatMsgAdapter extends RecyclerView.Adapter<ChatMsgAdapter.ViewHold
         return data.size();
     }
 
-    public void addData(String[] data){
+    public void setData(ArrayList<String> data) {
+        this.data = data;
+        notifyDataSetChanged();
+    }
+
+    public void addData(String data) {
         this.data.add(data);
         notifyDataSetChanged();
     }
 
-    public void clearData(){
+    public void clearData() {
         data.clear();
         notifyDataSetChanged();
     }
 
-    public ArrayList<String[]> getData(){
+    public ArrayList<String> getData() {
         return data;
     }
 

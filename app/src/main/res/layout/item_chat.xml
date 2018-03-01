@@ -29,13 +29,15 @@
 
         <TextView
             android:text="15:15"
-            android:gravity="center_vertical"
+            android:gravity="right"
             android:textSize="16sp"
             android:textColor="#8f8e94"
+            android:ellipsize="start"
             android:layout_centerVertical="true"
             android:id="@+id/tv_latest_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/tv_name"
             android:layout_toLeftOf="@+id/iv_more"/>
 
         <ImageView

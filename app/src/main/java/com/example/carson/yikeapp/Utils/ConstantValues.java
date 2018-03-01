@@ -62,6 +62,10 @@ public class ConstantValues {
 
     public static final int RESULTCODE_SETTING_ACCOUNT_QUIT = 10002;
 
+    public static final int REQUESTCODE_IF_MESSAGE_NEED_REFRESH = 10003;
+
+    public static final int RESULTCODE_NEED_REFRESH = 10003;
+
     public static final String USER_TYPE_STORE = "店家";
 
     public static final String USER_TYPE_NORMAL = "用户";

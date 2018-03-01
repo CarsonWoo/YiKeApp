@@ -35,6 +35,7 @@ import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -46,7 +47,7 @@ public class HomeActivity extends AppCompatActivity implements FragmentHome.OnFr
         FragmentMessage.OnFragmentInteractionListener, FragmentUser.OnFragmentInteractionListener,
         FragmentDiscuss.OnFragmentInteractionListener, FragmentDiary.OnFragmentInteractionListener,
         FragmentExp.OnFragmentInteractionListener, FragmentPartner.OnFragmentInteractionListener,
-        FragmentQuestion.OnFragmentInteractionListener{
+        FragmentQuestion.OnFragmentInteractionListener {
 
     private final static String TAG = "HomeActivity";
 
@@ -183,11 +184,15 @@ public class HomeActivity extends AppCompatActivity implements FragmentHome.OnFr
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
+        List<Fragment> fragments = getSupportFragmentManager().getFragments();
         switch (requestCode) {
             case ConstantValues.REQUESTCODE_START_SETTING:
                 if (resultCode == ConstantValues.RESULTCODE_SETTING_ACCOUNT_QUIT) {
                     finish();
                 }
+                break;
+            case ConstantValues.REQUESTCODE_IF_MESSAGE_NEED_REFRESH:
+                fragments.get(2).onActivityResult(requestCode,resultCode,data);
                 break;
             default:
                 break;
@@ -198,13 +203,13 @@ public class HomeActivity extends AppCompatActivity implements FragmentHome.OnFr
 
     @Override
     public void onFragmentInteraction(ArrayList item) {
-        switch (mViewPager.getCurrentItem()){
+        switch (mViewPager.getCurrentItem()) {
             case 0:
                 Log.d(TAG, "点击了首页的item");
                 Log.d(TAG, ((HomeContent.BNBHomeItem) (item.get(0))).id + "");
                 Toast.makeText(this, "Item " + ((HomeContent.BNBHomeItem) (item.get(0))).id + " clicked.", Toast.LENGTH_SHORT).show();
                 Intent toStoreDetail = new Intent(HomeActivity.this, StoreDetailActivity.class);
-                toStoreDetail.putExtra(ConstantValues.KEY_STORE_MORE_DETAIL,((HomeContent.BNBHomeItem) (item.get(0))).moreDetail);
+                toStoreDetail.putExtra(ConstantValues.KEY_STORE_MORE_DETAIL, ((HomeContent.BNBHomeItem) (item.get(0))).moreDetail);
                 toStoreDetail.putExtra(ConstantValues.KEY_STORE_NAME, ((HomeContent.BNBHomeItem) (item.get(0))).name);
                 startActivity(toStoreDetail);
                 overridePendingTransition(R.anim.ani_right_get_into, R.anim.ani_left_sign_out);
@@ -225,9 +230,9 @@ public class HomeActivity extends AppCompatActivity implements FragmentHome.OnFr
 
                 break;
             case 2:
-                Intent toChatWin = new Intent(HomeActivity.this,ChatWindowActivity.class);
-                toChatWin.putExtra(ConstantValues.KEY_HOME_LIST_USERNAME,((ChatItem.ChatWinItem) (item.get(0))).name);
-                startActivity(toChatWin);
+                Intent toChatWin = new Intent(HomeActivity.this, ChatWindowActivity.class);
+                toChatWin.putExtra(ConstantValues.KEY_HOME_LIST_USERNAME, ((ChatItem.ChatWinItem) (item.get(0))).name);
+                startActivityForResult(toChatWin, ConstantValues.REQUESTCODE_IF_MESSAGE_NEED_REFRESH);
                 overridePendingTransition(R.anim.ani_right_get_into, R.anim.ani_left_sign_out);
                 Toast.makeText(this, "Item " + ((ChatItem.ChatWinItem) (item.get(0))).name + " clicked.", Toast.LENGTH_SHORT).show();
                 break;
@@ -241,7 +246,7 @@ public class HomeActivity extends AppCompatActivity implements FragmentHome.OnFr
     private void getToSinglePartPost(String id, int isAgree) {
         boolean isLike = isAgree == 0 ? false : true;
         Toast.makeText(this, "you click item " + id + " and its like condition is " +
-            isLike, Toast.LENGTH_SHORT).show();
+                isLike, Toast.LENGTH_SHORT).show();
     }
 
     //TODO 传递查询经验帖详细信息所需数据
@@ -363,7 +368,7 @@ public class HomeActivity extends AppCompatActivity implements FragmentHome.OnFr
                 case 2:
                     return FragmentMessage.newInstance();
                 case 3:
-                   return FragmentUser.newInstance();
+                    return FragmentUser.newInstance();
                 default:
                     return FragmentHome.newInstance();
             }

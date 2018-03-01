@@ -15,11 +15,22 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.carson.yikeapp.Adapter.ChatMsgAdapter;
 import com.example.carson.yikeapp.R;
 import com.example.carson.yikeapp.Utils.ConstantValues;
+import com.example.carson.yikeapp.Views.dummy.ChatWinData;
 import com.jude.swipbackhelper.SwipeBackHelper;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.litepal.crud.DataSupport;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 public class ChatWindowActivity extends AppCompatActivity {
     private final static String TAG = "ChatWindowActivity";
@@ -31,13 +42,15 @@ public class ChatWindowActivity extends AppCompatActivity {
     private RecyclerView rvChatWin;
     private RelativeLayout rlBottom;
 
+    private List<ChatWinData> chatWinDBList;
+    private ArrayList<String> chatMsgData;
     private LinearLayoutManager manager;
     private ChatMsgAdapter chatMsgAdapter;
-    private String[] msgList;
-    private String msgSend,msgRecieve;
-    private int etHeight,rlHeight;
-    private int etMiddleHeight,rlMiddleHeight;
-    private int etMaxHeight,rlMaxHeight;
+    private JSONObject msgList;
+    private String msgSend, msgRecieve, titleStr;
+    private int etHeight, rlHeight;
+    private int etMiddleHeight, rlMiddleHeight;
+    private int etMaxHeight, rlMaxHeight;
 
     private Intent initData;
 
@@ -45,6 +58,13 @@ public class ChatWindowActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat_window);
+
+        //Intent
+        initData = getIntent();
+        titleStr = initData.getStringExtra(ConstantValues.KEY_HOME_LIST_USERNAME);
+
+        //数据库预处理
+        chatWinDBList = DataSupport.where("name = ?", titleStr).find(ChatWinData.class);
 
         //设置右滑退出
         SwipeBackHelper.onCreate(this);
@@ -77,10 +97,8 @@ public class ChatWindowActivity extends AppCompatActivity {
                 onBackPressed();
             }
         });
+        title.setText(titleStr);
 
-        //Intent
-        initData = getIntent();
-        title.setText(initData.getStringExtra(ConstantValues.KEY_HOME_LIST_USERNAME));
 
         //设置edittext动态高度
         setUpEditText();
@@ -90,15 +108,25 @@ public class ChatWindowActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 msgSend = etMsgSend.getText().toString();
-                etMsgSend.setText(null);
-                msgList = new String[]{ConstantValues.KEY_CHAT_MSG_SENDER_ME,msgSend};
-                chatMsgAdapter.addData(msgList);
-                rvChatWin.scrollToPosition(chatMsgAdapter.getData().size()-1);
+                if (!msgSend.trim().isEmpty()) {
+                    etMsgSend.setText(null);
+                    SimpleDateFormat formatter = new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss");
+                    Date curDate = new Date(System.currentTimeMillis());//获取当前时间
+                    String curTime = formatter.format(curDate);
+                    String chatMsgData = "{\"name\":\"" + titleStr + "\"" +
+                            ",\"sender\":\"" + ConstantValues.KEY_CHAT_MSG_SENDER_ME + "\",\"time\":\"" + curTime + "\",\"msg\":\"" + msgSend + "\"}";
+                    ;
+                    saveNewMsg(chatMsgData);
+                    rvChatWin.scrollToPosition(chatMsgAdapter.getData().size() - 1);
+                } else {
+                    Toast.makeText(ChatWindowActivity.this, "不能发送空白信息", Toast.LENGTH_SHORT).show();
+                }
             }
         });
+
     }
 
-    private void setUpEditText(){
+    private void setUpEditText() {
 
         //取得控件高度
         ViewTreeObserver vto2 = etMsgSend.getViewTreeObserver();
@@ -108,7 +136,7 @@ public class ChatWindowActivity extends AppCompatActivity {
             public void onGlobalLayout() {
                 etMsgSend.getViewTreeObserver().removeGlobalOnLayoutListener(this);
                 etHeight = etMsgSend.getHeight();
-                Log.d(TAG,"mHeight: " + etHeight);
+                Log.d(TAG, "mHeight: " + etHeight);
                 etMiddleHeight = 8 * etHeight / 5;
                 etMaxHeight = 25 * etHeight / 10;
             }
@@ -122,7 +150,7 @@ public class ChatWindowActivity extends AppCompatActivity {
             public void onGlobalLayout() {
                 rlBottom.getViewTreeObserver().removeGlobalOnLayoutListener(this);
                 rlHeight = rlBottom.getHeight();
-                Log.d(TAG,"mHeight: " + rlHeight);
+                Log.d(TAG, "mHeight: " + rlHeight);
                 rlMiddleHeight = 8 * rlHeight / 5;
                 rlMaxHeight = 21 * rlHeight / 10;
             }
@@ -149,7 +177,7 @@ public class ChatWindowActivity extends AppCompatActivity {
             public void afterTextChanged(Editable s) {
 
                 int lineCount = etMsgSend.getLineCount();//取得内容的行数
-                Log.d(TAG,"lineCount: " + lineCount);
+                Log.d(TAG, "lineCount: " + lineCount);
                 /**
                  * 根据行数动态计算输入框的高度
                  */
@@ -168,13 +196,13 @@ public class ChatWindowActivity extends AppCompatActivity {
                     rlParams.height = rlMiddleHeight;
                     etMsgSend.setLayoutParams(etParams);
                     rlBottom.setLayoutParams(rlParams);
-                    rvChatWin.scrollToPosition(chatMsgAdapter.getData().size()-1);
+                    rvChatWin.scrollToPosition(chatMsgAdapter.getData().size() - 1);
                 } else {
                     etParams.height = etMaxHeight;
                     rlParams.height = rlMaxHeight;
                     etMsgSend.setLayoutParams(etParams);
                     rlBottom.setLayoutParams(rlParams);
-                    rvChatWin.scrollToPosition(chatMsgAdapter.getData().size()-1);
+                    rvChatWin.scrollToPosition(chatMsgAdapter.getData().size() - 1);
                 }
             }
         };
@@ -182,6 +210,58 @@ public class ChatWindowActivity extends AppCompatActivity {
         //动态计算字符串的长度
         etMsgSend.addTextChangedListener(mTextWatcher);
 
+    }
+
+    //加载历史消息
+    private void loadHistoryMsg() {
+        if (!chatWinDBList.isEmpty()) {
+            Log.d(TAG, "chatWinDBList : " + chatWinDBList.get(0).getName());
+            chatMsgData = chatWinDBList.get(0).getChatMsgData();
+            chatMsgAdapter.setData(chatMsgData);
+        }
+    }
+
+    //保存新消息
+    private void saveNewMsg(String chatMsgData) {
+        if (chatWinDBList != null && !chatWinDBList.isEmpty()) {
+            Log.d(TAG, "chatMsgData: " + chatMsgData.toString());
+            this.chatMsgData.add(chatMsgData);
+            ChatWinData chatWinData = new ChatWinData();
+
+            try {
+                JSONObject msg = new JSONObject(chatMsgData);
+                chatWinData.setLatestMsg(msg.getString("msg"));
+                chatWinData.setLatestTime(msg.getString("time"));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            chatWinData.setChatMsgData(this.chatMsgData);
+            Log.d(TAG, "saveMsg");
+            chatWinData.updateAll("name = ?", titleStr);
+            chatWinDBList = DataSupport.where("name = ?", titleStr).find(ChatWinData.class);
+            ArrayList<String> arrayList = chatWinDBList.get(0).getChatMsgData();
+            Log.d(TAG, "msgNum: " + arrayList.size() + "");
+        } else {
+            ChatWinData chatWinData = new ChatWinData();
+            chatWinData.setName(titleStr);
+            try {
+                JSONObject msg = new JSONObject(chatMsgData);
+                chatWinData.setLatestTime(msg.getString("time"));
+                chatWinData.setLatestMsg(msg.getString("msg"));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            chatWinData.addChatMsgData(chatMsgData);
+            chatMsgAdapter.setData(chatWinData.getChatMsgData());
+            chatWinData.save();
+        }
+        setResult(ConstantValues.RESULTCODE_NEED_REFRESH);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        loadHistoryMsg();
     }
 
     @Override
