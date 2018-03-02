@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="15dp">
@@ -25,19 +26,6 @@
         android:layout_marginStart="20dp"
         android:layout_toEndOf="@id/civ_discuss_rv_item_question_head" />
 
-    <ImageView
-        android:clickable="true"
-        android:layout_marginTop="10dp"
-        android:id="@+id/iv_discuss_rv_part_like"
-        android:layout_marginLeft="145dp"
-        android:layout_toRightOf="@id/artv_discuss_rv_item_question_name"
-        android:src="@drawable/ic_unlike"
-        android:layout_width="15dp"
-        android:layout_height="15dp"
-        android:layout_marginStart="145dp"
-        android:layout_toEndOf="@id/artv_discuss_rv_item_question_name"
-        android:focusable="true" />
-    
     <TextView
         android:layout_marginTop="10dp"
         android:textSize="11.6sp"
@@ -46,7 +34,7 @@
         android:layout_below="@id/artv_discuss_rv_item_question_name"
         android:id="@+id/tv_discuss_rv_item_question_text"
         android:layout_width="260dp"
-        android:hint="#haha# I come from Guangzhou!"
+        android:hint="question_text"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:layout_toEndOf="@id/civ_discuss_rv_item_question_head" />
@@ -66,17 +54,16 @@
         android:layout_toEndOf="@id/civ_discuss_rv_item_question_head" />
 
     <TextView
-        android:layout_marginTop="15dp"
-        android:layout_marginLeft="155dp"
-        android:hint="17回复"
-        android:layout_toRightOf="@id/tv_discuss_rv_item_question_view"
-        android:layout_below="@id/tv_discuss_rv_item_question_text"
+        android:id="@+id/tv_discuss_rv_item_question_comment"
         android:textSize="12.6sp"
-        android:id="@+id/tv_discuss_rv_item_part_reply"
+        android:layout_marginRight="14.45dp"
+        android:layout_marginTop="15dp"
+        android:layout_below="@id/tv_discuss_rv_item_question_text"
+        android:layout_alignParentEnd="true"
+        android:hint="128评论"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="155dp"
-        android:layout_toEndOf="@id/tv_discuss_rv_item_question_view" />
+        android:layout_alignParentRight="true" />
 
     <LinearLayout
         android:background="#31262525"

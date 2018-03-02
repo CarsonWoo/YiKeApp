@@ -64,6 +64,10 @@ public class ConstantValues {
 
     public static final String URL_SHOW_RESUME = "https://www.yiluzou.cn/yike/public/index.php/show_resume";
 
+    public static final String URL_QUESTION_LIST_SHOW = "https://www.yiluzou.cn/yike/public/index.php/show_help";
+
+    public static final String URL_QUESTION_PUBLISH = "https://www.yiluzou.cn/yike/public/index.php/help_user";
+
     public static final int CODE_TAKE_PHOTO = 1;
 
     public static final int TYPE_TAKE_PHOTO = 1;
@@ -163,6 +167,7 @@ public class ConstantValues {
     public static final String KEY_PART_LIST_SIZE = "size";
 
     public static final String KEY_PART_LIST_ID = "id";
+    public static final String KEY_PART_USER_ID = "user_id";
     public static final String KEY_PART_LIST_NAME = "username";
     public static final String KEY_PART_LIST_PHOTO_URL = "photo_url";
     public static final String KEY_PART_LIST_COMMENT = "text";
@@ -204,6 +209,18 @@ public class ConstantValues {
     public static final String KEY_DIARY_LIST_IS_AGREE = "is_agree";
     public static final String KEY_DIARY_LIST_PHOTO_URL = "photo";
 
+    //问答传递参数名称
+    public static final String KEY_QUESTION_LIST_PAGE = "page";
+    public static final String KEY_QUESTION_LIST_SIZE = "size";
+
+    public static final String KEY_QUESTION_LIST_ID = "id";
+    public static final String KEY_QUESTION_LIST_USER_ID = "user_id";
+    public static final String KEY_QUESTION_LIST_USER_NAME = "username";
+    public static final String KEY_QUESTION_LIST_TEXT = "text";
+    public static final String KEY_QUESTION_LIST_USER_PORTRAIT = "user_portrait";
+    public static final String KEY_QUESTION_LIST_COMMENT = "comment";
+    public static final String KEY_QUESTION_LIST_VIEWS = "see_time";
+
     //发布经验帖传递参数名
     public static final String KEY_PUBLISH_EXP_TITLE = "title";
     public static final String KEY_PUBLISH_EXP_CONTENT = "text";
@@ -216,6 +233,9 @@ public class ConstantValues {
     //发布日记传递参数名
     public static final String KEY_PUBLISH_DIARY_TEXT = "text";
     public static final String KEY_PUBLISH_DIARY_PHOTO = "photo";
+
+    //发布问答传递参数名
+    public static final String KEY_PUBLISH_QUESTION_TEXT = "text";
 
     //取得token
     public static String getCachedToken(Context context){

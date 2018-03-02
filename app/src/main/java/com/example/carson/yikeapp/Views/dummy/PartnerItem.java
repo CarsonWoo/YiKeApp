@@ -39,13 +39,14 @@ public class PartnerItem {
     }
 
     private static PartItem createPartItem(int pos) {
-        return new PartItem(String.valueOf(pos), String.valueOf(R.mipmap.ic_launcher),
+        return new PartItem(String.valueOf(pos), String.valueOf(pos), String.valueOf(R.mipmap.ic_launcher),
                 "Name" + pos, "Comment" + pos, pos * 10, pos, 0);
     }
 
 
     public static class PartItem {
         public final String id;
+        public final String userID;
         public final String headResFile;
         public final String name;
         public final String comment;
@@ -53,9 +54,10 @@ public class PartnerItem {
         public final int replyNum;
         public final int isAgree;
 
-        public PartItem(String id, String headResFile, String name, String comment,
+        public PartItem(String id,String userID, String headResFile, String name, String comment,
                         int viewNum, int replyNum, int isAgree) {
             this.id = id;
+            this.userID = userID;
             this.headResFile = headResFile;
             this.name = name;
             this.comment = comment;

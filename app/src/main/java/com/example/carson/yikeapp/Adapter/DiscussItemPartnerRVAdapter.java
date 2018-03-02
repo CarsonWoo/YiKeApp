@@ -9,21 +9,14 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.carson.yikeapp.R;
-import com.example.carson.yikeapp.Utils.ConstantValues;
-import com.example.carson.yikeapp.Utils.HttpUtils;
 import com.example.carson.yikeapp.Views.ArchRivalTextView;
 import com.example.carson.yikeapp.Views.FragmentPartner;
-import com.example.carson.yikeapp.Views.HomeActivity;
 import com.example.carson.yikeapp.Views.dummy.PartnerItem;
 
-import java.security.KeyManagementException;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-import okhttp3.FormBody;
-import okhttp3.OkHttpClient;
 
 /**
  * Created by 84594 on 2018/2/25.
@@ -61,10 +54,10 @@ public class DiscussItemPartnerRVAdapter extends RecyclerView
 
         public PartnerVH(View itemView) {
             super(itemView);
-            headView = itemView.findViewById(R.id.civ_discuss_rv_item_part_head);
-            tvName = itemView.findViewById(R.id.artv_discuss_rv_item_part_name);
-            tvComment = itemView.findViewById(R.id.tv_discuss_rv_item_part_comment);
-            tvView = itemView.findViewById(R.id.tv_discuss_rv_item_part_view);
+            headView = itemView.findViewById(R.id.civ_discuss_rv_item_question_head);
+            tvName = itemView.findViewById(R.id.artv_discuss_rv_item_question_name);
+            tvComment = itemView.findViewById(R.id.tv_discuss_rv_item_question_text);
+            tvView = itemView.findViewById(R.id.tv_discuss_rv_item_question_view);
             tvReply = itemView.findViewById(R.id.tv_discuss_rv_item_part_reply);
             ivLike = itemView.findViewById(R.id.iv_discuss_rv_part_like);
             this.itemView = itemView;
@@ -113,12 +106,14 @@ public class DiscussItemPartnerRVAdapter extends RecyclerView
         holder.headView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onHeadViewClickedListener.onHeadViewClicked(v, mValues.get(position).id);
+                onHeadViewClickedListener.onHeadViewClicked(v, mValues.get(position).userID);
             }
         });
 
 
     }
+
+
 
     public void addData(ArrayList<PartnerItem.PartItem> mValues) {
         this.mValues.addAll(mValues);
@@ -137,7 +132,7 @@ public class DiscussItemPartnerRVAdapter extends RecyclerView
 
     //设置头像的接口回调
     public interface OnHeadViewClickedListener {
-        void onHeadViewClicked(View view, String id);
+        void onHeadViewClicked(View view, String userID);
     }
 
     @Override

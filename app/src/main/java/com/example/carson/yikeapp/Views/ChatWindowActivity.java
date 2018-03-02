@@ -27,6 +27,7 @@ import com.example.carson.yikeapp.Utils.HttpUtils;
 import com.example.carson.yikeapp.Views.dummy.ChatWinData;
 import com.jude.swipbackhelper.SwipeBackHelper;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.litepal.crud.DataSupport;
@@ -37,6 +38,7 @@ import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 import okhttp3.Call;
@@ -82,7 +84,7 @@ public class ChatWindowActivity extends AppCompatActivity {
         initData = getIntent();
         titleStr = initData.getStringExtra(ConstantValues.KEY_CHAT_WIN_USERNAME);
         userId = initData.getIntExtra(ConstantValues.KEY_HOME_LIST_HOTEL_ID, -1);
-
+//        userId = initData.getStringExtra(ConstantValues.KEY_CHAT_WIN_USER_ID);
         //数据库预处理
         chatWinDBList = DataSupport.where("name = ?", titleStr).find(ChatWinData.class);
 
@@ -269,6 +271,7 @@ public class ChatWindowActivity extends AppCompatActivity {
             this.chatMsgData.add(chatMsgData);
             ChatWinData chatWinData = new ChatWinData();
             chatWinData.setId(userId);
+//            chatWinData.setId(Integer.parseInt(userId));
             chatWinData.setHeadPhotoUrl(userHeadUrl);
             try {
                 JSONObject msg = new JSONObject(chatMsgData);
@@ -286,6 +289,7 @@ public class ChatWindowActivity extends AppCompatActivity {
         } else {
             ChatWinData chatWinData = new ChatWinData();
             chatWinData.setId(userId);
+//            chatWinData.setId(Integer.parseInt(userId));
             chatWinData.setHeadPhotoUrl(userHeadUrl);
             chatWinData.setName(titleStr);
             try {
@@ -333,9 +337,9 @@ public class ChatWindowActivity extends AppCompatActivity {
                                     int code = object.getInt("code");
                                     Log.d(TAG, object.toString());
                                     if (code == 200) {
-                                        JSONObject jsonObject = object.getJSONObject("msg");
+                                        JSONObject detailObj = object.getJSONObject("msg");
                                         Message msg = new Message();
-                                        msg.obj = jsonObject;
+                                        msg.obj = detailObj;
                                         headHandler.sendMessage(msg);
                                     } else {
                                         final String msg = object.getString("msg");

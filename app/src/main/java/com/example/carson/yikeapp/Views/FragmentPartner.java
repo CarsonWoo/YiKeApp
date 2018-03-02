@@ -144,7 +144,7 @@ public class FragmentPartner extends Fragment implements OnHeadViewClickedListen
     }
 
     @Override
-    public void onHeadViewClicked(View view, final String id) {
+    public void onHeadViewClicked(View view, final String userID) {
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -158,8 +158,8 @@ public class FragmentPartner extends Fragment implements OnHeadViewClickedListen
                 }
                 FormBody.Builder builder = new FormBody.Builder();
                 builder.add(ConstantValues.KEY_TOKEN, token);
-                builder.add(ConstantValues.KEY_PART_LIST_ID, id);
-                Log.i(TAG, id);
+                builder.add(ConstantValues.KEY_PART_LIST_ID, userID);
+                Log.i(TAG, userID);
                 HttpUtils.sendRequest(client, ConstantValues.URL_GET_TARGET_USER_INFO,
                         builder, new Callback() {
                             @Override
@@ -223,6 +223,19 @@ public class FragmentPartner extends Fragment implements OnHeadViewClickedListen
                                                     p.height = (int) (d.getHeight() * 0.7);
                                                     p.width = (int) (d.getWidth() * 0.8);
                                                     dialog.getWindow().setAttributes(p);
+                                                    btnChat.setOnClickListener(new View.OnClickListener() {
+                                                        @Override
+                                                        public void onClick(View v) {
+                                                            Intent toChat = new Intent(getContext(),
+                                                                    ChatWindowActivity.class);
+                                                            toChat.putExtra(ConstantValues
+                                                                    .KEY_CHAT_WIN_USERNAME, datas.get(0))
+                                                                    .putExtra(ConstantValues.KEY_CHAT_WIN_USER_ID, userID);
+                                                            startActivity(toChat);
+                                                            getActivity().overridePendingTransition(R.anim.ani_right_get_into,
+                                                                    R.anim.ani_left_sign_out);
+                                                        }
+                                                    });
                                                 }
                                             }
                                         });
@@ -278,7 +291,7 @@ public class FragmentPartner extends Fragment implements OnHeadViewClickedListen
         View view;
         view = inflater.inflate(R.layout.tab_fragment_discuss_partner, container,
                 false);
-        RecyclerView rvPartner = view.findViewById(R.id.rv_discuss_partner);
+        final RecyclerView rvPartner = view.findViewById(R.id.rv_discuss_partner);
 
         fabPublish = view.findViewById(R.id.fab_to_publish_part);
 
@@ -320,13 +333,15 @@ public class FragmentPartner extends Fragment implements OnHeadViewClickedListen
                 for (int i = 0; i < array.length(); i++) {
                     try {
                         JSONObject object = array.getJSONObject(i);
-                        if (Integer.parseInt(object.getString(ConstantValues.KEY_PART_LIST_IS_AGREE)) == 1) {
-                            Glide.with(ivLike.getContext()).load(R.drawable.ic_like).into(ivLike);
-                        }
+//                        if (Integer.parseInt(object.getString(ConstantValues.KEY_PART_LIST_IS_AGREE)) == 1) {
+//                            Glide.with(ivLike.getContext()).load(R.drawable.ic_like).into(ivLike);
+//                        }
+
                         if (!listID.contains(object.getString(ConstantValues.KEY_PART_LIST_ID))) {
                             listID = listID + object.getString(ConstantValues.KEY_PART_LIST_ID);
                             mPartnerPostData.add(new PartnerItem.PartItem(
                                     object.getString(ConstantValues.KEY_PART_LIST_ID),
+                                    object.getString(ConstantValues.KEY_PART_USER_ID),
                                     object.getString(ConstantValues.KEY_PART_LIST_PHOTO_URL),
                                     object.getString(ConstantValues.KEY_PART_LIST_NAME),
                                     object.getString(ConstantValues.KEY_PART_LIST_COMMENT),
