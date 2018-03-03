@@ -282,7 +282,7 @@ public class FragmentUser extends Fragment {
                                 try {
                                     JSONObject object = new JSONObject(response
                                             .body().string());
-                                    int code = object.getInt("code");
+                                    int code = object.getInt(ConstantValues.KEY_CODE);
                                     Log.d(TAG,object.toString());
                                     if (code == 200) {
                                         JSONObject tempMsg = object.getJSONObject("msg");

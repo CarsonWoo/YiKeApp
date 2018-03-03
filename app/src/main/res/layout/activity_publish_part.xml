@@ -37,7 +37,7 @@
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab_publish_part"
-        android:layout_margin="19dp"
+        android:layout_marginRight="19dp"
         app:layout_anchorGravity="bottom|end"
         app:layout_anchor="@id/et_part_post_comment"
         app:srcCompat="@drawable/ic_publish"

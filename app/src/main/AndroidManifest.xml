@@ -86,7 +86,11 @@
         <activity
             android:name=".Views.PublishPartActivity"
             android:theme="@style/TransparentTheme" />
-        <activity android:name=".Views.PublishDiaryActivity"
+        <activity
+            android:name=".Views.PublishDiaryActivity"
+            android:theme="@style/TransparentTheme" />
+        <activity android:name=".Views.PublishQuestionActivity"
+            android:configChanges="keyboard"
             android:theme="@style/TransparentTheme"></activity>
     </application>
 

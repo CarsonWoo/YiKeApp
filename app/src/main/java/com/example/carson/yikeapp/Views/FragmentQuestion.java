@@ -3,6 +3,7 @@ package com.example.carson.yikeapp.Views;
 import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -151,8 +152,9 @@ public class FragmentQuestion extends Fragment {
         fabToPublish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO 跳转到发布问题界面
-                Toast.makeText(getContext(), "go to publish", Toast.LENGTH_SHORT).show();
+                Intent toPublish = new Intent(getContext(), PublishQuestionActivity.class);
+                startActivity(toPublish);
+                getActivity().overridePendingTransition(R.anim.ani_right_get_into, R.anim.ani_left_sign_out);
             }
         });
 
@@ -188,7 +190,7 @@ public class FragmentQuestion extends Fragment {
                             public void onResponse(Call call, Response response) throws IOException {
                                 try {
                                     JSONObject object = new JSONObject(response.body().string());
-                                    int code = object.getInt("code");
+                                    int code = object.getInt(ConstantValues.KEY_CODE);
                                     if (code == 200) {
                                         JSONArray array = object.getJSONArray("msg");
                                         Message msg = new Message();

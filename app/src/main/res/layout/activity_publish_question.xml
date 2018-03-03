@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#f3f5f3f3"
+    tools:context="com.example.carson.yikeapp.Views.PublishQuestionActivity">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar_publish_question"
+        app:navigationIcon="@drawable/ic_chevron_left"
+        app:title="问答帖"
+        app:titleMarginStart="93dp"
+        android:background="@android:color/white"
+        android:layout_width="match_parent"
+        android:layout_height="39dp">
+
+        <TextView
+            android:id="@+id/tv_publish_help"
+            android:text="发求助"
+            android:layout_marginLeft="80dp"
+            android:textColor="#e26323"
+            android:textSize="17.6sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </android.support.v7.widget.Toolbar>
+    
+    <android.support.v4.widget.NestedScrollView
+        android:layout_marginTop="41.5dp"
+        android:background="@android:color/white"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="95dp">
+                <EditText
+                    android:id="@+id/et_question_post_title"
+                    android:textAlignment="viewStart"
+                    android:textColor="@android:color/black"
+                    android:hint="问题"
+                    android:textSize="17.6sp"
+                    android:layout_margin="15dp"
+                    android:background="@android:color/white"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="start" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:background="#f3f5f3f3"
+                android:layout_width="match_parent"
+                android:layout_height="8.5dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="500dp">
+                <EditText
+                    android:background="@android:color/white"
+                    android:id="@+id/et_question_post_text"
+                    android:textColor="@android:color/black"
+                    android:textSize="17.6sp"
+                    android:hint="问题内容"
+                    android:textAlignment="viewStart"
+                    android:layout_margin="15dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="start" />
+
+            </LinearLayout>
+            
+        </LinearLayout>
+        
+    </android.support.v4.widget.NestedScrollView>
+
+</android.support.design.widget.CoordinatorLayout>
