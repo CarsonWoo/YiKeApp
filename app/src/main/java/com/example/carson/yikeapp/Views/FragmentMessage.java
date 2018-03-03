@@ -191,7 +191,7 @@ public class FragmentMessage extends Fragment {
         if (!chatWinDataList.isEmpty()) {
             for (ChatWinData chatWinData : chatWinDataList) {
                 ChatItem.ChatWinItem chatWinItem = new ChatItem.ChatWinItem(chatWinData.getId()
-                        , chatWinData.getName(), chatWinData.getLatestTime(), chatWinData.getLatestMsg(), chatWinData.getHeadPhotoUrl());
+                        , chatWinData.getUserId(),chatWinData.getName(), chatWinData.getLatestTime(), chatWinData.getLatestMsg(), chatWinData.getHeadPhotoUrl());
                 Log.d(TAG, "WIN_id:" + chatWinData.getId());
                 chatWinItems.add(chatWinItem);
             }

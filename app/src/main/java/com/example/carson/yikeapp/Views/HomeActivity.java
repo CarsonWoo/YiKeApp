@@ -242,7 +242,8 @@ public class HomeActivity extends AppCompatActivity implements FragmentHome.OnFr
             case 2:
                 Intent toChatWin = new Intent(HomeActivity.this, ChatWindowActivity.class);
                 toChatWin.putExtra(ConstantValues.KEY_HOME_LIST_USERNAME, ((ChatItem.ChatWinItem) (item.get(0))).name);
-                toChatWin.putExtra(ConstantValues.KEY_HOME_LIST_HOTEL_ID, ((ChatItem.ChatWinItem) (item.get(0))).id);
+                Log.d(TAG,"HomeList_HotelId: "+((ChatItem.ChatWinItem) (item.get(0))).id);
+                toChatWin.putExtra(ConstantValues.KEY_CHAT_WIN_USER_ID, ((ChatItem.ChatWinItem) (item.get(0))).userId);
                 startActivityForResult(toChatWin, ConstantValues.REQUESTCODE_IF_MESSAGE_NEED_REFRESH);
                 overridePendingTransition(R.anim.ani_right_get_into, R.anim.ani_left_sign_out);
                 break;

@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 public class ChatWinData extends DataSupport {
     private int id;
-    private String name,latestMsg,headPhotoUrl,latestTime;
+    private String userId,name,latestMsg,headPhotoUrl,latestTime;
     private ArrayList<String> chatMsgData;
 
     public ChatWinData(){
@@ -67,5 +67,13 @@ public class ChatWinData extends DataSupport {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 }

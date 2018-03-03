@@ -27,7 +27,6 @@ import com.example.carson.yikeapp.Utils.HttpUtils;
 import com.example.carson.yikeapp.Views.dummy.ChatWinData;
 import com.jude.swipbackhelper.SwipeBackHelper;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.litepal.crud.DataSupport;
@@ -38,7 +37,6 @@ import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 
 import okhttp3.Call;
@@ -69,7 +67,7 @@ public class ChatWindowActivity extends AppCompatActivity {
     private Handler headHandler;
 
     private String userHeadUrl, token;
-    private int userId;
+    private String userId;
     private Intent initData;
 
     @SuppressLint("HandlerLeak")
@@ -83,7 +81,8 @@ public class ChatWindowActivity extends AppCompatActivity {
         //Intent
         initData = getIntent();
         titleStr = initData.getStringExtra(ConstantValues.KEY_CHAT_WIN_USERNAME);
-        userId = initData.getIntExtra(ConstantValues.KEY_HOME_LIST_HOTEL_ID, -1);
+        userId = initData.getStringExtra(ConstantValues.KEY_CHAT_WIN_USER_ID);
+        Log.d(TAG,"userId: "+userId);
 //        userId = initData.getStringExtra(ConstantValues.KEY_CHAT_WIN_USER_ID);
         //数据库预处理
         chatWinDBList = DataSupport.where("name = ?", titleStr).find(ChatWinData.class);
@@ -152,7 +151,7 @@ public class ChatWindowActivity extends AppCompatActivity {
                 msgSend = etMsgSend.getText().toString();
                 if (!msgSend.trim().isEmpty()) {
                     etMsgSend.setText(null);
-                    SimpleDateFormat formatter = new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss");
+                    SimpleDateFormat formatter = new SimpleDateFormat("yyyy年MM月dd日\nHH:mm:ss");
                     Date curDate = new Date(System.currentTimeMillis());//获取当前时间
                     String curTime = formatter.format(curDate);
                     String chatMsgData = "{\"name\":\"" + titleStr + "\"" +
@@ -267,11 +266,12 @@ public class ChatWindowActivity extends AppCompatActivity {
     //保存新消息
     private void saveNewMsg(String chatMsgData) {
         if (chatWinDBList != null && !chatWinDBList.isEmpty()) {
-            Log.d(TAG, "chatMsgData: " + chatMsgData.toString());
+            Log.d(TAG, "SAVENEWMSG: " + 1);
+            Log.d(TAG, "chatMsgData: " + chatMsgData);
             this.chatMsgData.add(chatMsgData);
+
             ChatWinData chatWinData = new ChatWinData();
-            chatWinData.setId(userId);
-//            chatWinData.setId(Integer.parseInt(userId));
+            chatWinData.setUserId(userId);
             chatWinData.setHeadPhotoUrl(userHeadUrl);
             try {
                 JSONObject msg = new JSONObject(chatMsgData);
@@ -282,14 +282,14 @@ public class ChatWindowActivity extends AppCompatActivity {
             }
             chatWinData.setChatMsgData(this.chatMsgData);
             Log.d(TAG, "saveMsg");
-            chatWinData.updateAll("name = ?", titleStr);
-            chatWinDBList = DataSupport.where("name = ?", titleStr).find(ChatWinData.class);
+            chatWinData.updateAll("userId = ?", userId);
+            chatWinDBList = DataSupport.where("userId = ?", userId).find(ChatWinData.class);
             ArrayList<String> arrayList = chatWinDBList.get(0).getChatMsgData();
             Log.d(TAG, "msgNum: " + arrayList.size() + "");
         } else {
+            Log.d(TAG, "SAVENEWMSG: " + 2);
             ChatWinData chatWinData = new ChatWinData();
-            chatWinData.setId(userId);
-//            chatWinData.setId(Integer.parseInt(userId));
+            chatWinData.setUserId(userId);
             chatWinData.setHeadPhotoUrl(userHeadUrl);
             chatWinData.setName(titleStr);
             try {
@@ -302,6 +302,11 @@ public class ChatWindowActivity extends AppCompatActivity {
             chatWinData.addChatMsgData(chatMsgData);
             chatMsgAdapter.setData(chatWinData.getChatMsgData());
             chatWinData.save();
+            chatWinDBList = DataSupport.where("userId = ?", userId).find(ChatWinData.class);
+            this.chatMsgData = chatWinDBList.get(0).getChatMsgData();
+            chatMsgAdapter.setData( this.chatMsgData);
+            ArrayList<String> arrayList = chatWinDBList.get(0).getChatMsgData();
+            Log.d(TAG, "msgNum: " + arrayList.size() + "");
         }
         setResult(ConstantValues.RESULTCODE_NEED_REFRESH);
     }
@@ -321,7 +326,8 @@ public class ChatWindowActivity extends AppCompatActivity {
                 }
                 FormBody.Builder builder = new FormBody.Builder();
                 builder.add("token", token);
-                builder.add("id", userId + "");
+                Log.d(TAG,"sending userId: "+userId);
+                builder.add("id", userId);
                 HttpUtils.sendRequest(client, ConstantValues.URL_GET_TARGET_USER_INFO,
                         builder, new Callback() {
                             @Override
