@@ -216,7 +216,6 @@ public class HomeActivity extends AppCompatActivity implements FragmentHome.OnFr
             case 0:
                 Log.d(TAG, "点击了首页的item");
                 Log.d(TAG, ((HomeContent.BNBHomeItem) (item.get(0))).id + "");
-                Toast.makeText(this, "Item " + ((HomeContent.BNBHomeItem) (item.get(0))).id + " clicked.", Toast.LENGTH_SHORT).show();
                 Intent toStoreDetail = new Intent(HomeActivity.this, StoreDetailActivity.class);
                 toStoreDetail.putExtra(ConstantValues.KEY_STORE_MORE_DETAIL, ((HomeContent.BNBHomeItem) (item.get(0))).moreDetail);
                 toStoreDetail.putExtra(ConstantValues.KEY_STORE_NAME, ((HomeContent.BNBHomeItem) (item.get(0))).name);
