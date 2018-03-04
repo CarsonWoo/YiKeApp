@@ -28,7 +28,6 @@ public class DiscussItemPartnerRVAdapter extends RecyclerView
     private final List<PartnerItem.PartItem> mValues;
     private final FragmentPartner.OnFragmentInteractionListener mListener;
     private final ArrayList<PartnerItem.PartItem> itemSelected = new ArrayList<>();
-
     private final OnLikeClickedListener onLikeClickedListener;
     private final OnHeadViewClickedListener onHeadViewClickedListener;
 
@@ -42,14 +41,14 @@ public class DiscussItemPartnerRVAdapter extends RecyclerView
         this.onHeadViewClickedListener = onHeadViewClickedListener;
     }
 
-    class PartnerVH extends RecyclerView.ViewHolder {
+    public class PartnerVH extends RecyclerView.ViewHolder {
         View itemView;
         CircleImageView headView;
         ArchRivalTextView tvName;
         TextView tvComment;
         TextView tvView;
         TextView tvReply;
-        ImageView ivLike;
+        public ImageView ivLike;
         public PartnerItem.PartItem item;
 
         public PartnerVH(View itemView) {
@@ -102,6 +101,12 @@ public class DiscussItemPartnerRVAdapter extends RecyclerView
                         mValues.get(position).isAgree);
             }
         });
+
+        if (mValues.get(position).isAgree == 0) {
+            Glide.with(holder.ivLike.getContext()).load(R.drawable.ic_unlike).into(holder.ivLike);
+        } else {
+            Glide.with(holder.ivLike.getContext()).load(R.drawable.ic_like).into(holder.ivLike);
+        }
 
         holder.headView.setOnClickListener(new View.OnClickListener() {
             @Override

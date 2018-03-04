@@ -22,6 +22,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.Adapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -67,6 +68,8 @@ public class FragmentPartner extends Fragment implements OnHeadViewClickedListen
     private String token, listID = "";
 
     private DiscussItemPartnerRVAdapter partnerRVAdapter;
+
+    private RecyclerView rvPartner;
 
     private OnFragmentInteractionListener mListener;
 
@@ -272,6 +275,7 @@ public class FragmentPartner extends Fragment implements OnHeadViewClickedListen
         return fragmentPartner;
     }
 
+    @SuppressLint("HandlerLeak")
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -279,6 +283,7 @@ public class FragmentPartner extends Fragment implements OnHeadViewClickedListen
         View view = LayoutInflater.from(getContext()).inflate(R.layout.discuss_rv_item_partner, null);
         ivLike = view.findViewById(R.id.iv_discuss_rv_part_like);
         getPartnerPostList();
+
     }
 
     @SuppressLint("HandlerLeak")
@@ -291,7 +296,7 @@ public class FragmentPartner extends Fragment implements OnHeadViewClickedListen
         View view;
         view = inflater.inflate(R.layout.tab_fragment_discuss_partner, container,
                 false);
-        final RecyclerView rvPartner = view.findViewById(R.id.rv_discuss_partner);
+        rvPartner = view.findViewById(R.id.rv_discuss_partner);
 
         fabPublish = view.findViewById(R.id.fab_to_publish_part);
 
@@ -333,10 +338,7 @@ public class FragmentPartner extends Fragment implements OnHeadViewClickedListen
                 for (int i = 0; i < array.length(); i++) {
                     try {
                         JSONObject object = array.getJSONObject(i);
-//                        if (Integer.parseInt(object.getString(ConstantValues.KEY_PART_LIST_IS_AGREE)) == 1) {
-//                            Glide.with(ivLike.getContext()).load(R.drawable.ic_like).into(ivLike);
-//                        }
-
+//                        partnerRVAdapter.notifyItemChanged(i);
                         if (!listID.contains(object.getString(ConstantValues.KEY_PART_LIST_ID))) {
                             listID = listID + object.getString(ConstantValues.KEY_PART_LIST_ID);
                             mPartnerPostData.add(new PartnerItem.PartItem(
@@ -350,18 +352,33 @@ public class FragmentPartner extends Fragment implements OnHeadViewClickedListen
                                     Integer.parseInt(object.getString(ConstantValues.KEY_PART_LIST_IS_AGREE))
                             ));
                         }
+
+                        if (object.getString("is_agree").equals("1")) {
+                            Log.i(TAG, object.getString(ConstantValues.KEY_PART_LIST_ID));
+                            int position = Integer
+                                    .parseInt(object.getString(ConstantValues.KEY_PART_LIST_ID));
+                            Log.i(TAG, position + "");
+                            DiscussItemPartnerRVAdapter.PartnerVH partnerVH =
+                                    (DiscussItemPartnerRVAdapter.PartnerVH) rvPartner
+                                            .findViewHolderForAdapterPosition(position);
+                            if (partnerVH != null) {
+                                partnerVH.ivLike.setImageResource(R.drawable.ic_like);
+                            }
+                            partnerRVAdapter.notifyItemChanged(position);
+
+                        }
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
                 }
                 if (dataSize == mPartnerPostData.size()) {
                     Toast.makeText(getContext(), "No more details", Toast.LENGTH_SHORT).show();
+                } else {
+                    partnerRVAdapter.clearData();
+                    partnerRVAdapter.addData(mPartnerPostData);
                 }
-                partnerRVAdapter.clearData();
-                partnerRVAdapter.addData(mPartnerPostData);
             }
         };
-
 //        getPartnerPostList();
 
 

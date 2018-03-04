@@ -63,6 +63,9 @@ public class FragmentExp extends Fragment {
 
     private TextView tvSortByTime, tvSortByLike;
 
+    private int judgeCode = 1;
+
+    private boolean isChanged;
     public interface OnFragmentInteractionListener {
         void onFragmentInteraction(ArrayList item);
     }
@@ -83,7 +86,9 @@ public class FragmentExp extends Fragment {
             Log.i(TAG, "listener not null");
         }
         token = ConstantValues.getCachedToken(getContext());
-        getExpPostList(1);
+
+
+        getExpPostList(judgeCode);
     }
 
     @SuppressLint("HandlerLeak")
@@ -155,6 +160,46 @@ public class FragmentExp extends Fragment {
                 }
                 if (dataSize == expPostData.size()) {
                     Toast.makeText(getContext(), "暂时没有更多经验帖", Toast.LENGTH_SHORT).show();
+                    if (judgeCode == 1) {
+                        //以时间排序
+                        expPostData.clear();
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            try {
+                                object = jsonArray.getJSONObject(i);
+                                expPostData.add(new ExperienceItem.ExpItem(
+                                        object.getString(ConstantValues.KEY_EXP_LIST_ID),
+                                        object.getString(ConstantValues.KEY_EXP_LIST_TITLE),
+                                        object.getString(ConstantValues.KEY_EXP_LIST_CONTENT),
+                                        object.getString(ConstantValues.KEY_EXP_LIST_POSITION),
+                                        object.getString(ConstantValues.KEY_EXP_LIST_TIME),
+                                        Integer.parseInt(object
+                                                .getString(ConstantValues.KEY_EXP_LIST_AGREE_NUM)),
+                                        Integer.parseInt(object
+                                                .getString(ConstantValues.KEY_EXP_LIST_IS_AGREE))));
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    } else if (judgeCode == 2) {
+                        expPostData.clear();
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            try {
+                                object = jsonArray.getJSONObject(i);
+                                expPostData.add(new ExperienceItem.ExpItem(
+                                        object.getString(ConstantValues.KEY_EXP_LIST_ID),
+                                        object.getString(ConstantValues.KEY_EXP_LIST_TITLE),
+                                        object.getString(ConstantValues.KEY_EXP_LIST_CONTENT),
+                                        object.getString(ConstantValues.KEY_EXP_LIST_POSITION),
+                                        object.getString(ConstantValues.KEY_EXP_LIST_TIME),
+                                        Integer.parseInt(object
+                                                .getString(ConstantValues.KEY_EXP_LIST_AGREE_NUM)),
+                                        Integer.parseInt(object
+                                                .getString(ConstantValues.KEY_EXP_LIST_IS_AGREE))));
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
                 }
                 adapter.clearData();
                 adapter.addData(expPostData);
@@ -164,7 +209,12 @@ public class FragmentExp extends Fragment {
 
         tvSortByTime = view.findViewById(R.id.tv_discuss_sort_time);
         tvSortByLike = view.findViewById(R.id.tv_discuss_sort_like);
-        tvSortByTime.setTextColor(Color.parseColor("#e26323"));
+        if (judgeCode == 1) {
+            tvSortByTime.setTextColor(Color.parseColor("#e26323"));
+        } else if (judgeCode == 2) {
+            tvSortByLike.setTextColor(Color.parseColor("#e26323"));
+        }
+
         tvSortByTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -172,6 +222,7 @@ public class FragmentExp extends Fragment {
                 tvSortByLike.setTextColor(Color.GRAY);
 //                        adapter.notifyDataSetChanged();
                 getExpPostList(1);
+                judgeCode = 1;
             }
         });
         tvSortByLike.setOnClickListener(new View.OnClickListener() {
@@ -181,8 +232,10 @@ public class FragmentExp extends Fragment {
                 tvSortByTime.setTextColor(Color.GRAY);
 //                        adapter.notifyDataSetChanged();
                 getExpPostList(2);
+                judgeCode = 2;
             }
         });
+
         return view;
     }
 

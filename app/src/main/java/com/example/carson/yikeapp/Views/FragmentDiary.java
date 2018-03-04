@@ -1,14 +1,27 @@
 package com.example.carson.yikeapp.Views;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -31,16 +44,29 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
+import de.hdodenhof.circleimageview.*;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.FormBody;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
+import okhttp3.RequestBody;
 import okhttp3.Response;
+
+import static android.app.Activity.RESULT_OK;
+import static com.example.carson.yikeapp.Utils.ConstantValues.CODE_PICK_PHOTO;
+import static com.example.carson.yikeapp.Utils.ConstantValues.CODE_TAKE_PHOTO;
+import static com.example.carson.yikeapp.Utils.ConstantValues.TYPE_TAKE_PHOTO;
 
 /**
  * Created by 84594 on 2018/2/26.
@@ -65,6 +91,8 @@ public class FragmentDiary extends Fragment implements DiscussItemDiaryRVAdapter
     private SwipeRefreshLayout srl;
 
     private FloatingActionButton fabToPublish;
+
+    private RecyclerView rvDiary;
 
     @Override
     public void onLikeClicked(View v, final String id, int isAgree) {
@@ -156,15 +184,15 @@ public class FragmentDiary extends Fragment implements DiscussItemDiaryRVAdapter
 //                            Log.i(TAG, object.getString(ConstantValues.KEY_DIARY_LIST_IS_AGREE));
 //                            Glide.with(getContext()).load(R.drawable.ic_like).into(ivLike);
 //                        }
-                        //TODO 判断isagree属性，然后在adapter中还得加入resource文件参数
                         if (!listID.contains(object.getString(ConstantValues.KEY_DIARY_LIST_ID))) {
                             listID = listID + object.getString(ConstantValues.KEY_DIARY_LIST_ID);
                             mDiaryItemList.add(new DiaryItem.DItem(
                                     object.getString(ConstantValues.KEY_DIARY_LIST_ID),
-                                    object.getString(ConstantValues.KEY_DIARY_LIST_USER_PORTRAIT),
+                                    "http://www.yiluzou.cn/yike/public/"
+                                            + object.getString(ConstantValues.KEY_DIARY_LIST_USER_PORTRAIT),
                                     object.getString(ConstantValues.KEY_DIARY_LIST_NAME),
                                     object.getString(ConstantValues.KEY_DIARY_LIST_CONTENT),
-                                    object.getString(ConstantValues.KEY_DIARY_LIST_VIEW),
+                                    object.getString(ConstantValues.KEY_DIARY_LIST_VIEW) + "浏览",
                                     object.getString(ConstantValues.KEY_DIARY_LIST_DATE),
                                     Integer.parseInt(
                                             object.getString(ConstantValues.KEY_DIARY_LIST_IS_AGREE)),
@@ -178,7 +206,6 @@ public class FragmentDiary extends Fragment implements DiscussItemDiaryRVAdapter
                 }
                 if (dataSize == mDiaryItemList.size()) {
                     Toast.makeText(getContext(), "No more diaries", Toast.LENGTH_SHORT).show();
-
                 }
                 adapter.clearData();
                 adapter.addData(mDiaryItemList);
@@ -194,7 +221,7 @@ public class FragmentDiary extends Fragment implements DiscussItemDiaryRVAdapter
 //        token = ConstantValues.getCachedToken(getContext());
         View view = inflater.inflate(R.layout.tab_fragment_discuss_diary, container,
                 false);
-        RecyclerView rvDiary = view.findViewById(R.id.rv_discuss_diary);
+        rvDiary = view.findViewById(R.id.rv_discuss_diary);
         rvDiary.setLayoutManager(new LinearLayoutManager(view.getContext()));
         adapter = new DiscussItemDiaryRVAdapter(DiaryItem.ITEMS, mListener, this);
         rvDiary.setAdapter(adapter);
@@ -256,8 +283,9 @@ public class FragmentDiary extends Fragment implements DiscussItemDiaryRVAdapter
                             public void onResponse(Call call, Response response) throws IOException {
                                 try {
                                     JSONObject object = new JSONObject(response.body().string());
-                                    int code = object.getInt(ConstantValues.KEY_CODE);
+                                        int code = object.getInt(ConstantValues.KEY_CODE);
                                     if (code == 200) {
+//                                        Log.i(TAG, object.getString("msg"));
                                         JSONArray array = object.getJSONArray("msg");
                                         Message message = new Message();
                                         message.obj = array;
@@ -268,9 +296,9 @@ public class FragmentDiary extends Fragment implements DiscussItemDiaryRVAdapter
                                 }
                             }
                         });
-            }
-        }).start();
-    }
+                }
+            }).start();
+        }
 
     @Override
     public void onAttachFragment(Fragment childFragment) {

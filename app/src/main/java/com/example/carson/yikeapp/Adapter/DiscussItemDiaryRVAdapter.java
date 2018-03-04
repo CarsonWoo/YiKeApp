@@ -1,6 +1,7 @@
 package com.example.carson.yikeapp.Adapter;
 
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +28,8 @@ public class DiscussItemDiaryRVAdapter extends RecyclerView.Adapter<DiscussItemD
     private final ArrayList<DiaryItem.DItem> itemSelected = new ArrayList<>();
     private final FragmentDiary.OnFragmentInteractionListener mListener;
     private final OnLikeClickedListener mOnLikeClickedListener;
+
+    private static final int LINES = 2;
 
     public DiscussItemDiaryRVAdapter(List<DiaryItem.DItem> items,
                                      FragmentDiary.OnFragmentInteractionListener listener,
@@ -65,6 +68,12 @@ public class DiscussItemDiaryRVAdapter extends RecyclerView.Adapter<DiscussItemD
             }
         });
 
+        if (mValues.get(position).isAgree == 0) {
+            Glide.with(holder.like.getContext()).load(R.drawable.ic_unlike).into(holder.like);
+        } else {
+            Glide.with(holder.like.getContext()).load(R.drawable.ic_like).into(holder.like);
+        }
+
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -76,11 +85,29 @@ public class DiscussItemDiaryRVAdapter extends RecyclerView.Adapter<DiscussItemD
             }
         });
 
+        if (holder.content.getLayout() != null) {
+            final int elsCount = holder.content.getLayout()
+                    .getEllipsisCount(holder.content.getLineCount() - 1);
+            if (elsCount > 0) {
+                holder.showAll.setVisibility(View.VISIBLE);
+            } else {
+                holder.showAll.setVisibility(View.INVISIBLE);
+            }
+        }
         holder.showAll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO 显示全文
-                holder.showAll.setVisibility(View.GONE);
+                int elsCount = holder.content.getLayout()
+                        .getEllipsisCount(holder.content.getLineCount() - 1);
+                if (elsCount > 0) {
+                    //代表没有显示全部 存在省略部分
+                    holder.content.setMaxHeight(v.getResources().getDisplayMetrics().heightPixels);
+                    holder.showAll.setText("收起");
+                } else {
+                    //显示两行
+                    holder.showAll.setText("全文");
+                    holder.content.setMaxLines(LINES);
+                }
             }
         });
 
