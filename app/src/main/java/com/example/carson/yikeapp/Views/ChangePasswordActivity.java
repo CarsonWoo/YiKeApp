@@ -14,6 +14,7 @@ import android.widget.Toast;
 import com.example.carson.yikeapp.R;
 import com.example.carson.yikeapp.Utils.ConstantValues;
 import com.example.carson.yikeapp.Utils.HttpUtils;
+import com.jude.swipbackhelper.SwipeBackHelper;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -43,6 +44,16 @@ public class ChangePasswordActivity extends AppCompatActivity implements View.On
 
         setSupportActionBar(toolbar);
 
+        //设置右滑退出
+        SwipeBackHelper.onCreate(this);
+        SwipeBackHelper.getCurrentPage(this)
+                .setSwipeBackEnable(true)
+                .setSwipeSensitivity(1.0f)
+                .setSwipeRelateEnable(true)
+                .setSwipeRelateOffset(300)
+                .setSwipeEdgePercent(0.15f)
+                .setClosePercent(0.5f);
+
         initViews();
         initEvents();
     }
@@ -54,7 +65,7 @@ public class ChangePasswordActivity extends AppCompatActivity implements View.On
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ChangePasswordActivity.this.finish();
+                onBackPressed();
             }
         });
     }
@@ -74,7 +85,6 @@ public class ChangePasswordActivity extends AppCompatActivity implements View.On
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_change_send_check_code:
-
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
@@ -167,9 +177,7 @@ public class ChangePasswordActivity extends AppCompatActivity implements View.On
                                                                     Toast.LENGTH_SHORT).show();
                                                         }
                                                     });
-                                                    startActivity(new Intent(ChangePasswordActivity.this,
-                                                            LoginActivity.class));
-                                                    finish();
+                                                    onBackPressed();
                                                 }
                                             } catch (JSONException e) {
                                                 e.printStackTrace();
@@ -182,5 +190,11 @@ public class ChangePasswordActivity extends AppCompatActivity implements View.On
 
                 break;
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(R.anim.ani_left_get_into, R.anim.ani_right_sign_out);
     }
 }

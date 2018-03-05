@@ -2,6 +2,7 @@ package com.example.carson.yikeapp.Views;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
@@ -13,6 +14,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -81,6 +83,8 @@ public class FragmentHome extends Fragment implements HomeItemRecyclerViewAdapte
     private TimerTask timerTask;
     private SwipeRefreshLayout refreshLayout;
     private boolean loadingMore = false;
+
+    private SearchView searchView;
     /**
      * 屏幕宽度
      */
@@ -152,6 +156,24 @@ public class FragmentHome extends Fragment implements HomeItemRecyclerViewAdapte
             }
         };
         rvList.setLayoutManager(layoutManager);
+
+        searchView = view.findViewById(R.id.search_view_home);
+        searchView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                toSearchIntent();
+            }
+        });
+
+        searchView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    searchView.clearFocus();
+                    toSearchIntent();
+                }
+            }
+        });
 
         //下拉刷新
         refreshLayout = view.findViewById(R.id.srl_refresh);
@@ -306,6 +328,12 @@ public class FragmentHome extends Fragment implements HomeItemRecyclerViewAdapte
             pagerScrolling = true;
         }
         return view;
+    }
+
+    private void toSearchIntent() {
+        Intent toSearch = new Intent(getContext(), SearchActivity.class);
+        startActivity(toSearch);
+        getActivity().overridePendingTransition(R.anim.ani_right_get_into,R.anim.ani_left_sign_out);
     }
 
     //首页店家列表获取

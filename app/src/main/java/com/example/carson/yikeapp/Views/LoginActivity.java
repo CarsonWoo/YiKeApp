@@ -75,7 +75,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             etName.setText(name);
         }
         if (isPwdChecked) {
-            String pwd = pref.getString("pwd", "");
+            String pwd = pref.getString("pwd", ConstantValues.getCachedPsw(this));
             etPwd.setText(pwd);
         }
         btnLogin.setOnClickListener(this);
@@ -110,11 +110,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             case R.id.tv_to_regis:
                 startActivity(new Intent(LoginActivity.this,
                         RegisterActivity.class));
+                finish();
                 break;
             case R.id.tv_forget_pwd:
                 //跳转到忘记密码的页面
                 startActivity(new Intent(LoginActivity.this,
                         ChangePasswordActivity.class));
+                overridePendingTransition(R.anim.ani_right_get_into, R.anim.ani_left_sign_out);
                 break;
             case R.id.btn_login:
                 //交到后台处理
@@ -161,19 +163,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                 try {
                                     JSONObject object = new JSONObject(responseData);
                                     String code = object.getString("code");
-                                    String msg = object.getString("msg");
-                                    JSONObject datas = object.getJSONObject("msg");
-                                    Iterator iterator = datas.keys();
-                                    while (iterator.hasNext()) {
-                                        String key = (String) iterator.next();
-                                        dataList.add(datas.getString(key));
-                                    }
-                                    //token信息
-                                    String token = dataList.get(0);
-                                    ConstantValues.cachToken(LoginActivity.this,token);
-                                    //识别用户还是商家
-                                    String userType = dataList.get(1);
-                                    ConstantValues.cachUserType(LoginActivity.this,userType);
+                                    final String msg = object.getString("msg");
                                     if (!code.equals("200")) {
                                         runOnUiThread(new Runnable() {
                                             @Override
@@ -182,11 +172,23 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 //                                                        AlertDialog.Builder(getApplicationContext());
 //                                                dialog.setView(R.layout.bg_alert_dialog)
 //                                                        .show();
-                                                Snackbar.make(btnLogin, "账号或密码错误 请重新输入",
+                                                Snackbar.make(btnLogin, msg,
                                                         Snackbar.LENGTH_SHORT).show();
                                             }
                                         });
                                     } else {
+                                        JSONObject datas = object.getJSONObject("msg");
+                                        Iterator iterator = datas.keys();
+                                        while (iterator.hasNext()) {
+                                            String key = (String) iterator.next();
+                                            dataList.add(datas.getString(key));
+                                        }
+                                        //token信息
+                                        String token = dataList.get(0);
+                                        ConstantValues.cachToken(LoginActivity.this,token);
+                                        //识别用户还是商家
+                                        String userType = dataList.get(1);
+                                        ConstantValues.cachUserType(LoginActivity.this,userType);
                                         ConstantValues.cachPsw(LoginActivity.this,pwd);
                                         if (!isFirstFilled) {
                                             Intent intent = new Intent(LoginActivity.this,

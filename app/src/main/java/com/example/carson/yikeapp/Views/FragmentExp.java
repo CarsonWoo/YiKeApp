@@ -268,7 +268,7 @@ public class FragmentExp extends Fragment {
                                 try {
                                     final JSONObject object = new JSONObject(response.body().string());
                                     int code = object.getInt(ConstantValues.KEY_CODE);
-                                    Log.i(TAG, object.toString());
+//                                    Log.i(TAG, object.toString());
                                     if (code == 200) {
                                         JSONArray jsonArray = object.getJSONArray("msg");
                                         Message msg = new Message();

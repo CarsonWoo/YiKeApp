@@ -2,6 +2,7 @@ package com.example.carson.yikeapp.Views;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.nfc.Tag;
 import android.os.Bundle;
@@ -14,8 +15,10 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -52,6 +55,8 @@ public class FragmentDiscuss extends Fragment  {
     private final List<Fragment> fragmentList = new ArrayList<>();
 
     private Fragment tabSelected = null;
+
+    private SearchView searchView;
 
     public FragmentDiscuss() {
 
@@ -90,14 +95,37 @@ public class FragmentDiscuss extends Fragment  {
         view = inflater.inflate(R.layout.fragment_discuss, container, false);
         DiscussPagerAdapter pagerAdapter = new DiscussPagerAdapter(getChildFragmentManager(),
                 fragmentList, mListener);
+        searchView = view.findViewById(R.id.search_view_discuss);
         vp = view.findViewById(R.id.vp_discuss_item);
         vp.setAdapter(pagerAdapter);
         TabLayout tabLayout = view.findViewById(R.id.tab_layout_discuss);
         vp.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(vp));
 
+        searchView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                toSearchIntent();
+            }
+        });
+
+        searchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    searchView.clearFocus();
+                    toSearchIntent();
+                }
+            }
+        });
         return view;
 
+    }
+
+    private void toSearchIntent() {
+        Intent toSearch = new Intent(getContext(), SearchActivity.class);
+        startActivity(toSearch);
+        getActivity().overridePendingTransition(R.anim.ani_right_get_into, R.anim.ani_left_sign_out);
     }
 
     @Override

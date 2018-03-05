@@ -5,14 +5,13 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-        <android.support.v7.widget.SearchView
-            android:id="@+id/search_view_discuss"
-            android:layout_margin="10dp"
-            android:background="#16483838"
-            android:layout_width="match_parent"
-            android:layout_height="30.7dp">
-
-        </android.support.v7.widget.SearchView>
+    <android.support.v7.widget.SearchView
+        android:id="@+id/search_view_discuss"
+        android:layout_margin="10dp"
+        android:background="#16483838"
+        android:onClick="onClick"
+        android:layout_width="match_parent"
+        android:layout_height="30.7dp" />
 
     <LinearLayout
         android:layout_marginTop="50dp"

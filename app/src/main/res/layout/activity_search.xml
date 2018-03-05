@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@android:color/white"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.example.carson.yikeapp.Views.SearchActivity">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar_search"
+        android:layout_width="match_parent"
+        android:background="@android:color/white"
+        app:navigationIcon="@drawable/ic_back_black"
+        android:layout_height="39dp" />
+
+    <android.support.v7.widget.SearchView
+        android:id="@+id/search_view_aty"
+        android:layout_marginTop="10dp"
+        app:iconifiedByDefault="false"
+        app:queryBackground="@null"
+        app:queryHint="请输入搜索内容"
+        android:layout_width="match_parent"
+        android:layout_height="30.7dp" />
+
+    <ListView
+        android:id="@+id/lv_search_view"
+        android:layout_marginTop="10dp"
+        android:divider="#d6d6d6"
+        android:dividerHeight="1dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"></ListView>
+
+</LinearLayout>
