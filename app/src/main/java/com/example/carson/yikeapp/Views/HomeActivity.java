@@ -102,7 +102,6 @@ public class HomeActivity extends AppCompatActivity implements FragmentHome.OnFr
         View partItemView = LayoutInflater.from(this).inflate(R.layout.discuss_rv_item_partner, null);
 
 
-
         //title
         TextView title = findViewById(R.id.title);
         title.setText(titles[mViewPager.getCurrentItem()]);
@@ -241,7 +240,7 @@ public class HomeActivity extends AppCompatActivity implements FragmentHome.OnFr
             case 2:
                 Intent toChatWin = new Intent(HomeActivity.this, ChatWindowActivity.class);
                 toChatWin.putExtra(ConstantValues.KEY_HOME_LIST_USERNAME, ((ChatItem.ChatWinItem) (item.get(0))).name);
-                Log.d(TAG,"HomeList_HotelId: "+((ChatItem.ChatWinItem) (item.get(0))).id);
+                Log.d(TAG, "HomeList_HotelId: " + ((ChatItem.ChatWinItem) (item.get(0))).id);
                 toChatWin.putExtra(ConstantValues.KEY_CHAT_WIN_USER_ID, ((ChatItem.ChatWinItem) (item.get(0))).userId);
                 startActivityForResult(toChatWin, ConstantValues.REQUESTCODE_IF_MESSAGE_NEED_REFRESH);
                 overridePendingTransition(R.anim.ani_right_get_into, R.anim.ani_left_sign_out);

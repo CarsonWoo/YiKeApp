@@ -16,7 +16,7 @@
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar_store_detail"
             android:layout_width="match_parent"
-            app:navigationIcon="@drawable/ic_chevron_left"
+            app:navigationIcon="@drawable/ic_back_black"
             android:layout_height="39dp">
 
             <TextView

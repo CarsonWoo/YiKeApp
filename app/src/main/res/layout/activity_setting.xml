@@ -14,7 +14,7 @@
         app:elevation="0dp">
 
         <android.support.v7.widget.Toolbar
-            app:navigationIcon="@drawable/ic_chevron_left"
+            app:navigationIcon="@drawable/ic_back_black"
             android:id="@+id/toolbar_setting"
             android:layout_width="match_parent"
             android:layout_height="39dp">

@@ -1,23 +1,19 @@
 package com.example.carson.yikeapp.Views;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
+import android.app.Activity;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
-import android.support.v4.app.ActivityCompat;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.content.FileProvider;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,6 +24,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.carson.yikeapp.R;
+import com.example.carson.yikeapp.Utils.BitmapUtils;
 import com.example.carson.yikeapp.Utils.ConstantValues;
 import com.example.carson.yikeapp.Utils.HttpUtils;
 
@@ -35,21 +32,24 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.FormBody;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
+import okhttp3.RequestBody;
 import okhttp3.Response;
 
 import static com.example.carson.yikeapp.Utils.ConstantValues.CODE_PICK_PHOTO;
+import static com.example.carson.yikeapp.Utils.ConstantValues.CODE_REQUEST_CROP;
 import static com.example.carson.yikeapp.Utils.ConstantValues.CODE_TAKE_PHOTO;
-import static com.example.carson.yikeapp.Utils.ConstantValues.TYPE_TAKE_PHOTO;
+import static com.example.carson.yikeapp.Utils.ConstantValues.getCachedToken;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -76,35 +76,23 @@ public class FragmentUser extends Fragment {
     private static Handler sendMsg;
     private File photoFile;
     private Uri photoUri;
-    private String token,gender;
+    private String token, gender;
+    private static String tempHeadName = "tempHeadPic";
+
+    private CircleImageView userHead;
 
     public FragmentUser() {
         // Required empty public constructor
     }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @return A new instance of fragment FragmentUser.
-     */
-    // Rename and change types and number of parameters
     public static FragmentUser newInstance() {
         FragmentUser fragment = new FragmentUser();
-//        Bundle args = new Bundle();
-//        args.putString(ARG_PARAM1, param1);
-//        args.putString(ARG_PARAM2, param2);
-//        fragment.setArguments(args);
+
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        if (getArguments() != null) {
-//            mParam1 = getArguments().getString(ARG_PARAM1);
-//            mParam2 = getArguments().getString(ARG_PARAM2);
-//        }
     }
 
     @SuppressLint("HandlerLeak")
@@ -112,10 +100,10 @@ public class FragmentUser extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         token = ConstantValues.getCachedToken(getContext());
-        if(ConstantValues.getCachedUserType(getContext()).equals(ConstantValues.USER_TYPE_NORMAL)) {
+        if (ConstantValues.getCachedUserType(getContext()).equals(ConstantValues.USER_TYPE_NORMAL)) {
             View view = inflater.inflate(R.layout.fragment_user_normal, container, false);
             //findview
-            final CircleImageView userHead = view.findViewById(R.id.civ_user_head);
+            userHead = view.findViewById(R.id.civ_user_head);
             final TextView userName = view.findViewById(R.id.tv_user_name);
             final TextView userLevel = view.findViewById(R.id.tv_user_store_level);
             final TextView userXp = view.findViewById(R.id.tv_user_store_xp);
@@ -147,14 +135,15 @@ public class FragmentUser extends Fragment {
                         userExpPost.setText(userInfo[0].getString(ConstantValues.KEY_USER_EXP_POST));
                         gender = userInfo[0].getString(ConstantValues.KEY_USER_GENDER);
                         int exp = Integer.parseInt(userXp.getText().toString());
-                        if(exp<200){
+                        if (exp < 200) {
                             userLevel.setText("1");
-                        }else if(exp>=200&&exp<500){
+                        } else if (exp >= 200 && exp < 500) {
                             userLevel.setText("2");
-                        }else {
-                            userLevel.setText(exp/500+2);
+                        } else {
+                            userLevel.setText(exp / 500 + 2);
                         }
-                        Glide.with(getActivity()).load(userInfo[0].getString(ConstantValues.KEY_USER_PHOTO_URL)).into(userHead);//设置头像
+                        Glide.with(getActivity()).load(userInfo[0].getString(ConstantValues.KEY_USER_PHOTO_URL))
+                                .thumbnail(Glide.with(getContext()).load(R.drawable.ic_loader)).into(userHead);//设置头像
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -166,21 +155,7 @@ public class FragmentUser extends Fragment {
             userHead.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                    builder.setItems(new String[]{"拍照", "选取照片"}, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            switch (which) {
-                                case 0:
-                                    checkCameraPermission();
-                                    break;
-                                case 1:
-                                    checkReadStoragePermission();
-                                    break;
-                            }
-                        }
-                    });
-                    builder.show();
+                    BitmapUtils.showDialogToChoosePic(getContext(),FragmentUser.this,tempHeadName);
                 }
             });
 
@@ -203,15 +178,15 @@ public class FragmentUser extends Fragment {
                 @Override
                 public void onClick(View view) {
                     Intent toResume = new Intent(getContext(), ResumeActivity.class);
-                    toResume.putExtra("name",userName.getText());
-                    toResume.putExtra("gender",gender);
+                    toResume.putExtra("name", userName.getText());
+                    toResume.putExtra("gender", gender);
                     startActivity(toResume);
                     getActivity().overridePendingTransition(R.anim.ani_right_get_into, R.anim.ani_left_sign_out);
                 }
             });
             return view;
 
-        }else {
+        } else {
             View view = inflater.inflate(R.layout.fragment_user_store, container, false);
             //findview
             final CircleImageView storeHead = view.findViewById(R.id.civ_user_head);
@@ -255,7 +230,7 @@ public class FragmentUser extends Fragment {
     }
 
     //“我的”界面信息获取
-    private void getUserInfo(){
+    private void getUserInfo() {
 
         new Thread(new Runnable() {
             @Override
@@ -283,7 +258,7 @@ public class FragmentUser extends Fragment {
                                     JSONObject object = new JSONObject(response
                                             .body().string());
                                     int code = object.getInt(ConstantValues.KEY_CODE);
-                                    Log.d(TAG,object.toString());
+                                    Log.d(TAG, object.toString());
                                     if (code == 200) {
                                         JSONObject tempMsg = object.getJSONObject("msg");
                                         Message message = Message.obtain();
@@ -308,108 +283,148 @@ public class FragmentUser extends Fragment {
         }).start();
     }
 
-    //检查权限
-    private void checkReadStoragePermission() {
-        if (ContextCompat.checkSelfPermission(getContext(),
-                Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(getActivity(),
-                    new String[] {Manifest.permission.READ_EXTERNAL_STORAGE}, 3);
-        } else {
-            startPick();
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case CODE_TAKE_PHOTO:
+                if (resultCode == Activity.RESULT_OK) {
+                    Bitmap photo = data.getParcelableExtra("data");
+                    String imagePath = BitmapUtils.saveImage(getContext(),photo,getCachedToken(getContext()));
+                    try {
+                        MediaStore.Images.Media.insertImage(getContext().getContentResolver(), photoFile.getAbsolutePath(),
+                                photoFile.getName(), null);
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                    startCropActivity( imagePath, requestCode);
+                }
+                break;
+
+            case CODE_PICK_PHOTO:
+                if (resultCode == Activity.RESULT_OK) {
+                    startCropActivity(data.getData().toString(), requestCode);
+                }
+                break;
+
+            case CODE_REQUEST_CROP:    // 裁剪图片结果
+                if (resultCode == Activity.RESULT_OK) {
+                    handleCropResult(data, userHead);
+                }
+                break;
         }
     }
 
-    private void startPick() {
-        Intent albumIntent = new Intent(Intent.ACTION_PICK,
-                MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        startActivityForResult(albumIntent, CODE_PICK_PHOTO);
+    /**
+     * 裁剪图片方法实现
+     *
+     * @param imagePath
+     */
+    public void startCropActivity(String imagePath,int resultFrom) {
+        Log.d(TAG,"FileUri:"+imagePath);
+        Intent turnToCrop = new Intent(getActivity(), CropPicActivity.class);
+        turnToCrop.putExtra("Uri",imagePath);
+        turnToCrop.putExtra("resultFrom",resultFrom);
+        startActivityForResult(turnToCrop,CODE_REQUEST_CROP);
     }
 
-    private void checkCameraPermission() {
-        if (ContextCompat.checkSelfPermission(getContext(),
-                Manifest.permission.CAMERA) != PackageManager
-                .PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(getActivity(),
-                    new String[]{Manifest.permission.CAMERA}, 1);
+    /**
+     * 处理剪切成功的返回值
+     *
+     * @param result
+     */
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    private void handleCropResult(Intent result, CircleImageView view) {
+        deleteTempPhotoFile();
+        final Uri resultUri = result.getData();
+        if (null != resultUri ) {
+            Bitmap bitmap = null;
+            bitmap = BitmapFactory.decodeFile(resultUri.getPath());
+            view.setImageBitmap(bitmap);
+            uploadHead(resultUri);
         } else {
-            checkWriteStoragePermission();
+            Toast.makeText(getContext(), "无法剪切选择图片", Toast.LENGTH_SHORT).show();
         }
     }
 
-    //设置写入相册内存权限
-    private void checkWriteStoragePermission() {
-        if (ContextCompat.checkSelfPermission(getContext(),
-                Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(getActivity(),
-                    new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE}, 2);
-        } else {
-            startCamera();
+    /**
+     * 删除拍照临时文件
+     */
+    private void deleteTempPhotoFile() {
+        File tempFile = new File(ConstantValues.MY_TEMPPHOTO_PATH+tempHeadName+".jpeg");
+        if (tempFile.exists() && tempFile.isFile()) {
+            tempFile.delete();
         }
     }
 
-    private void startCamera() {
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    private void uploadHead(final Uri imgUri){
+        Log.d(TAG,"imgUri.getPath(): "+ imgUri.getPath());
+        photoFile = new File(imgUri.getPath());
 
-        if (Build.VERSION.SDK_INT >= 24) {
-            Intent takeIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            photoUri = get24MediaFileUri(TYPE_TAKE_PHOTO);
-            takeIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
-            startActivityForResult(takeIntent, CODE_TAKE_PHOTO);
-        } else {
-            Intent takeIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            photoUri = getMediaFileUri(TYPE_TAKE_PHOTO);
-            takeIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
-            startActivityForResult(takeIntent, CODE_TAKE_PHOTO);
-        }
-    }
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                OkHttpClient client = null;
+                try {
+                    client = HttpUtils.getUnsafeOkHttpClient();
+                } catch (NoSuchAlgorithmException e) {
+                    e.printStackTrace();
+                } catch (KeyManagementException e) {
+                    e.printStackTrace();
+                }
+                Log.i("startStage:", "ok");
+                Log.i("token", token);
+                MediaType type = MediaType.parse("image/*");
+                RequestBody fileBody = RequestBody.create(type, photoFile);
+                RequestBody multiBody = new MultipartBody.Builder()
+                        .setType(MultipartBody.FORM)
+                        .addFormDataPart("token", token)
+                        .addFormDataPart("photo", photoFile.getName(), fileBody)
+                        .build();
 
-    private Uri getMediaFileUri(int type) {
-        File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(Environment
-                .DIRECTORY_PICTURES), "相册名字");
-        if (!mediaStorageDir.exists()) {
-            if (!mediaStorageDir.mkdirs()) {
-                return null;
+                HttpUtils.sendRequest(client, ConstantValues.URL_CHANGE_ICON, multiBody,
+                        new Callback() {
+                            @Override
+                            public void onFailure(Call call, IOException e) {
+
+                            }
+
+                            @Override
+                            public void onResponse(Call call, Response response) throws IOException {
+                                try {
+                                    Log.i("responseStage:", "ok");
+                                    final JSONObject object = new JSONObject(response.body().string());
+                                    int code = object.getInt("code");
+                                    Log.i(TAG,"MSG:"+object.getString("msg"));
+                                    if (code == 200) {
+                                        getActivity().runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                try {
+                                                    Toast.makeText(getContext(),
+                                                            object.getString("msg"),
+                                                            Toast.LENGTH_SHORT).show();
+                                                } catch (JSONException e) {
+                                                    e.printStackTrace();
+                                                }
+                                            }
+                                        });
+
+                                    } else {
+                                        Log.i("msg:", object.getString("msg"));
+                                        Log.i("token", token);
+                                        Log.i("file", photoFile.getName());
+                                    }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        });
             }
-        }
-        //创建Media File
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        File mediaFile;
-        if (type == TYPE_TAKE_PHOTO) {
-            mediaFile = new File(mediaStorageDir.getPath() + File.separator + "IMG_"
-                    + timeStamp + ".jpg");
-        } else {
-            return null;
-        }
-        photoFile = mediaFile;
-        return Uri.fromFile(mediaFile);
-    }
 
-    private Uri get24MediaFileUri(int type) {
-        File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(Environment
-                .DIRECTORY_PICTURES), "相册名字");
-        if (!mediaStorageDir.exists()) {
-            if (!mediaStorageDir.mkdirs()) {
-                return null;
-            }
-        }
-
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        File mediaFile;
-        if (type == TYPE_TAKE_PHOTO) {
-            mediaFile = new File(mediaStorageDir.getPath() + File.separator + "IMG_"
-                    + timeStamp + ".jpg");
-        } else {
-            return null;
-        }
-        photoFile = mediaFile;
-        return FileProvider.getUriForFile(getContext(), getActivity().getPackageName() + ".fileprovider",
-                mediaFile);
-    }
-
-    // Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
+        }).start();
     }
 
     @Override

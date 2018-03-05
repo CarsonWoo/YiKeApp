@@ -11,7 +11,7 @@
         android:background="@android:color/white"
         android:id="@+id/toolbar_publish_exp"
         android:gravity="fill_horizontal"
-        app:navigationIcon="@drawable/ic_chevron_left"
+        app:navigationIcon="@drawable/ic_back_black"
         app:title="经验帖"
         app:titleMarginStart="90dp"
         android:layout_width="match_parent"

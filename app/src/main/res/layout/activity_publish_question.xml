@@ -10,7 +10,7 @@
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar_publish_question"
-        app:navigationIcon="@drawable/ic_chevron_left"
+        app:navigationIcon="@drawable/ic_back_black"
         app:title="问答帖"
         app:titleMarginStart="93dp"
         android:background="@android:color/white"

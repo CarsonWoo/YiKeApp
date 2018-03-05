@@ -10,7 +10,7 @@
     <android.support.v7.widget.Toolbar
         android:background="@android:color/white"
         android:id="@+id/toolbar_publish_partner"
-        app:navigationIcon="@drawable/ic_chevron_left"
+        app:navigationIcon="@drawable/ic_back_black"
         app:titleMarginStart="90dp"
         app:title="约行帖"
         android:layout_width="match_parent"

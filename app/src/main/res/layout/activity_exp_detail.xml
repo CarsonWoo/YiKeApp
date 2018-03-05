@@ -18,7 +18,7 @@
             android:id="@+id/toolbar_exp_detail"
             android:layout_width="match_parent"
             android:layout_height="39dp"
-            app:navigationIcon="@drawable/ic_chevron_left">
+            app:navigationIcon="@drawable/ic_back_black">
 
             <TextView
                 android:textColor="@android:color/black"

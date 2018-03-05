@@ -92,6 +92,8 @@
         <activity android:name=".Views.PublishQuestionActivity"
             android:configChanges="keyboard"
             android:theme="@style/TransparentTheme"></activity>
+        <activity android:name=".Views.CropPicActivity"
+            android:theme="@style/MainTheme"/>
     </application>
 
 </manifest>

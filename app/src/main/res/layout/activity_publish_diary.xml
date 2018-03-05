@@ -9,7 +9,7 @@
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar_publish_diary"
-        app:navigationIcon="@drawable/ic_chevron_left"
+        app:navigationIcon="@drawable/ic_back_black"
         android:background="@android:color/white"
         app:title="日记"
         app:titleMarginStart="105dp"

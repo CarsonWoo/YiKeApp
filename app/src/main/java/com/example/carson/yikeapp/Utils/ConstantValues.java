@@ -2,6 +2,9 @@ package com.example.carson.yikeapp.Utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Environment;
+
+import java.io.File;
 
 /**
  * Created by 84594 on 2018/1/17.
@@ -74,6 +77,8 @@ public class ConstantValues {
 
     public static final int CODE_PICK_PHOTO = 2;
 
+    public static final int CODE_REQUEST_CROP = 3;
+
     public static final int REQUESTCODE_START_SETTING = 10001;
 
     public static final int RESULTCODE_SETTING_ACCOUNT_QUIT = 10002;
@@ -87,6 +92,9 @@ public class ConstantValues {
     public static final String USER_TYPE_NORMAL = "用户";
 
     public static final String KEY_CODE = "code";
+
+    //拍照临时存放地址
+    public static final String MY_TEMPPHOTO_PATH = Environment.getExternalStorageDirectory() + File.separator ;
 
     //获取用户信息时服务器返回json数据key名
     //义工

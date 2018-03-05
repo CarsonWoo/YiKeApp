@@ -13,7 +13,7 @@
         android:layout_height="39dp"
         android:background="#fff"
         android:theme="@style/AppTheme.NoActionBar"
-        app:navigationIcon="@drawable/ic_chevron_left"
+        app:navigationIcon="@drawable/ic_back_black"
         app:popupTheme="@style/AppTheme.PopupOverlay">
 
         <TextView
