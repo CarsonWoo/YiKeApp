@@ -86,7 +86,7 @@ public class DiscussItemDiaryRVAdapter extends RecyclerView.Adapter<DiscussItemD
         });
 
         if (holder.content.getLayout() != null) {
-            final int elsCount = holder.content.getLayout()
+            int elsCount = holder.content.getLayout()
                     .getEllipsisCount(holder.content.getLineCount() - 1);
             if (elsCount > 0) {
                 holder.showAll.setVisibility(View.VISIBLE);
@@ -128,13 +128,17 @@ public class DiscussItemDiaryRVAdapter extends RecyclerView.Adapter<DiscussItemD
         return mValues.size();
     }
 
-    class DiaryVH extends RecyclerView.ViewHolder {
+    public class DiaryVH extends RecyclerView.ViewHolder {
 
         CircleImageView head;
 
-        ImageView photo, like;
+        ImageView photo;
 
-        TextView name, content, date, views, showAll;
+        public ImageView like;
+
+        TextView name, date, views;
+
+        public TextView content, showAll;
 
         View itemView;
 

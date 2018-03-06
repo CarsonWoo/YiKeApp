@@ -50,7 +50,7 @@ public class HomeActivity extends AppCompatActivity implements FragmentHome.OnFr
         FragmentMessage.OnFragmentInteractionListener, FragmentUser.OnFragmentInteractionListener,
         FragmentDiscuss.OnFragmentInteractionListener, FragmentDiary.OnFragmentInteractionListener,
         FragmentExp.OnFragmentInteractionListener, FragmentPartner.OnFragmentInteractionListener,
-        FragmentQuestion.OnFragmentInteractionListener, DiscussItemPartnerRVAdapter.OnHeadViewClickedListener {
+        FragmentQuestion.OnFragmentInteractionListener {
 
     private final static String TAG = "HomeActivity";
 
@@ -343,21 +343,16 @@ public class HomeActivity extends AppCompatActivity implements FragmentHome.OnFr
 
     @Override
     public void onFragmentInteraction(Fragment fragment) {
-        //进行数据交互
-        if (fragment instanceof FragmentExp) {
-            Log.i(TAG, "Instance of FragmentExp");
-        } else if (fragment instanceof FragmentPartner) {
-            Log.i(TAG, "Instance of FragmentPartner");
-        } else if (fragment instanceof FragmentQuestion) {
-            Log.i(TAG, "Instance of FragmentQuestion");
-        } else if (fragment instanceof FragmentDiary) {
-            Log.i(TAG, "Instance of FragmentDiary");
-        }
-    }
-
-    @Override
-    public void onHeadViewClicked(View view, String id) {
-
+//        //进行数据交互
+//        if (fragment instanceof FragmentExp) {
+//            Log.i(TAG, "Instance of FragmentExp");
+//        } else if (fragment instanceof FragmentPartner) {
+//            Log.i(TAG, "Instance of FragmentPartner");
+//        } else if (fragment instanceof FragmentQuestion) {
+//            Log.i(TAG, "Instance of FragmentQuestion");
+//        } else if (fragment instanceof FragmentDiary) {
+//            Log.i(TAG, "Instance of FragmentDiary");
+//        }
     }
 
     /**

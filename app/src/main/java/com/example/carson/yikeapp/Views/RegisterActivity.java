@@ -1,6 +1,7 @@
 package com.example.carson.yikeapp.Views;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -135,6 +136,10 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                                         runOnUiThread(new Runnable() {
                                             @Override
                                             public void run() {
+                                                btnSendCheck.setEnabled(false);
+                                                btnSendCheck.setClickable(false);
+                                                btnSendCheck.setText("已发送");
+                                                btnSendCheck.setBackgroundColor(Color.parseColor("#f3f5f3f3"));
                                                 Toast.makeText(getApplicationContext(), "发送成功",
                                                         Toast.LENGTH_SHORT).show();
                                             }
@@ -249,6 +254,19 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                                                         Log.i("isFirstFill", isFirstFill + "");
                                                         startActivity(intent);
                                                         finish();
+                                                    } else {
+                                                        runOnUiThread(new Runnable() {
+                                                            @Override
+                                                            public void run() {
+                                                                try {
+                                                                    Snackbar.make(btnRegis, object.getString("msg"),
+                                                                            Snackbar.LENGTH_SHORT).show();
+                                                                } catch (JSONException e) {
+                                                                    e.printStackTrace();
+                                                                }
+                                                            }
+                                                        });
+                                                        Log.i("RegisterActivity", object.getString("msg"));
                                                     }
                                                 } catch (JSONException e) {
                                                     e.printStackTrace();

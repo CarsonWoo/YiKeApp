@@ -7,12 +7,14 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
@@ -39,6 +41,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.carson.yikeapp.R;
+import com.example.carson.yikeapp.Utils.AddressPickTask;
 import com.example.carson.yikeapp.Utils.ConstantValues;
 import com.example.carson.yikeapp.Utils.HttpUtils;
 
@@ -57,6 +60,10 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
+import cn.qqtheme.framework.entity.City;
+import cn.qqtheme.framework.entity.County;
+import cn.qqtheme.framework.entity.Province;
+import cn.qqtheme.framework.util.ConvertUtils;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.FormBody;
@@ -82,10 +89,10 @@ public class UserDetailActivity extends AppCompatActivity implements View.OnClic
     private String[] genders;
     private EditText etName, etIDCard, etBirth, etArea, etInfo, etGender;
     private Button btnSave, btnCancel;
-    private ListView listViewArea, listViewGender;
-    private ArrayList<String> areaList;
-    private PopupWindow windowArea, windowGender;
+    private ListView listViewGender;
+    private PopupWindow windowGender;
     private de.hdodenhof.circleimageview.CircleImageView headView;
+    private boolean isFromUser = false;
 
     private Uri photoUri;
 //    private String gender;
@@ -102,16 +109,10 @@ public class UserDetailActivity extends AppCompatActivity implements View.OnClic
 
         Intent intent = getIntent();
         token = intent.getStringExtra("token");
+        isFromUser = intent.getBooleanExtra("isFromUser", false);
 
         initViews();
         initEvents();
-
-
-
-//        Toast.makeText(getApplicationContext(), "token is " + token,
-//                Toast.LENGTH_LONG).show();
-
-
 
     }
 
@@ -123,43 +124,26 @@ public class UserDetailActivity extends AppCompatActivity implements View.OnClic
             }
         });
 
-//        gender = "男";
-//        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//            @Override
-//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-//                gender = genders[position];
-//            }
-//
-//            @Override
-//            public void onNothingSelected(AdapterView<?> parent) {
-//
-//            }
-//        });
-
-
-
         etBirth.setInputType(InputType.TYPE_NULL);
         etBirth.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (hasFocus) {
-                    showDateDialog();
+                    onYearMonthDayPicker(etBirth);
                 }
             }
         });
         etBirth.setOnClickListener(this);
 
+        etArea.setInputType(InputType.TYPE_NULL);
         etArea.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (hasFocus) {
-                    //从底部弹出
-                    windowArea.showAtLocation(UserDetailActivity.this.findViewById(R.id.btn_detail_save),
-                            Gravity.BOTTOM, 0, 0);
+                    showDressDialog(etArea);
                 }
             }
         });
-
         etArea.setOnClickListener(this);
 
         etGender.setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -173,14 +157,6 @@ public class UserDetailActivity extends AppCompatActivity implements View.OnClic
         });
 
         etGender.setOnClickListener(this);
-
-        listViewArea.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                etArea.setText(areaList.get(position));
-                windowArea.dismiss();
-            }
-        });
 
         listViewGender.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -196,6 +172,83 @@ public class UserDetailActivity extends AppCompatActivity implements View.OnClic
         headView.setOnClickListener(this);
 
         loadDatas();
+    }
+
+    //选择日期
+    public void onYearMonthDayPicker(final EditText view) {
+        final cn.qqtheme.framework.picker.DatePicker picker = new cn.qqtheme.framework.picker.DatePicker(this);
+
+        //当前日期
+        Calendar c = Calendar.getInstance();
+        int year = c.get(Calendar.YEAR);
+        int month = c.get(Calendar.MONTH);
+        int day = c.get(Calendar.DAY_OF_MONTH);
+
+        picker.setCanceledOnTouchOutside(true);
+        picker.setUseWeight(true);
+        picker.setTopPadding(ConvertUtils.toPx(this, 10));
+        picker.setRangeEnd(year, month, day);
+        picker.setRangeStart(1940, 1, 1);
+        picker.setSelectedItem(year, month, day);
+        int color = getResources().getColor(R.color.bg_bnb_loca);
+        picker.setDividerVisible(false);
+        picker.setTextColor(color);
+        picker.setLabelTextColor(color);
+        picker.setTopLineColor(Color.WHITE);
+        picker.setCancelTextColor(Color.GRAY);
+        picker.setSubmitTextColor(color);
+        picker.setResetWhileWheel(false);
+
+        picker.setOnDatePickListener(new cn.qqtheme.framework.picker.DatePicker.OnYearMonthDayPickListener() {
+            @Override
+            public void onDatePicked(String year, String month, String day) {
+                view.setText(year + "-" + month + "-" + day);
+            }
+        });
+
+        picker.setOnWheelListener(new cn.qqtheme.framework.picker.DatePicker.OnWheelListener() {
+            @Override
+            public void onYearWheeled(int index, String year) {
+                picker.setTitleText(year + "-" + picker.getSelectedMonth() + "-"
+                        + picker.getSelectedDay());
+            }
+
+            @Override
+            public void onMonthWheeled(int index, String month) {
+                picker.setTitleText(picker.getSelectedYear() + "-" + month + "-"
+                        + picker.getSelectedDay());
+            }
+
+            @Override
+            public void onDayWheeled(int index, String day) {
+                picker.setTitleText(picker.getSelectedYear() + "-" + picker.getSelectedMonth()
+                        + "-" + day);
+            }
+        });
+        picker.show();
+    }
+
+    //选择地区
+    public void showDressDialog(View view) {
+        AddressPickTask task = new AddressPickTask(this);
+        task.setHideCounty(true);
+        task.setCallback(new AddressPickTask.Callback() {
+            @Override
+            public void onAddressInitFailed() {
+                showToast("数据初始化失败");
+            }
+
+            @Override
+            public void onAddressPicked(Province province, City city, County county) {
+                etArea.setText(province.getAreaName() + "-" + city.getAreaName());
+            }
+        });
+        task.execute("广东", "广州");
+    }
+
+    //showtoast
+    private void showToast(String msg) {
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
     }
 
     private void loadDatas() {
@@ -225,12 +278,6 @@ public class UserDetailActivity extends AppCompatActivity implements View.OnClic
                                     JSONObject object = new JSONObject(response.body().string());
                                     int code = object.getInt("code");
                                     if (code == 200) {
-//                                        Log.i("detail>>>>>>", object.getString("msg"));
-//                                        Iterator iterator = object.keys();
-//                                        while(iterator.hasNext()) {
-//                                            String key = (String) iterator.next();
-//                                            Log.i("detail_info>>>>", object.getString(key));
-//                                        }
                                         JSONObject detailOb = object.getJSONObject("msg");
                                         Iterator iterator = detailOb.keys();
                                         while(iterator.hasNext()) {
@@ -248,8 +295,6 @@ public class UserDetailActivity extends AppCompatActivity implements View.OnClic
                                                 etInfo.setText(infoList.get(6));
                                                 Glide.with(UserDetailActivity.this)
                                                         .load(infoList.get(7)).into(headView);
-//                                                Glide.with(UserDetailActivity.this)
-//                                                        .load(infoList.get(6)).into(headView);
                                             }
                                         });
                                     }
@@ -262,23 +307,7 @@ public class UserDetailActivity extends AppCompatActivity implements View.OnClic
         }).start();
     }
 
-    private void showDateDialog() {
-        Calendar c = Calendar.getInstance();
-        new DatePickerDialog(UserDetailActivity.this, new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                etBirth.setText(year + "-" + (month + 1) + "-" + dayOfMonth);
-            }
-        }, c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH)).show();
-    }
-
     private void initViews() {
-//        spinner = findViewById(R.id.spinner_gender);
-//        genders = getResources().getStringArray(R.array.spinner_gender);
-//        ArrayAdapter<String> genderAdapter = new ArrayAdapter<String>(UserDetailActivity.this,
-//                R.layout.spinner_style, genders);
-//        genderAdapter.setDropDownViewResource(R.layout.spinner_style_text);
-//        spinner.setAdapter(genderAdapter);
 
         genders = new String[]{"男", "女"};
 
@@ -292,28 +321,11 @@ public class UserDetailActivity extends AppCompatActivity implements View.OnClic
         btnSave = findViewById(R.id.btn_detail_save);
         btnCancel = findViewById(R.id.btn_detail_cancel);
 
-        areaList = new ArrayList<>();
-        initList();
-
-        View viewArea = LayoutInflater.from(this)
-                .inflate(R.layout.activity_detail_area_item_list, null);
-        listViewArea = viewArea.findViewById(R.id.lv_area_detail);
-        listViewArea.setAdapter(new ArrayAdapter<>(UserDetailActivity.this,
-                android.R.layout.simple_list_item_1, areaList));
-
         View viewGender = LayoutInflater.from(this)
                 .inflate(R.layout.activity_detail_gender_item_list, null);
         listViewGender = viewGender.findViewById(R.id.lv_gender_detail);
         listViewGender.setAdapter(new ArrayAdapter<>(UserDetailActivity.this,
                 android.R.layout.simple_list_item_1, genders));
-
-        windowArea = new PopupWindow(viewArea,
-                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT,
-                true);
-        windowArea.setOutsideTouchable(true);
-        windowArea.setBackgroundDrawable(new BitmapDrawable());
-        windowArea.setFocusable(true);
-        windowArea.setContentView(viewArea);
 
         windowGender = new PopupWindow(viewGender,
                 ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT,
@@ -327,22 +339,6 @@ public class UserDetailActivity extends AppCompatActivity implements View.OnClic
         headView.setOnClickListener(this);
 
         infoList = new ArrayList<>();
-    }
-
-
-    private void initList() {
-        areaList.add("广州");
-        areaList.add("北京");
-        areaList.add("上海");
-        areaList.add("杭州");
-        areaList.add("深圳");
-        areaList.add("南京");
-        areaList.add("重庆");
-        areaList.add("天津");
-        areaList.add("乌鲁木齐");
-        areaList.add("四川");
-        areaList.add("湖南");
-        areaList.add("河北");
     }
 
     @Override
@@ -363,15 +359,14 @@ public class UserDetailActivity extends AppCompatActivity implements View.OnClic
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.et_birth:
-                showDateDialog();
+                onYearMonthDayPicker(etBirth);
                 break;
             case R.id.et_gender:
                 windowGender.showAtLocation(UserDetailActivity.this.findViewById(R.id.btn_detail_save),
                         Gravity.BOTTOM, 0, 0);
                 break;
             case R.id.et_area:
-                windowArea.showAtLocation(UserDetailActivity.this.findViewById(R.id.btn_detail_save),
-                        Gravity.BOTTOM, 0, 0);
+                showDressDialog(etArea);
                 break;
             case R.id.civ_detail_change:
                 AlertDialog.Builder builder = new AlertDialog.Builder(UserDetailActivity.this);
@@ -391,6 +386,11 @@ public class UserDetailActivity extends AppCompatActivity implements View.OnClic
                 builder.show();
                 break;
             case R.id.btn_detail_cancel:
+                if (isFromUser) {
+                    finish();
+                } else {
+                    Snackbar.make(btnCancel, "请先完善基本信息", Snackbar.LENGTH_SHORT).show();
+                }
                 break;
             case R.id.btn_detail_save:
                 new Thread(new Runnable() {
@@ -426,11 +426,16 @@ public class UserDetailActivity extends AppCompatActivity implements View.OnClic
                                                     .body().string());
                                             int code = object.getInt("code");
                                             if (code == 200) {
-                                                Intent intent = new Intent(UserDetailActivity.this,
-                                                        HomeActivity.class);
-                                                intent.putExtra("token", token);
-                                                startActivity(intent);
-                                                finish();
+                                                if (!isFromUser) {
+                                                    Intent intent = new Intent(UserDetailActivity.this,
+                                                            HomeActivity.class);
+                                                    intent.putExtra("token", token);
+                                                    startActivity(intent);
+                                                    finish();
+                                                } else {
+                                                    //从fragmentuser进入则直接finish即可
+                                                    finish();
+                                                }
                                             } else {
                                                 final String msg = object.getString("msg");
                                                 runOnUiThread(new Runnable() {

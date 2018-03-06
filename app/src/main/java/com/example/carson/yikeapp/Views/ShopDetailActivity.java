@@ -7,12 +7,14 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
@@ -36,6 +38,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.carson.yikeapp.R;
+import com.example.carson.yikeapp.Utils.AddressPickTask;
 import com.example.carson.yikeapp.Utils.ConstantValues;
 import com.example.carson.yikeapp.Utils.HttpUtils;
 
@@ -52,6 +55,10 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
+import cn.qqtheme.framework.entity.City;
+import cn.qqtheme.framework.entity.County;
+import cn.qqtheme.framework.entity.Province;
+import cn.qqtheme.framework.util.ConvertUtils;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.FormBody;
@@ -70,12 +77,13 @@ public class ShopDetailActivity extends AppCompatActivity implements View.OnClic
     private Toolbar toolbar;
     private EditText etName, etIDCard, etGender, etArea, etBirth, etInfo;
     private Button btnSave, btnAdd, btnCancel;
-    private PopupWindow windowArea, windowGender;
-    private ListView listViewArea, listViewGender;
+    private PopupWindow windowGender;
+    private ListView listViewGender;
     private de.hdodenhof.circleimageview.CircleImageView headView;
-    private ArrayList<String> areaList;
     private String[] genders;
     private String token;
+
+    private boolean isFromUser = false;
 
     private File photoFile;
 
@@ -91,6 +99,7 @@ public class ShopDetailActivity extends AppCompatActivity implements View.OnClic
 
         Intent intent = getIntent();
         token = intent.getStringExtra("token");
+        isFromUser = intent.getBooleanExtra("isFromUser", false);
 
         initViews();
         initEvents();
@@ -109,11 +118,12 @@ public class ShopDetailActivity extends AppCompatActivity implements View.OnClic
         });
         etGender.setOnClickListener(this);
 
+        etArea.setInputType(InputType.TYPE_NULL);
         etArea.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (hasFocus) {
-                    windowArea.showAtLocation(v, Gravity.BOTTOM, 0, 0);
+                    showDressDialog(etArea);
                 }
             }
         });
@@ -124,7 +134,7 @@ public class ShopDetailActivity extends AppCompatActivity implements View.OnClic
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (hasFocus) {
-                    showDateDialog();
+                    onYearMonthDayPicker(etBirth);
                 }
             }
         });
@@ -138,27 +148,9 @@ public class ShopDetailActivity extends AppCompatActivity implements View.OnClic
             }
         });
 
-        listViewArea.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                etArea.setText(areaList.get(position));
-                windowArea.dismiss();
-            }
-        });
-
         btnAdd.setOnClickListener(this);
         btnCancel.setOnClickListener(this);
         btnSave.setOnClickListener(this);
-    }
-
-    private void showDateDialog() {
-        Calendar c = Calendar.getInstance();
-        new DatePickerDialog(ShopDetailActivity.this, new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                etBirth.setText(year + "-" + (month + 1) + "-" + dayOfMonth);
-            }
-        }, c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH)).show();
     }
 
     private void initViews() {
@@ -177,27 +169,11 @@ public class ShopDetailActivity extends AppCompatActivity implements View.OnClic
 
         genders = new String[]{"男", "女"};
 
-        areaList = new ArrayList<>();
-        initList();
-
-        View viewArea = LayoutInflater.from(this).inflate(
-                R.layout.activity_detail_area_item_list, null);
-        listViewArea = viewArea.findViewById(R.id.lv_area_detail);
-        listViewArea.setAdapter(new ArrayAdapter<>(ShopDetailActivity.this,
-                android.R.layout.simple_list_item_1, areaList));
-
         View viewGender = LayoutInflater.from(this).inflate(
                 R.layout.activity_detail_gender_item_list, null);
         listViewGender = viewGender.findViewById(R.id.lv_gender_detail);
         listViewGender.setAdapter(new ArrayAdapter<>(ShopDetailActivity.this,
                 android.R.layout.simple_list_item_1, genders));
-
-        windowArea = new PopupWindow(viewArea, ViewGroup.LayoutParams.WRAP_CONTENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT, true);
-        windowArea.setOutsideTouchable(true);
-        windowArea.setBackgroundDrawable(new BitmapDrawable());
-        windowArea.setFocusable(true);
-        windowArea.setContentView(viewArea);
 
         windowGender = new PopupWindow(viewGender, ViewGroup.LayoutParams.WRAP_CONTENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT, true);
@@ -207,20 +183,81 @@ public class ShopDetailActivity extends AppCompatActivity implements View.OnClic
         windowGender.setContentView(viewGender);
 
     }
+    //选择日期
+    public void onYearMonthDayPicker(final EditText view) {
+        final cn.qqtheme.framework.picker.DatePicker picker = new cn.qqtheme.framework.picker.DatePicker(this);
 
-    private void initList() {
-        areaList.add("广州");
-        areaList.add("北京");
-        areaList.add("上海");
-        areaList.add("杭州");
-        areaList.add("深圳");
-        areaList.add("南京");
-        areaList.add("重庆");
-        areaList.add("天津");
-        areaList.add("乌鲁木齐");
-        areaList.add("四川");
-        areaList.add("湖南");
-        areaList.add("河北");
+        //当前日期
+        Calendar c = Calendar.getInstance();
+        int year = c.get(Calendar.YEAR);
+        int month = c.get(Calendar.MONTH);
+        int day = c.get(Calendar.DAY_OF_MONTH);
+
+        picker.setCanceledOnTouchOutside(true);
+        picker.setUseWeight(true);
+        picker.setTopPadding(ConvertUtils.toPx(this, 10));
+        picker.setRangeEnd(year, month, day);
+        picker.setRangeStart(1940, 1, 1);
+        picker.setSelectedItem(year, month, day);
+        int color = getResources().getColor(R.color.bg_bnb_loca);
+        picker.setDividerVisible(false);
+        picker.setTextColor(color);
+        picker.setLabelTextColor(color);
+        picker.setTopLineColor(Color.WHITE);
+        picker.setCancelTextColor(Color.GRAY);
+        picker.setSubmitTextColor(color);
+        picker.setResetWhileWheel(false);
+
+        picker.setOnDatePickListener(new cn.qqtheme.framework.picker.DatePicker.OnYearMonthDayPickListener() {
+            @Override
+            public void onDatePicked(String year, String month, String day) {
+                view.setText(year + "-" + month + "-" + day);
+            }
+        });
+
+        picker.setOnWheelListener(new cn.qqtheme.framework.picker.DatePicker.OnWheelListener() {
+            @Override
+            public void onYearWheeled(int index, String year) {
+                picker.setTitleText(year + "-" + picker.getSelectedMonth() + "-"
+                        + picker.getSelectedDay());
+            }
+
+            @Override
+            public void onMonthWheeled(int index, String month) {
+                picker.setTitleText(picker.getSelectedYear() + "-" + month + "-"
+                        + picker.getSelectedDay());
+            }
+
+            @Override
+            public void onDayWheeled(int index, String day) {
+                picker.setTitleText(picker.getSelectedYear() + "-" + picker.getSelectedMonth()
+                        + "-" + day);
+            }
+        });
+        picker.show();
+    }
+
+    //选择地区
+    public void showDressDialog(View view) {
+        AddressPickTask task = new AddressPickTask(this);
+        task.setHideCounty(true);
+        task.setCallback(new AddressPickTask.Callback() {
+            @Override
+            public void onAddressInitFailed() {
+                showToast("数据初始化失败");
+            }
+
+            @Override
+            public void onAddressPicked(Province province, City city, County county) {
+                etArea.setText(province.getAreaName() + "-" + city.getAreaName());
+            }
+        });
+        task.execute("广东", "广州");
+    }
+
+    //showtoast
+    private void showToast(String msg) {
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -247,10 +284,10 @@ public class ShopDetailActivity extends AppCompatActivity implements View.OnClic
                 windowGender.showAtLocation(getCurrentFocus(), Gravity.BOTTOM,0, 0);
                 break;
             case R.id.et_area_shop:
-                windowArea.showAtLocation(getCurrentFocus(), Gravity.BOTTOM, 0,0);
+                showDressDialog(etArea);
                 break;
             case R.id.et_birth_shop:
-                showDateDialog();
+                onYearMonthDayPicker(etBirth);
                 break;
             case R.id.btn_add_photo_detail_shop:
                 //设置调用相机权限
@@ -290,6 +327,7 @@ public class ShopDetailActivity extends AppCompatActivity implements View.OnClic
                         builder.add("birth", etBirth.getText().toString());
                         builder.add("gender", etGender.getText().toString());
                         builder.add("area", etArea.getText().toString());
+                        //还需要添加店家照片
                         HttpUtils.sendRequest(client, ConstantValues.URL_FILL_HOTEL_INFO, builder,
                                 new Callback() {
                                     @Override
@@ -303,10 +341,14 @@ public class ShopDetailActivity extends AppCompatActivity implements View.OnClic
                                             JSONObject object = new JSONObject(response.body().string());
                                             int code = object.getInt("code");
                                             if (code == 200) {
-                                                Intent intent = new Intent(ShopDetailActivity.this,
-                                                        HomeActivity.class);
-                                                intent.putExtra("token", token);
-                                                startActivity(intent);
+                                                if (isFromUser) {
+                                                    finish();
+                                                } else {
+                                                    Intent intent = new Intent(ShopDetailActivity.this,
+                                                            HomeActivity.class);
+                                                    intent.putExtra("token", token);
+                                                    startActivity(intent);
+                                                }
                                             } else {
                                                 final String msg = object.getString("msg");
                                                 runOnUiThread(new Runnable() {
@@ -326,6 +368,11 @@ public class ShopDetailActivity extends AppCompatActivity implements View.OnClic
                 }).start();
                 break;
             case R.id.btn_detail_shop_cancel:
+                if (isFromUser) {
+                    finish();
+                } else {
+                    Snackbar.make(btnCancel, "请先完善好商家资料", Snackbar.LENGTH_SHORT).show();
+                }
                 break;
         }
     }

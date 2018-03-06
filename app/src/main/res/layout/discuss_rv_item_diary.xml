@@ -41,8 +41,9 @@
         android:layout_below="@id/tv_discuss_rv_item_diary_content"
         android:textColor="#e26323"
         android:text="全文"
+        android:visibility="invisible"
         android:clickable="true"
-        android:textSize="13.7sp"
+        android:textSize="12.7sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
@@ -50,7 +51,7 @@
 
     <ImageView
         android:id="@+id/iv_discuss_rv_diary_photo"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="28dp"
         android:layout_marginLeft="90dp"
         android:clickable="true"
         android:layout_below="@id/tv_discuss_rv_item_diary_content"

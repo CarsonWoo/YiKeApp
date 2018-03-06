@@ -64,6 +64,7 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 import static android.app.Activity.RESULT_OK;
+import static com.example.carson.yikeapp.Adapter.DiscussItemDiaryRVAdapter.*;
 import static com.example.carson.yikeapp.Utils.ConstantValues.CODE_PICK_PHOTO;
 import static com.example.carson.yikeapp.Utils.ConstantValues.CODE_TAKE_PHOTO;
 import static com.example.carson.yikeapp.Utils.ConstantValues.TYPE_TAKE_PHOTO;
@@ -72,7 +73,7 @@ import static com.example.carson.yikeapp.Utils.ConstantValues.TYPE_TAKE_PHOTO;
  * Created by 84594 on 2018/2/26.
  */
 
-public class FragmentDiary extends Fragment implements DiscussItemDiaryRVAdapter.OnLikeClickedListener {
+public class FragmentDiary extends Fragment implements OnLikeClickedListener {
 
     private static final String TAG = "FragmentDiary";
 
@@ -93,6 +94,8 @@ public class FragmentDiary extends Fragment implements DiscussItemDiaryRVAdapter
     private FloatingActionButton fabToPublish;
 
     private RecyclerView rvDiary;
+
+    private boolean isRefresh = false;
 
     @Override
     public void onLikeClicked(View v, final String id, int isAgree) {
@@ -167,7 +170,7 @@ public class FragmentDiary extends Fragment implements DiscussItemDiaryRVAdapter
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         token = ConstantValues.getCachedToken(getContext());
-        getDiaryPostList();
+//        getDiaryPostList();
         View view = LayoutInflater.from(getContext()).inflate(R.layout.discuss_rv_item_diary, null);
         ivLike = view.findViewById(R.id.iv_discuss_rv_diary_like);
         mHandler = new Handler() {
@@ -199,12 +202,31 @@ public class FragmentDiary extends Fragment implements DiscussItemDiaryRVAdapter
                                     object.getString(ConstantValues.KEY_DIARY_LIST_PHOTO_URL)
                             ));
                         }
-
+                        int position = Integer
+                                .parseInt(object.getString(ConstantValues.KEY_DIARY_LIST_ID));
+                        DiscussItemDiaryRVAdapter.DiaryVH diaryVH = (DiscussItemDiaryRVAdapter.DiaryVH)
+                                rvDiary.findViewHolderForAdapterPosition(position);
+                        if (object.getString("is_agree").equals("1")) {
+                            if (diaryVH != null) {
+                                diaryVH.like.setImageResource(R.drawable.ic_like);
+                            }
+                            adapter.notifyItemChanged(position);
+                        }
+                        if (diaryVH != null && diaryVH.content.getLayout() != null) {
+                            int elsCount = diaryVH.content.getLayout()
+                                    .getEllipsisCount(diaryVH.content.getLineCount() - 1);
+                            if (elsCount > 0) {
+                                diaryVH.showAll.setVisibility(View.VISIBLE);
+                            } else {
+                                diaryVH.showAll.setVisibility(View.INVISIBLE);
+                            }
+                            adapter.notifyItemChanged(position);
+                        }
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
                 }
-                if (dataSize == mDiaryItemList.size()) {
+                if (dataSize == mDiaryItemList.size() && isRefresh) {
                     Toast.makeText(getContext(), "No more diaries", Toast.LENGTH_SHORT).show();
                 }
                 adapter.clearData();
@@ -243,16 +265,18 @@ public class FragmentDiary extends Fragment implements DiscussItemDiaryRVAdapter
         srl.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                isRefresh = true;
                 getDiaryPostList();
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
+                        isRefresh = false;
                         srl.setRefreshing(false);
                     }
                 }, 1000);
             }
         });
-
+        getDiaryPostList();
         return view;
     }
 

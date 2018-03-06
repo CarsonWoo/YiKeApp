@@ -61,6 +61,8 @@ public class FragmentQuestion extends Fragment {
 
     private DiscussItemQuestionRVAdapter questionRVAdapter;
 
+    private boolean isRefresh = false;
+
     public interface OnFragmentInteractionListener {
         void onFragmentInteraction(ArrayList item);
     }
@@ -78,7 +80,7 @@ public class FragmentQuestion extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         token = ConstantValues.getCachedToken(getContext());
-        getQuestionPostList();
+//        getQuestionPostList();
     }
 
     @SuppressLint("HandlerLeak")
@@ -104,11 +106,13 @@ public class FragmentQuestion extends Fragment {
         srl.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                isRefresh = true;
                 getQuestionPostList();
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         srl.setRefreshing(false);
+                        isRefresh = false;
                     }
                 }, 1000);
             }
@@ -134,17 +138,17 @@ public class FragmentQuestion extends Fragment {
                                     object.getString(ConstantValues.KEY_QUESTION_LIST_VIEWS),
                                     object.getString(ConstantValues.KEY_QUESTION_LIST_COMMENT)));
                         }
-                        if (dataSize == mPostData.size()) {
-                            Toast.makeText(getContext(),
-                                    "No more question to load",
-                                    Toast.LENGTH_SHORT).show();
-                        }
-                        questionRVAdapter.clearData();
-                        questionRVAdapter.addData(mPostData);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
                 }
+                if (dataSize == mPostData.size() && isRefresh) {
+                    Toast.makeText(getContext(),
+                            "No more question to load",
+                            Toast.LENGTH_SHORT).show();
+                }
+                questionRVAdapter.clearData();
+                questionRVAdapter.addData(mPostData);
             }
         };
 
@@ -158,7 +162,7 @@ public class FragmentQuestion extends Fragment {
             }
         });
 
-//        getQuestionPostList();
+        getQuestionPostList();
 
         return view;
     }

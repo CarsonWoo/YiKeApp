@@ -169,6 +169,7 @@ public class FragmentUser extends Fragment {
                     Intent intent = new Intent(getContext(),
                             UserDetailActivity.class);
                     intent.putExtra("token", token);
+                    intent.putExtra("isFromUser", true);
                     startActivity(intent);
                 }
             });
@@ -207,7 +208,8 @@ public class FragmentUser extends Fragment {
                     try {
 //                                storeName.setText(userInfo[0].getString(ConstantValues.KEY_USER_REALNAME));
                         storeIntro.setText(userInfo[0].getString(ConstantValues.KEY_USER_INTRO));
-                        Glide.with(getActivity()).load(userInfo[0].getString(ConstantValues.KEY_USER_PHOTO_URL)).into(storeHead);//设置头像
+                        Glide.with(getActivity()).load(userInfo[0]
+                                .getString(ConstantValues.KEY_USER_PHOTO_URL)).into(storeHead);//设置头像
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -222,6 +224,7 @@ public class FragmentUser extends Fragment {
                     Intent intent = new Intent(getContext(),
                             ShopDetailActivity.class);
                     intent.putExtra("token", token);
+                    intent.putExtra("isFromUser", true);
                     startActivity(intent);
                 }
             });

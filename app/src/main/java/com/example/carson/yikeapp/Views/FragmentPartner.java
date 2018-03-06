@@ -81,6 +81,8 @@ public class FragmentPartner extends Fragment implements OnHeadViewClickedListen
 
     private ImageView ivLike;
 
+    private boolean isRefresh = false;//用来判断是否需要显示无更多列表的提示信息
+
     @Override
     public void onLikeClicked(View view, final String id, int isAgree) {
         ivLike = (ImageView) view;
@@ -282,7 +284,7 @@ public class FragmentPartner extends Fragment implements OnHeadViewClickedListen
         token = ConstantValues.getCachedToken(getContext());
         View view = LayoutInflater.from(getContext()).inflate(R.layout.discuss_rv_item_partner, null);
         ivLike = view.findViewById(R.id.iv_discuss_rv_part_like);
-        getPartnerPostList();
+//        getPartnerPostList();
 
     }
 
@@ -310,10 +312,12 @@ public class FragmentPartner extends Fragment implements OnHeadViewClickedListen
         srl.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                isRefresh = true;
                 getPartnerPostList();
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
+                        isRefresh = false;
                         srl.setRefreshing(false);
                     }
                 }, 1000);
@@ -354,10 +358,10 @@ public class FragmentPartner extends Fragment implements OnHeadViewClickedListen
                         }
 
                         if (object.getString("is_agree").equals("1")) {
-                            Log.i(TAG, object.getString(ConstantValues.KEY_PART_LIST_ID));
+//                            Log.i(TAG, object.getString(ConstantValues.KEY_PART_LIST_ID));
                             int position = Integer
                                     .parseInt(object.getString(ConstantValues.KEY_PART_LIST_ID));
-                            Log.i(TAG, position + "");
+//                            Log.i(TAG, position + "");
                             DiscussItemPartnerRVAdapter.PartnerVH partnerVH =
                                     (DiscussItemPartnerRVAdapter.PartnerVH) rvPartner
                                             .findViewHolderForAdapterPosition(position);
@@ -371,15 +375,16 @@ public class FragmentPartner extends Fragment implements OnHeadViewClickedListen
                         e.printStackTrace();
                     }
                 }
-                if (dataSize == mPartnerPostData.size()) {
+                if (dataSize == mPartnerPostData.size() && isRefresh) {
                     Toast.makeText(getContext(), "No more details", Toast.LENGTH_SHORT).show();
-                } else {
-                    partnerRVAdapter.clearData();
-                    partnerRVAdapter.addData(mPartnerPostData);
                 }
+
+                partnerRVAdapter.clearData();
+                partnerRVAdapter.addData(mPartnerPostData);
+
             }
         };
-//        getPartnerPostList();
+        getPartnerPostList();
 
 
         return view;
