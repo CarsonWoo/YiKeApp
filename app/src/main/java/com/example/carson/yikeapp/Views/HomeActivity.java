@@ -232,8 +232,8 @@ public class HomeActivity extends AppCompatActivity implements FragmentHome.OnFr
                 } else if (item.get(0) instanceof PartnerItem.PartItem) {
                     Log.i(TAG, "点击了partItem");
                     Log.i(TAG, ((PartnerItem.PartItem) item.get(0)).id + " " + ((PartnerItem.PartItem) item.get(0)).isAgree);
-                    getToSinglePartPost(((PartnerItem.PartItem) item.get(0)).id,
-                            ((PartnerItem.PartItem) item.get(0)).isAgree);
+                } else if (item.get(0) instanceof DiaryItem.DItem) {
+                    goToSingleQuestionPost(((DiaryItem.DItem) item.get(0)).id);
                 }
 
                 break;
@@ -252,10 +252,8 @@ public class HomeActivity extends AppCompatActivity implements FragmentHome.OnFr
         }
     }
 
-    private void getToSinglePartPost(String id, int isAgree) {
-        boolean isLike = isAgree == 0 ? false : true;
-        Toast.makeText(this, "you click item " + id + " and its like condition is " +
-                isLike, Toast.LENGTH_SHORT).show();
+    private void goToSingleQuestionPost(String id) {
+
     }
 
     //TODO 传递查询经验帖详细信息所需数据

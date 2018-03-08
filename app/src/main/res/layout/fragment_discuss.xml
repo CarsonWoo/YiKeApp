@@ -9,7 +9,6 @@
         android:id="@+id/search_view_discuss"
         android:layout_margin="10dp"
         android:background="#16483838"
-        android:onClick="onClick"
         android:layout_width="match_parent"
         android:layout_height="30.7dp" />
 

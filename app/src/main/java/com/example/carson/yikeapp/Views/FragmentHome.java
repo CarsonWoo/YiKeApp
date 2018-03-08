@@ -165,15 +165,9 @@ public class FragmentHome extends Fragment implements HomeItemRecyclerViewAdapte
             }
         });
 
-        searchView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus) {
-                    searchView.clearFocus();
-                    toSearchIntent();
-                }
-            }
-        });
+        searchView.setFocusable(false);
+
+        searchView.setIconifiedByDefault(true);
 
         //下拉刷新
         refreshLayout = view.findViewById(R.id.srl_refresh);
@@ -331,6 +325,7 @@ public class FragmentHome extends Fragment implements HomeItemRecyclerViewAdapte
     }
 
     private void toSearchIntent() {
+        searchView.clearFocus();
         Intent toSearch = new Intent(getContext(), SearchActivity.class);
         startActivity(toSearch);
         getActivity().overridePendingTransition(R.anim.ani_right_get_into,R.anim.ani_left_sign_out);

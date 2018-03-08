@@ -71,6 +71,8 @@ public class ConstantValues {
 
     public static final String URL_QUESTION_PUBLISH = "https://www.yiluzou.cn/yike/public/index.php/help_user";
 
+    public static final String URL_SEARCH_ALL = "https://www.yiluzou.cn/yike/public/index.php/search_all";
+
     public static final int CODE_TAKE_PHOTO = 1;
 
     public static final int TYPE_TAKE_PHOTO = 1;
@@ -91,7 +93,19 @@ public class ConstantValues {
 
     public static final String USER_TYPE_NORMAL = "用户";
 
+    public static final String TYPE_EXP_STRING = "经验贴";
+
+    public static final String TYPE_DIARY_STRING = "日记";
+
+    public static final String TYPE_PARTNER_STRING = "约伴出行";
+
+    public static final String TYPE_QUESTION_STRING = "互助";
+
+    //还缺一个首页的type
+
     public static final String KEY_CODE = "code";
+
+    public static final String KEY_SEARCH_WORD = "search_word";
 
     //拍照临时存放地址
     public static final String MY_TEMPPHOTO_PATH = Environment.getExternalStorageDirectory() + File.separator ;

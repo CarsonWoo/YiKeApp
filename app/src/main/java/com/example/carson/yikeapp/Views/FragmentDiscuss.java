@@ -108,21 +108,14 @@ public class FragmentDiscuss extends Fragment  {
                 toSearchIntent();
             }
         });
-
-        searchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus) {
-                    searchView.clearFocus();
-                    toSearchIntent();
-                }
-            }
-        });
+        searchView.setIconifiedByDefault(true);
+        searchView.setFocusable(false);
         return view;
 
     }
 
     private void toSearchIntent() {
+        searchView.clearFocus();
         Intent toSearch = new Intent(getContext(), SearchActivity.class);
         startActivity(toSearch);
         getActivity().overridePendingTransition(R.anim.ani_right_get_into, R.anim.ani_left_sign_out);
