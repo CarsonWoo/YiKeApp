@@ -85,7 +85,7 @@ public class SearchRVAdapter extends RecyclerView.Adapter<SearchRVAdapter.ItemVi
         holder.type.setText(mValues.get(position).typeStr);
 
         if (mValues.get(position).typeStr.equals(ConstantValues.TYPE_DIARY_STRING)
-                || mValues.get(position).equals(ConstantValues.TYPE_PARTNER_STRING)) {
+                || mValues.get(position).typeStr.equals(ConstantValues.TYPE_PARTNER_STRING)) {
             holder.cardView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

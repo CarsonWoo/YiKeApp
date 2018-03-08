@@ -253,13 +253,8 @@ public class SearchActivity extends AppCompatActivity implements SearchRVAdapter
 
     @Override
     public void onSearchItemClick(View view, String type) {
-        if (type.equals(ConstantValues.TYPE_DIARY_STRING)) {
-            Toast.makeText(getApplicationContext(), "您点击的是" + type, Toast.LENGTH_SHORT)
-                    .show();
-        } else if (type.equals(ConstantValues.TYPE_PARTNER_STRING)) {
-            Toast.makeText(getApplicationContext(), "您点击的是" + type, Toast.LENGTH_SHORT)
-                    .show();
-        }
+        Toast.makeText(getApplicationContext(), "您点击的是" + type, Toast.LENGTH_SHORT)
+                .show();
     }
 
     @Override
