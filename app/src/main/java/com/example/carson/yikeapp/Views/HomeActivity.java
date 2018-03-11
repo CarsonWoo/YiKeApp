@@ -29,6 +29,7 @@ import com.example.carson.yikeapp.Views.dummy.DiaryItem;
 import com.example.carson.yikeapp.Views.dummy.ExperienceItem;
 import com.example.carson.yikeapp.Views.dummy.HomeContent;
 import com.example.carson.yikeapp.Views.dummy.PartnerItem;
+import com.example.carson.yikeapp.Views.dummy.QuestionItem;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -98,8 +99,6 @@ public class HomeActivity extends AppCompatActivity implements FragmentHome.OnFr
         mViewPager.addOnPageChangeListener(new TabLayoutOnPageChangeListener(tabLayout));
         mViewPager.setOffscreenPageLimit(1);
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
-
-        View partItemView = LayoutInflater.from(this).inflate(R.layout.discuss_rv_item_partner, null);
 
 
         //title
@@ -223,6 +222,7 @@ public class HomeActivity extends AppCompatActivity implements FragmentHome.OnFr
                 overridePendingTransition(R.anim.ani_right_get_into, R.anim.ani_left_sign_out);
                 break;
             case 1:
+                Log.i(TAG, item.get(0).getClass() + "");
                 if (item.get(0) instanceof DiaryItem.DItem) {
                     Log.i(TAG, "点击了diaryItem");
                 } else if (item.get(0) instanceof ExperienceItem.ExpItem) {
@@ -232,10 +232,11 @@ public class HomeActivity extends AppCompatActivity implements FragmentHome.OnFr
                 } else if (item.get(0) instanceof PartnerItem.PartItem) {
                     Log.i(TAG, "点击了partItem");
                     Log.i(TAG, ((PartnerItem.PartItem) item.get(0)).id + " " + ((PartnerItem.PartItem) item.get(0)).isAgree);
-                } else if (item.get(0) instanceof DiaryItem.DItem) {
-                    goToSingleQuestionPost(((DiaryItem.DItem) item.get(0)).id);
+                } else if (item.get(0) instanceof QuestionItem.QuesItem) {
+                    //haiweiwancheng
+                    Log.i(TAG, "点击了quesItem");
+                    goToSingleQuestionPost(((QuestionItem.QuesItem) item.get(0)).id);
                 }
-
                 break;
             case 2:
                 Intent toChatWin = new Intent(HomeActivity.this, ChatWindowActivity.class);
@@ -252,11 +253,65 @@ public class HomeActivity extends AppCompatActivity implements FragmentHome.OnFr
         }
     }
 
-    private void goToSingleQuestionPost(String id) {
+    private void goToSingleQuestionPost(final String id) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                OkHttpClient client = null;
+                try {
+                    client = HttpUtils.getUnsafeOkHttpClient();
+                } catch (NoSuchAlgorithmException e) {
+                    e.printStackTrace();
+                } catch (KeyManagementException e) {
+                    e.printStackTrace();
+                }
+                FormBody.Builder builder = new FormBody.Builder();
+                builder.add(ConstantValues.KEY_TOKEN, token);
+                builder.add(ConstantValues.KEY_QUESTION_LIST_ID, id);
+                HttpUtils.sendRequest(client, ConstantValues.URL_QUESTION_SINGLE_POST, builder,
+                        new Callback() {
+                            @Override
+                            public void onFailure(Call call, IOException e) {
 
+                            }
+
+                            @Override
+                            public void onResponse(Call call, Response response) throws IOException {
+                                try {
+                                    JSONObject object = new JSONObject(response.body().string());
+                                    int code = object.getInt(ConstantValues.KEY_CODE);
+                                    if (code == 200) {
+                                        Intent toQuesDetail = new Intent(HomeActivity.this,
+                                                QuesDetailActivity.class);
+                                        JSONObject detailObj = object.getJSONObject("msg");
+                                        ArrayList<String> datas = new ArrayList<>();
+                                        Iterator iterator = detailObj.keys();
+                                        while (iterator.hasNext()) {
+                                            String key = (String) iterator.next();
+                                            datas.add(detailObj.getString(key));
+                                        }
+                                        toQuesDetail.putExtra(ConstantValues.KEY_QUESTION_LIST_USER_ID,
+                                                datas.get(0));
+                                        toQuesDetail.putExtra(ConstantValues.KEY_QUESTION_LIST_USER_NAME,
+                                                datas.get(1));
+                                        toQuesDetail.putExtra(ConstantValues.KEY_QUESTION_LIST_USER_PORTRAIT,
+                                                datas.get(2));
+                                        toQuesDetail.putExtra(ConstantValues.KEY_QUESTION_LIST_TEXT,
+                                                datas.get(3));
+                                        toQuesDetail.putExtra(ConstantValues.KEY_QUESTION_LIST_ID, id);
+                                        startActivity(toQuesDetail);
+                                        overridePendingTransition(R.anim.ani_right_get_into
+                                                , R.anim.ani_left_sign_out);
+                                    }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        });
+            }
+        }).start();
     }
 
-    //TODO 传递查询经验帖详细信息所需数据
     private void getToSingleExpPost(final String id, final int isAgree) {
         new Thread(new Runnable() {
             @Override

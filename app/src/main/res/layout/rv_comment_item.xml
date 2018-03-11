@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_margin="5dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/civ_rv_comment_head"
+        android:src="#ececec"
+        android:layout_width="45dp"
+        android:layout_height="45dp" />
+
+    <com.example.carson.yikeapp.Views.ArchRivalTextView
+        android:id="@+id/artv_rv_comment_name"
+        android:textSize="16.6sp"
+        android:textColor="@android:color/black"
+        android:layout_toRightOf="@id/civ_rv_comment_head"
+        android:layout_marginLeft="5dp"
+        android:hint="username"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:textSize="15.6sp"
+        android:id="@+id/tv_rv_item_comment"
+        android:layout_marginTop="15dp"
+        android:layout_marginLeft="5dp"
+        android:hint="comment"
+        android:layout_marginRight="10dp"
+        android:layout_toRightOf="@id/civ_rv_comment_head"
+        android:layout_below="@id/artv_rv_comment_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <View
+        android:layout_marginTop="5dp"
+        android:layout_below="@id/tv_rv_item_comment"
+        android:background="#e8e8e8"
+        android:layout_width="match_parent"
+        android:layout_height="1dp" />
+
+</RelativeLayout>

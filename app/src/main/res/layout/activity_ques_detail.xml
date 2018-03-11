@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@android:color/white"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.carson.yikeapp.Views.QuesDetailActivity">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar_ques_detail"
+        app:navigationIcon="@drawable/ic_back_black"
+        android:layout_width="match_parent"
+        android:layout_height="39dp" />
+
+    <RelativeLayout
+        android:id="@+id/rl_no_use"
+        android:layout_marginTop="41.5dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="12dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_marginLeft="3dp"
+            android:id="@+id/civ_question_post_head"
+            android:src="#e6e5e5"
+            android:layout_width="55dp"
+            android:layout_height="55dp" />
+
+        <com.example.carson.yikeapp.Views.ArchRivalTextView
+            android:id="@+id/artv_ques_post_name"
+            android:textColor="@android:color/black"
+            android:layout_toRightOf="@id/civ_question_post_head"
+            android:layout_marginLeft="8dp"
+            android:hint="username"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <LinearLayout
+            android:layout_marginTop="15dp"
+            android:background="#e26323"
+            android:layout_below="@id/civ_question_post_head"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:textColor="#fff"
+                android:text="问题详情"
+                android:gravity="center_horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+        <TextView
+            android:textColor="@android:color/black"
+            android:id="@+id/tv_ques_post_text"
+            android:textSize="20.6sp"
+            android:text="    "
+            android:layout_below="@id/civ_question_post_head"
+            android:layout_marginTop="40dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <LinearLayout
+            android:id="@+id/ll_ques_post_no_use"
+            android:layout_marginTop="10dp"
+            android:background="#e26323"
+            android:layout_below="@id/tv_ques_post_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:textColor="#fff"
+                android:text="评论"
+                android:gravity="center_horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:layout_marginTop="5dp"
+            android:id="@+id/rv_ques_comment_show"
+            android:layout_below="@id/ll_ques_post_no_use"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </RelativeLayout>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_comment"
+        app:srcCompat="@drawable/ic_message_square"
+        app:layout_anchor="@id/rl_no_use"
+        app:layout_anchorGravity="bottom|end"
+        android:layout_margin="19dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+
+</android.support.design.widget.CoordinatorLayout>

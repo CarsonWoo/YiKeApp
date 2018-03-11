@@ -272,4 +272,15 @@ public class SearchActivity extends AppCompatActivity implements SearchRVAdapter
         startActivity(toExpPost);
         overridePendingTransition(R.anim.ani_right_get_into, R.anim.ani_left_sign_out);
     }
+
+    @Override
+    public void onQuesItemClick(View v, String id, String name, String res, String text) {
+        Intent toQuesPost = new Intent(SearchActivity.this, QuesDetailActivity.class);
+        toQuesPost.putExtra(ConstantValues.KEY_QUESTION_LIST_ID, id)
+                .putExtra(ConstantValues.KEY_QUESTION_LIST_USER_NAME, name)
+                .putExtra(ConstantValues.KEY_QUESTION_LIST_USER_PORTRAIT, res)
+                .putExtra(ConstantValues.KEY_QUESTION_LIST_TEXT, text);
+        startActivity(toQuesPost);
+        overridePendingTransition(R.anim.ani_right_get_into, R.anim.ani_left_sign_out);
+    }
 }

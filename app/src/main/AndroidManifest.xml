@@ -95,9 +95,13 @@
             android:theme="@style/TransparentTheme" />
         <activity
             android:name=".Views.SearchActivity"
-            android:theme="@style/TransparentTheme"></activity>
-        <activity android:name=".Views.CropPicActivity"
-            android:theme="@style/MainTheme"/>
+            android:theme="@style/TransparentTheme" />
+        <activity
+            android:name=".Views.CropPicActivity"
+            android:theme="@style/MainTheme" />
+        <activity
+            android:name=".Views.QuesDetailActivity"
+            android:theme="@style/TransparentTheme" />
     </application>
 
 </manifest>

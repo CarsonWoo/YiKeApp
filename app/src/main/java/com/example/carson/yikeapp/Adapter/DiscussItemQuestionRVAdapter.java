@@ -9,15 +9,13 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.carson.yikeapp.R;
 import com.example.carson.yikeapp.Views.ArchRivalTextView;
+import com.example.carson.yikeapp.Views.FragmentQuestion;
 import com.example.carson.yikeapp.Views.dummy.QuestionItem;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-
-import static com.example.carson.yikeapp.Views.FragmentQuestion.*;
-import static com.example.carson.yikeapp.Views.dummy.QuestionItem.*;
 
 /**
  * Created by 84594 on 2018/3/2.
@@ -27,15 +25,37 @@ public class DiscussItemQuestionRVAdapter extends
         RecyclerView.Adapter<DiscussItemQuestionRVAdapter.QuesVH> {
 
     private final List<QuestionItem.QuesItem> mValues;
-    private final OnFragmentInteractionListener onFragmentInteractionListener;
+    private final FragmentQuestion.OnFragmentInteractionListener mListener;
 //    private final OnCommentClickedListener mCommentClickedListener;
-    private final ArrayList<QuesItem> itemSelected = new ArrayList<>();
+    private final ArrayList<QuestionItem.QuesItem> itemSelected = new ArrayList<>();
 
     public DiscussItemQuestionRVAdapter(List<QuestionItem.QuesItem> items,
-                                        OnFragmentInteractionListener mFragmentListener) {
+                                        FragmentQuestion.OnFragmentInteractionListener mListener) {
         this.mValues = items;
-        this.onFragmentInteractionListener = mFragmentListener;
+        this.mListener = mListener;
 //        this.mCommentClickedListener = mCommentClickedListener;
+    }
+
+    public class QuesVH extends RecyclerView.ViewHolder {
+        View itemView;
+        CircleImageView head;
+        ArchRivalTextView tvName;
+        TextView tvText;
+        //        ImageView ivMakeComment;
+        TextView tvComment;
+        TextView tvView;
+        public QuestionItem.QuesItem item;
+
+        public QuesVH(View itemView) {
+            super(itemView);
+            this.itemView = itemView;
+            head = itemView.findViewById(R.id.civ_discuss_rv_item_question_head);
+            tvName = itemView.findViewById(R.id.artv_discuss_rv_item_question_name);
+            tvText = itemView.findViewById(R.id.tv_discuss_rv_item_question_text);
+//            ivMakeComment = itemView.findViewById(R.id.iv_discuss_rv_question_make_comment);
+            tvView = itemView.findViewById(R.id.tv_discuss_rv_item_question_view);
+            tvComment = itemView.findViewById(R.id.tv_discuss_rv_item_question_comment);
+        }
     }
 
     @Override
@@ -48,6 +68,7 @@ public class DiscussItemQuestionRVAdapter extends
 
     @Override
     public void onBindViewHolder(final QuesVH holder, final int position) {
+        holder.item = mValues.get(position);
         Glide.with(holder.head.getContext()).load(mValues.get(position).headResFile)
                 .into(holder.head);
         holder.tvName.setText(mValues.get(position).userName);
@@ -64,17 +85,17 @@ public class DiscussItemQuestionRVAdapter extends
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (onFragmentInteractionListener != null) {
+                if (null != mListener) {
                     itemSelected.clear();
                     itemSelected.add(holder.item);
-                    onFragmentInteractionListener.onFragmentInteraction(itemSelected);
+                    mListener.onFragmentInteraction(itemSelected);
                 }
             }
         });
 
     }
 
-    public void addData(ArrayList<QuesItem> mValues) {
+    public void addData(ArrayList<QuestionItem.QuesItem> mValues) {
         this.mValues.addAll(mValues);
         notifyDataSetChanged();
     }
@@ -89,28 +110,7 @@ public class DiscussItemQuestionRVAdapter extends
         return mValues.size();
     }
 
-    class QuesVH extends RecyclerView.ViewHolder {
 
-        CircleImageView head;
-        ArchRivalTextView tvName;
-        TextView tvText;
-//        ImageView ivMakeComment;
-        TextView tvComment;
-        TextView tvView;
-        View itemView;
-        public QuesItem item;
-
-        public QuesVH(View itemView) {
-            super(itemView);
-            this.itemView = itemView;
-            head = itemView.findViewById(R.id.civ_discuss_rv_item_question_head);
-            tvName = itemView.findViewById(R.id.artv_discuss_rv_item_question_name);
-            tvText = itemView.findViewById(R.id.tv_discuss_rv_item_question_text);
-//            ivMakeComment = itemView.findViewById(R.id.iv_discuss_rv_question_make_comment);
-            tvView = itemView.findViewById(R.id.tv_discuss_rv_item_question_view);
-            tvComment = itemView.findViewById(R.id.tv_discuss_rv_item_question_comment);
-        }
-    }
 
     public interface OnCommentClickedListener {
         void onCommentClicked(View view, String id);

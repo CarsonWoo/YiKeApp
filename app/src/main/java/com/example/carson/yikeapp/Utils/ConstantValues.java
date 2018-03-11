@@ -73,6 +73,12 @@ public class ConstantValues {
 
     public static final String URL_SEARCH_ALL = "https://www.yiluzou.cn/yike/public/index.php/search_all";
 
+    public static final String URL_QUESTION_SINGLE_POST = "https://www.yiluzou.cn/yike/public/index.php/single_help";
+
+    public static final String URL_QUESTION_MAKE_COMMENT = "https://www.yiluzou.cn/yike/public/index.php/help_comment";
+
+    public static final String URL_QUESTION_COMMENT_SHOW = "https://www.yiluzou.cn/yike/public/index.php/show_help_comment";
+
     public static final int CODE_TAKE_PHOTO = 1;
 
     public static final int TYPE_TAKE_PHOTO = 1;

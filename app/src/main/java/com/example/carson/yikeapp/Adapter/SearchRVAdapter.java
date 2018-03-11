@@ -101,6 +101,14 @@ public class SearchRVAdapter extends RecyclerView.Adapter<SearchRVAdapter.ItemVi
                             holder.item.currentTime, holder.item.agreeNum);
                 }
             });
+        } else if (mValues.get(position).typeStr.equals(ConstantValues.TYPE_QUESTION_STRING)) {
+            holder.cardView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mListener.onQuesItemClick(v, holder.item.id, holder.item.userName,
+                            holder.item.headResFile, holder.item.content);
+                }
+            });
         }
 
 
@@ -116,6 +124,8 @@ public class SearchRVAdapter extends RecyclerView.Adapter<SearchRVAdapter.ItemVi
 
         void onExpItemClick(View v, String id, String name, String res, String title,
                             String content, String time, String agreeNum);
+
+        void onQuesItemClick(View v, String id, String name, String res, String text);
 
     }
 
