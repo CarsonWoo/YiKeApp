@@ -405,6 +405,7 @@ public class ResumeActivity extends AppCompatActivity {
                                             public void run() {
                                                 Toast.makeText(ResumeActivity.this,
                                                         "已上传保存", Toast.LENGTH_SHORT).show();
+                                                ConstantValues.cachRusumeState(ResumeActivity.this,true);
                                             }
                                         });
                                     } else {

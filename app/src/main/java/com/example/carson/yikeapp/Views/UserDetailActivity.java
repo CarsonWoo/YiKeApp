@@ -1,25 +1,25 @@
 package com.example.carson.yikeapp.Views;
 
 import android.Manifest;
-import android.app.AlertDialog;
-import android.app.DatePickerDialog;
-import android.content.DialogInterface;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
 import android.util.Log;
@@ -32,16 +32,15 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.Toast;
 
-
 import com.bumptech.glide.Glide;
 import com.example.carson.yikeapp.R;
 import com.example.carson.yikeapp.Utils.AddressPickTask;
+import com.example.carson.yikeapp.Utils.BitmapUtils;
 import com.example.carson.yikeapp.Utils.ConstantValues;
 import com.example.carson.yikeapp.Utils.HttpUtils;
 
@@ -74,11 +73,14 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 import static com.example.carson.yikeapp.Utils.ConstantValues.CODE_PICK_PHOTO;
+import static com.example.carson.yikeapp.Utils.ConstantValues.CODE_REQUEST_CROP;
 import static com.example.carson.yikeapp.Utils.ConstantValues.CODE_TAKE_PHOTO;
 import static com.example.carson.yikeapp.Utils.ConstantValues.TYPE_TAKE_PHOTO;
+import static com.example.carson.yikeapp.Utils.ConstantValues.getCachedToken;
 
 
 public class UserDetailActivity extends AppCompatActivity implements View.OnClickListener {
+    private static final String TAG = "UserDetailActivity";
 
     private Toolbar toolbar;
 
@@ -91,8 +93,10 @@ public class UserDetailActivity extends AppCompatActivity implements View.OnClic
     private Button btnSave, btnCancel;
     private ListView listViewGender;
     private PopupWindow windowGender;
-    private de.hdodenhof.circleimageview.CircleImageView headView;
+    private CircleImageView headView;
     private boolean isFromUser = false;
+
+    private static String tempHeadName = "tempHeadPic";
 
     private Uri photoUri;
 //    private String gender;
@@ -369,21 +373,7 @@ public class UserDetailActivity extends AppCompatActivity implements View.OnClic
                 showDressDialog(etArea);
                 break;
             case R.id.civ_detail_change:
-                AlertDialog.Builder builder = new AlertDialog.Builder(UserDetailActivity.this);
-                builder.setItems(new String[]{"拍照", "选取照片"}, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        switch (which) {
-                            case 0:
-                                checkCameraPermission();
-                                break;
-                            case 1:
-                                checkReadStoragePermission();
-                                break;
-                        }
-                    }
-                });
-                builder.show();
+                BitmapUtils.showDialogToChoosePic(this,null,tempHeadName);
                 break;
             case R.id.btn_detail_cancel:
                 if (isFromUser) {
@@ -434,6 +424,7 @@ public class UserDetailActivity extends AppCompatActivity implements View.OnClic
                                                     finish();
                                                 } else {
                                                     //从fragmentuser进入则直接finish即可
+                                                    setResult(ConstantValues.RESULTCODE_NEED_REFRESH);
                                                     finish();
                                                 }
                                             } else {
@@ -460,22 +451,6 @@ public class UserDetailActivity extends AppCompatActivity implements View.OnClic
                 }).start();
                 break;
         }
-    }
-
-    private void checkReadStoragePermission() {
-        if (ContextCompat.checkSelfPermission(UserDetailActivity.this,
-                Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(UserDetailActivity.this,
-                    new String[] {Manifest.permission.READ_EXTERNAL_STORAGE}, 3);
-        } else {
-            startPick();
-        }
-    }
-
-    private void startPick() {
-        Intent albumIntent = new Intent(Intent.ACTION_PICK,
-                MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        startActivityForResult(albumIntent, CODE_PICK_PHOTO);
     }
 
     private void checkCameraPermission() {
@@ -575,91 +550,88 @@ public class UserDetailActivity extends AppCompatActivity implements View.OnClic
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     protected void onActivityResult(int requestCode, int resultCode, final Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == CODE_TAKE_PHOTO && resultCode == RESULT_OK) {
-            Log.i("data", "has_data");
-            try {
-                MediaStore.Images.Media.insertImage(getContentResolver(), photoFile.getAbsolutePath(),
-                        photoFile.getName(), null);
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
-            sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.parse("file://"
-                    + photoFile.getAbsolutePath())));
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    OkHttpClient client = null;
+        switch (requestCode) {
+            case CODE_TAKE_PHOTO:
+                if (resultCode == Activity.RESULT_OK) {
+                    Bitmap photo = data.getParcelableExtra("data");
+                    String imagePath = BitmapUtils.saveImage(this,photo,getCachedToken(this));
                     try {
-                        client = HttpUtils.getUnsafeOkHttpClient();
-                    } catch (NoSuchAlgorithmException e) {
-                        e.printStackTrace();
-                    } catch (KeyManagementException e) {
+                        MediaStore.Images.Media.insertImage(getContentResolver(), photoFile.getAbsolutePath(),
+                                photoFile.getName(), null);
+                    } catch (FileNotFoundException e) {
                         e.printStackTrace();
                     }
-                    MediaType type = MediaType.parse("image/*");
-                    RequestBody fileBody = RequestBody.create(type, photoFile);
-                    RequestBody multiBody = new MultipartBody.Builder()
-                            .setType(MultipartBody.FORM)
-                            .addFormDataPart("token", token)
-                            .addFormDataPart("photo", photoFile.getName(), fileBody)
-                            .build();
-                    HttpUtils.sendRequest(client, ConstantValues.URL_CHANGE_ICON, multiBody,
-                            new Callback() {
-                                @Override
-                                public void onFailure(Call call, IOException e) {
-
-                                }
-
-                                @Override
-                                public void onResponse(Call call, Response response) throws IOException {
-                                    try {
-                                        final JSONObject object = new JSONObject(response.body()
-                                                .string());
-                                        int code = object.getInt("code");
-                                        if (code == 200) {
-                                            runOnUiThread(new Runnable() {
-                                                @Override
-                                                public void run() {
-                                                    Glide.with(UserDetailActivity.this)
-                                                            .load(photoUri).into(headView);
-                                                    try {
-                                                        Toast.makeText(getApplicationContext(),
-                                                                object.getString("msg"),
-                                                                Toast.LENGTH_SHORT).show();
-                                                    } catch (JSONException e) {
-                                                        e.printStackTrace();
-                                                    }
-                                                }
-                                            });
-                                        }
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
-                                    }
-                                }
-                            });
+                    startCropActivity( imagePath, requestCode);
                 }
-            }).start();
-            Log.i("resultCodeStage:", "ok");
+                break;
 
-        } else if (requestCode == CODE_PICK_PHOTO && resultCode == RESULT_OK) {
-            Log.i("pickPhotoStage:", "ok");
-            selectPic(data);
+            case CODE_PICK_PHOTO:
+                if (resultCode == Activity.RESULT_OK) {
+                    startCropActivity(data.getData().toString(), requestCode);
+                }
+                break;
+
+            case CODE_REQUEST_CROP:    // 裁剪图片结果
+                if (resultCode == Activity.RESULT_OK) {
+                    handleCropResult(data, headView);
+                }
+                break;
         }
     }
 
-    private void selectPic(Intent intent) {
-        final Uri imgUri = intent.getData();
-        String[] filePathColumn = {MediaStore.Images.Media.DATA};
-        Cursor cursor = getContentResolver().query(imgUri, filePathColumn,
-                null, null, null);
-        cursor.moveToFirst();
-        int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-        String picPath = cursor.getString(columnIndex);
-        cursor.close();
-        photoFile = new File(picPath);
+    /**
+     * 裁剪图片方法实现
+     *
+     * @param imagePath
+     */
+    public void startCropActivity(String imagePath,int resultFrom) {
+        Log.d(TAG,"FileUri:"+imagePath);
+        Intent turnToCrop = new Intent(this, CropPicActivity.class);
+        turnToCrop.putExtra("Uri",imagePath);
+        turnToCrop.putExtra("resultFrom",resultFrom);
+        startActivityForResult(turnToCrop,CODE_REQUEST_CROP);
+    }
+
+    /**
+     * 处理剪切成功的返回值
+     * @param result
+     */
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    private void handleCropResult(Intent result, CircleImageView view) {
+        deleteTempPhotoFile();
+        final Uri resultUri = result.getData();
+        if (null != resultUri ) {
+            Bitmap bitmap = null;
+            bitmap = BitmapFactory.decodeFile(resultUri.getPath());
+            view.setImageBitmap(bitmap);
+            uploadHead(resultUri);
+        } else {
+            Toast.makeText(this, "无法剪切选择图片", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    /**
+     * 删除拍照临时文件
+     */
+    private void deleteTempPhotoFile() {
+        File tempFile = new File(ConstantValues.MY_TEMPPHOTO_PATH+tempHeadName+".jpeg");
+        if (tempFile.exists() && tempFile.isFile()) {
+            tempFile.delete();
+        }
+    }
+
+    /**
+     * 上传更改后的头像
+     * @param imgUri
+     */
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    private void uploadHead(final Uri imgUri){
+        Log.d(TAG,"imgUri.getPath(): "+ imgUri.getPath());
+        photoFile = new File(imgUri.getPath());
 
         new Thread(new Runnable() {
             @Override
@@ -673,9 +645,6 @@ public class UserDetailActivity extends AppCompatActivity implements View.OnClic
                     e.printStackTrace();
                 }
                 Log.i("startStage:", "ok");
-//                FormBody.Builder builder = new FormBody.Builder();
-//                builder.add("token", token);
-//                builder.add("photo", String.valueOf(photoFile));
                 Log.i("token", token);
                 MediaType type = MediaType.parse("image/*");
                 RequestBody fileBody = RequestBody.create(type, photoFile);
@@ -698,16 +667,19 @@ public class UserDetailActivity extends AppCompatActivity implements View.OnClic
                                     Log.i("responseStage:", "ok");
                                     final JSONObject object = new JSONObject(response.body().string());
                                     int code = object.getInt("code");
+                                    Log.i(TAG,"MSG:"+object.getString("msg"));
                                     if (code == 200) {
                                         runOnUiThread(new Runnable() {
                                             @Override
                                             public void run() {
-                                                Glide.with(UserDetailActivity.this).load(imgUri)
-                                                        .into(headView);
                                                 try {
-                                                    Toast.makeText(getApplicationContext(),
+                                                    Toast.makeText(UserDetailActivity.this,
                                                             object.getString("msg"),
                                                             Toast.LENGTH_SHORT).show();
+                                                    Intent data = new Intent();
+                                                    data.setData(imgUri);
+                                                    setResult(ConstantValues.RESULTCODE_NEED_REFRESH,data);
+                                                    Log.d(TAG,"设置了结果");
                                                 } catch (JSONException e) {
                                                     e.printStackTrace();
                                                 }
@@ -724,9 +696,8 @@ public class UserDetailActivity extends AppCompatActivity implements View.OnClic
                                 }
                             }
                         });
-                    }
+            }
 
         }).start();
-
     }
 }

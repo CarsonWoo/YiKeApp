@@ -16,13 +16,6 @@
         app:navigationIcon="@drawable/ic_back_black"
         app:popupTheme="@style/AppTheme.PopupOverlay">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="返回"
-            android:textColor="@android:color/black"
-            android:textSize="18sp" />
-
     </android.support.v7.widget.Toolbar>
 
     <ScrollView

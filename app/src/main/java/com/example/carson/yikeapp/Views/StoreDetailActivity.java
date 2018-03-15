@@ -138,9 +138,10 @@ public class StoreDetailActivity extends AppCompatActivity {
         storeApply.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (photoUrl != null) {
+                if (ConstantValues.getCachRusumeState(StoreDetailActivity.this)) {
                     apply();
-                    Log.d("photoUrl: ", photoUrl);
+                }else {
+                    makeToast("报名之前需要先完成简历的填写。");
                 }
             }
         });
@@ -162,6 +163,10 @@ public class StoreDetailActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void makeToast(String msg){
+        Toast.makeText(this,msg,Toast.LENGTH_SHORT).show();
     }
 
     @Override

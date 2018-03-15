@@ -18,21 +18,21 @@
         android:padding="10dp">
 
         <com.example.carson.yikeapp.Views.CircleImageView
-            android:id="@+id/civ_user_head"
+            android:id="@+id/civ_user_store_head"
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:layout_margin="10dp"
             android:src="@android:color/black"/>
 
         <TextView
-            android:id="@+id/tv_user_name"
+            android:id="@+id/tv_user_store_name"
             android:text="店名"
             android:textColor="@android:color/black"
             android:textSize="18sp"
             android:layout_marginTop="15dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@+id/civ_user_head" />
+            android:layout_toRightOf="@+id/civ_user_store_head" />
 
         <TextView
             android:id="@+id/tv_lv_no_use"
@@ -41,8 +41,8 @@
             android:textColor="@color/bg_bnb_loca"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/tv_user_name"
-            android:layout_toRightOf="@+id/civ_user_head"/>
+            android:layout_below="@+id/tv_user_store_name"
+            android:layout_toRightOf="@+id/civ_user_store_head"/>
 
         <TextView
             android:id="@+id/tv_user_store_level"
@@ -51,7 +51,7 @@
             android:textColor="@color/bg_bnb_loca"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/tv_user_name"
+            android:layout_below="@+id/tv_user_store_name"
             android:layout_toRightOf="@+id/tv_lv_no_use"/>
 
         <TextView
@@ -62,7 +62,7 @@
             android:textColor="@color/bg_bnb_loca"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/tv_user_name"
+            android:layout_below="@+id/tv_user_store_name"
             android:layout_toRightOf="@+id/tv_user_store_level"/>
 
         <TextView
@@ -71,11 +71,11 @@
             android:textColor="@color/bg_bnb_loca"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/tv_user_name"
+            android:layout_below="@+id/tv_user_store_name"
             android:layout_toRightOf="@+id/tv_user_store_xp"/>
 
         <TextView
-            android:id="@+id/tv_user_info"
+            android:id="@+id/tv_user_store_info"
             android:textColor="#999999"
             android:layout_width="wrap_content"
             android:textSize="16sp"
@@ -84,7 +84,7 @@
             android:text="简介好长啊真的编不出来了我对民宿的"
             android:layout_height="wrap_content"
             android:layout_below="@+id/tv_user_store_level"
-            android:layout_toRightOf="@+id/civ_user_head"/>
+            android:layout_toRightOf="@+id/civ_user_store_head"/>
 
     </RelativeLayout>
 

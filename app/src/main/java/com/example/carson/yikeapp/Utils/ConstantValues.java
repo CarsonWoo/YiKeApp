@@ -93,7 +93,9 @@ public class ConstantValues {
 
     public static final int REQUESTCODE_IF_MESSAGE_NEED_REFRESH = 10003;
 
-    public static final int RESULTCODE_NEED_REFRESH = 10003;
+    public static final int RESULTCODE_NEED_REFRESH = 10004;
+
+    public static final int REQUESTCODE_CHANGE_INFO = 10005;
 
     public static final String USER_TYPE_STORE = "店家";
 
@@ -264,6 +266,8 @@ public class ConstantValues {
 
     //发布问答传递参数名
     public static final String KEY_PUBLISH_QUESTION_TEXT = "text";
+    private static final String KEY_RUSUME_ISFINISHED = "resumeState";
+
 
     //取得token
     public static String getCachedToken(Context context){
@@ -305,6 +309,18 @@ public class ConstantValues {
     public static void cachPsw(Context context,String psw){
         SharedPreferences.Editor editor = context.getSharedPreferences(APP_ID,Context.MODE_PRIVATE).edit();
         editor.putString(KEY_PSW,psw);
+        editor.apply();
+    }
+
+    //获取简历完成状态
+    public static Boolean getCachRusumeState(Context context){
+        return context.getSharedPreferences(APP_ID,Context.MODE_PRIVATE).getBoolean(KEY_RUSUME_ISFINISHED,false);
+    }
+
+    //记录简历完成状态
+    public static void cachRusumeState(Context context,boolean isFinished){
+        SharedPreferences.Editor editor = context.getSharedPreferences(APP_ID,Context.MODE_PRIVATE).edit();
+        editor.putBoolean(KEY_RUSUME_ISFINISHED,isFinished);
         editor.apply();
     }
 }

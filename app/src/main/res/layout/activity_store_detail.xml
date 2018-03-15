@@ -329,7 +329,7 @@
 
         <Button
             android:id="@+id/btn_store_detail_contact"
-            android:text="咨询客服"
+            android:text="@string/contact_store"
             android:textSize="13.7sp"
             android:textColor="@android:color/darker_gray"
             android:background="@android:color/white"

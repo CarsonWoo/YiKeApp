@@ -1,18 +1,15 @@
 package com.example.carson.yikeapp.Views;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.provider.MediaStore;
-import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,8 +20,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.carson.yikeapp.R;
-import com.example.carson.yikeapp.Utils.BitmapUtils;
 import com.example.carson.yikeapp.Utils.ConstantValues;
 import com.example.carson.yikeapp.Utils.HttpUtils;
 
@@ -32,7 +29,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
@@ -40,16 +36,8 @@ import java.security.NoSuchAlgorithmException;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.FormBody;
-import okhttp3.MediaType;
-import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
-import okhttp3.RequestBody;
 import okhttp3.Response;
-
-import static com.example.carson.yikeapp.Utils.ConstantValues.CODE_PICK_PHOTO;
-import static com.example.carson.yikeapp.Utils.ConstantValues.CODE_REQUEST_CROP;
-import static com.example.carson.yikeapp.Utils.ConstantValues.CODE_TAKE_PHOTO;
-import static com.example.carson.yikeapp.Utils.ConstantValues.getCachedToken;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -64,8 +52,8 @@ public class FragmentUser extends Fragment {
 
     // Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private static final int USER_TYPE_USER = 1;
+    private static final int USER_TYPE_STORE = 2;
 
     //Rename and change types of parameters
     private String mParam1;
@@ -75,7 +63,7 @@ public class FragmentUser extends Fragment {
 
     private static Handler sendMsg;
     private File photoFile;
-    private Uri photoUri;
+    private Uri haedUri;
     private String token, gender;
     private static String tempHeadName = "tempHeadPic";
 
@@ -105,8 +93,8 @@ public class FragmentUser extends Fragment {
             //findview
             userHead = view.findViewById(R.id.civ_user_head);
             final TextView userName = view.findViewById(R.id.tv_user_name);
-            final TextView userLevel = view.findViewById(R.id.tv_user_store_level);
-            final TextView userXp = view.findViewById(R.id.tv_user_store_xp);
+            final TextView userLevel = view.findViewById(R.id.tv_user_level);
+            final TextView userXp = view.findViewById(R.id.tv_user_xp);
             final TextView userIntro = view.findViewById(R.id.tv_user_info);
             final TextView userDiary = view.findViewById(R.id.tv_user_diary);
             final TextView userBalance = view.findViewById(R.id.tv_user_balance);
@@ -142,8 +130,10 @@ public class FragmentUser extends Fragment {
                         } else {
                             userLevel.setText(exp / 500 + 2);
                         }
-                        Glide.with(getActivity()).load(userInfo[0].getString(ConstantValues.KEY_USER_PHOTO_URL))
-                                .thumbnail(Glide.with(getContext()).load(R.drawable.ic_loader)).into(userHead);//设置头像
+                        haedUri = Uri.parse(userInfo[0].getString(ConstantValues.KEY_USER_PHOTO_URL));
+                        Glide.with(getActivity()).load(haedUri)
+                                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                                .into(userHead);//设置头像
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -151,28 +141,20 @@ public class FragmentUser extends Fragment {
                 }
             };
 
-            //设置点击头像更改头像
+            //设置点击头像编辑资料
             userHead.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    BitmapUtils.showDialogToChoosePic(getContext(),FragmentUser.this,tempHeadName);
-                }
-            });
-
-            //获取当前页面用户信息
-            getUserInfo();
-
-            //设置点击用户名填写资料
-            userName.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Intent intent = new Intent(getContext(),
                             UserDetailActivity.class);
                     intent.putExtra("token", token);
                     intent.putExtra("isFromUser", true);
-                    startActivity(intent);
+                    startActivityForResult(intent,ConstantValues.REQUESTCODE_CHANGE_INFO);
                 }
             });
+
+            //获取当前页面用户信息
+            getUserInfo();
 
             //简历点击
             itemResume.setOnClickListener(new View.OnClickListener() {
@@ -190,13 +172,14 @@ public class FragmentUser extends Fragment {
         } else {
             View view = inflater.inflate(R.layout.fragment_user_store, container, false);
             //findview
-            final CircleImageView storeHead = view.findViewById(R.id.civ_user_head);
-            final TextView storeName = view.findViewById(R.id.tv_user_name);
+            userHead = view.findViewById(R.id.civ_user_store_head);
+            final TextView storeName = view.findViewById(R.id.tv_user_store_name);
             final TextView storeLevel = view.findViewById(R.id.tv_user_store_level);
             final TextView storeXp = view.findViewById(R.id.tv_user_store_xp);
-            final TextView storeIntro = view.findViewById(R.id.tv_user_info);
-            final TextView storeAty = view.findViewById(R.id.tv_user_diary);
-            final TextView storeFollow = view.findViewById(R.id.tv_user_balance);
+            final TextView storeIntro = view.findViewById(R.id.tv_user_store_info);
+            final TextView storeAty = view.findViewById(R.id.tv_user_store_activities);
+            final TextView storeFollow = view.findViewById(R.id.tv_user_store_follow);
+            final TextView storeCredit = view.findViewById(R.id.tv_user_store_credit_value);
 
             //向服务器获取用户信息
             final JSONObject[] userInfo = {new JSONObject()};
@@ -206,10 +189,25 @@ public class FragmentUser extends Fragment {
                     super.handleMessage(msg);
                     userInfo[0] = (JSONObject) msg.obj;
                     try {
-//                                storeName.setText(userInfo[0].getString(ConstantValues.KEY_USER_REALNAME));
-                        storeIntro.setText(userInfo[0].getString(ConstantValues.KEY_USER_INTRO));
-                        Glide.with(getActivity()).load(userInfo[0]
-                                .getString(ConstantValues.KEY_USER_PHOTO_URL)).into(storeHead);//设置头像
+                        storeName.setText(userInfo[0].getString(ConstantValues.KEY_USER_REALNAME));
+                        storeXp.setText(userInfo[0].getString(ConstantValues.KEY_STORE_EXP));
+                        storeIntro.setText(userInfo[0].getString(ConstantValues.KEY_STORE_INTRO));
+                        storeAty.setText(userInfo[0].getString(ConstantValues.KEY_STORE_ATY_NUM));
+                        storeCredit.setText(userInfo[0].getString(ConstantValues.KEY_STORE_CREDIT));
+                        //TODO FragmentUser ： 设置 Store关注数。
+
+                        int exp = Integer.parseInt(storeXp.getText().toString());
+                        if (exp < 200) {
+                            storeLevel.setText("1");
+                        } else if (exp >= 200 && exp < 500) {
+                            storeLevel.setText("2");
+                        } else {
+                            storeLevel.setText(exp / 500 + 2);
+                        }
+                        haedUri = Uri.parse(userInfo[0].getString(ConstantValues.KEY_USER_PHOTO_URL));
+                        Glide.with(getActivity()).load(haedUri)
+                                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                                .into(userHead);//设置头像
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -225,7 +223,7 @@ public class FragmentUser extends Fragment {
                             ShopDetailActivity.class);
                     intent.putExtra("token", token);
                     intent.putExtra("isFromUser", true);
-                    startActivity(intent);
+                    startActivityForResult(intent,ConstantValues.REQUESTCODE_CHANGE_INFO);
                 }
             });
             return view;
@@ -286,148 +284,32 @@ public class FragmentUser extends Fragment {
         }).start();
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        switch (requestCode) {
-            case CODE_TAKE_PHOTO:
-                if (resultCode == Activity.RESULT_OK) {
-                    Bitmap photo = data.getParcelableExtra("data");
-                    String imagePath = BitmapUtils.saveImage(getContext(),photo,getCachedToken(getContext()));
-                    try {
-                        MediaStore.Images.Media.insertImage(getContext().getContentResolver(), photoFile.getAbsolutePath(),
-                                photoFile.getName(), null);
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
+        switch (requestCode){
+            case ConstantValues.REQUESTCODE_CHANGE_INFO:
+                Log.d(TAG,"编辑资料返回后");
+                if(resultCode == ConstantValues.RESULTCODE_NEED_REFRESH) {
+                    Log.d(TAG,"更改了资料，正在刷新");
+                    if(data!=null) {
+                        Log.d(TAG,"更改了头像");
+
+                        Bitmap bitmap = null;
+                        bitmap = BitmapFactory.decodeFile(data.getData().getPath());
+                        BitmapDrawable drawable = new BitmapDrawable(getContext().getResources(),bitmap);
+
+                        haedUri = data.getData();
+                        Glide.with(getActivity()).load(haedUri)
+                                .placeholder(drawable)
+                                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                                .into(userHead);//设置头像
                     }
-                    startCropActivity( imagePath, requestCode);
                 }
                 break;
-
-            case CODE_PICK_PHOTO:
-                if (resultCode == Activity.RESULT_OK) {
-                    startCropActivity(data.getData().toString(), requestCode);
-                }
-                break;
-
-            case CODE_REQUEST_CROP:    // 裁剪图片结果
-                if (resultCode == Activity.RESULT_OK) {
-                    handleCropResult(data, userHead);
-                }
+            default:
                 break;
         }
-    }
-
-    /**
-     * 裁剪图片方法实现
-     *
-     * @param imagePath
-     */
-    public void startCropActivity(String imagePath,int resultFrom) {
-        Log.d(TAG,"FileUri:"+imagePath);
-        Intent turnToCrop = new Intent(getActivity(), CropPicActivity.class);
-        turnToCrop.putExtra("Uri",imagePath);
-        turnToCrop.putExtra("resultFrom",resultFrom);
-        startActivityForResult(turnToCrop,CODE_REQUEST_CROP);
-    }
-
-    /**
-     * 处理剪切成功的返回值
-     *
-     * @param result
-     */
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-    private void handleCropResult(Intent result, CircleImageView view) {
-        deleteTempPhotoFile();
-        final Uri resultUri = result.getData();
-        if (null != resultUri ) {
-            Bitmap bitmap = null;
-            bitmap = BitmapFactory.decodeFile(resultUri.getPath());
-            view.setImageBitmap(bitmap);
-            uploadHead(resultUri);
-        } else {
-            Toast.makeText(getContext(), "无法剪切选择图片", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    /**
-     * 删除拍照临时文件
-     */
-    private void deleteTempPhotoFile() {
-        File tempFile = new File(ConstantValues.MY_TEMPPHOTO_PATH+tempHeadName+".jpeg");
-        if (tempFile.exists() && tempFile.isFile()) {
-            tempFile.delete();
-        }
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-    private void uploadHead(final Uri imgUri){
-        Log.d(TAG,"imgUri.getPath(): "+ imgUri.getPath());
-        photoFile = new File(imgUri.getPath());
-
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                OkHttpClient client = null;
-                try {
-                    client = HttpUtils.getUnsafeOkHttpClient();
-                } catch (NoSuchAlgorithmException e) {
-                    e.printStackTrace();
-                } catch (KeyManagementException e) {
-                    e.printStackTrace();
-                }
-                Log.i("startStage:", "ok");
-                Log.i("token", token);
-                MediaType type = MediaType.parse("image/*");
-                RequestBody fileBody = RequestBody.create(type, photoFile);
-                RequestBody multiBody = new MultipartBody.Builder()
-                        .setType(MultipartBody.FORM)
-                        .addFormDataPart("token", token)
-                        .addFormDataPart("photo", photoFile.getName(), fileBody)
-                        .build();
-
-                HttpUtils.sendRequest(client, ConstantValues.URL_CHANGE_ICON, multiBody,
-                        new Callback() {
-                            @Override
-                            public void onFailure(Call call, IOException e) {
-
-                            }
-
-                            @Override
-                            public void onResponse(Call call, Response response) throws IOException {
-                                try {
-                                    Log.i("responseStage:", "ok");
-                                    final JSONObject object = new JSONObject(response.body().string());
-                                    int code = object.getInt("code");
-                                    Log.i(TAG,"MSG:"+object.getString("msg"));
-                                    if (code == 200) {
-                                        getActivity().runOnUiThread(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                try {
-                                                    Toast.makeText(getContext(),
-                                                            object.getString("msg"),
-                                                            Toast.LENGTH_SHORT).show();
-                                                } catch (JSONException e) {
-                                                    e.printStackTrace();
-                                                }
-                                            }
-                                        });
-
-                                    } else {
-                                        Log.i("msg:", object.getString("msg"));
-                                        Log.i("token", token);
-                                        Log.i("file", photoFile.getName());
-                                    }
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        });
-            }
-
-        }).start();
     }
 
     @Override

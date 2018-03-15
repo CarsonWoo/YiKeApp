@@ -25,7 +25,7 @@
     <string name="login">Login</string>
     <string name="description_start">img_start_header</string>
     <string name="online_reserve">线上预约</string>
-    <string name="balance">总费用</string>
+    <string name="collection">收藏</string>
     <string name="diary">日记</string>
     <string name="activities">活动</string>
     <string name="follow">关注</string>
@@ -47,6 +47,7 @@
     <string name="new_user_register">新用户注册</string>
     <string name="login_chinese">登录</string>
     <string name="login_tab_title">登录义客</string>
+    <string name="contact_store">咨询店家</string>
 
     <string-array name="option_message">
         <item>删除该聊天</item>

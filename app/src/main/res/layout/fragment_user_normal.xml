@@ -21,7 +21,7 @@
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:layout_margin="10dp"
-            android:src="@drawable/ic_loader"/>
+            android:src="@android:color/black"/>
 
         <TextView
             android:id="@+id/tv_user_name"
@@ -44,7 +44,7 @@
             android:layout_toRightOf="@+id/civ_user_head"/>
 
         <TextView
-            android:id="@+id/tv_user_store_level"
+            android:id="@+id/tv_user_level"
             android:textSize="13sp"
             android:text="1"
             android:textColor="@color/bg_bnb_loca"
@@ -54,7 +54,7 @@
             android:layout_toRightOf="@+id/tv_lv_no_use"/>
 
         <TextView
-            android:id="@+id/tv_user_store_xp"
+            android:id="@+id/tv_user_xp"
             android:textSize="13sp"
             android:text="466"
             android:layout_marginLeft="32dp"
@@ -62,7 +62,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/tv_user_name"
-            android:layout_toRightOf="@+id/tv_user_store_level"/>
+            android:layout_toRightOf="@+id/tv_user_level"/>
 
         <TextView
             android:textSize="13sp"
@@ -71,7 +71,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/tv_user_name"
-            android:layout_toRightOf="@+id/tv_user_store_xp"/>
+            android:layout_toRightOf="@+id/tv_user_xp"/>
 
         <TextView
             android:id="@+id/tv_user_info"
@@ -82,7 +82,7 @@
             android:ellipsize="end"
             android:text="简介好长啊真的编不出来了我对民宿的"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/tv_user_store_level"
+            android:layout_below="@+id/tv_user_level"
             android:layout_toRightOf="@+id/civ_user_head"/>
 
     </RelativeLayout>
@@ -132,7 +132,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
             <TextView
-                android:text="@string/balance"
+                android:text="@string/collection"
                 android:textColor="#999999"
                 android:textSize="12sp"
                 android:layout_width="wrap_content"
