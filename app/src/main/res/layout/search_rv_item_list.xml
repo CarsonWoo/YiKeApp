@@ -36,7 +36,7 @@
 
         <LinearLayout
             android:background="#f2f2f2"
-            android:layout_marginTop="100dp"
+            android:layout_marginTop="20dp"
             android:layout_below="@id/tv_search_rv_item_content"
             android:gravity="center"
             android:orientation="horizontal"
@@ -48,8 +48,8 @@
                 android:id="@+id/civ_search_rv_item"
                 android:layout_gravity="center_vertical"
                 android:src="#e2e2e2"
-                android:layout_width="40dp"
-                android:layout_height="40dp" />
+                android:layout_width="35dp"
+                android:layout_height="35dp" />
             <com.example.carson.yikeapp.Views.ArchRivalTextView
                 android:id="@+id/artv_search_rv_item_name"
                 android:layout_marginLeft="8dp"

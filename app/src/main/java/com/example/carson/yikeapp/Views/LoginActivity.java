@@ -1,14 +1,19 @@
 package com.example.carson.yikeapp.Views;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Display;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
@@ -165,15 +170,27 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                     String code = object.getString("code");
                                     final String msg = object.getString("msg");
                                     if (!code.equals("200")) {
+                                        Log.i("LoginAty", msg);
                                         runOnUiThread(new Runnable() {
                                             @Override
                                             public void run() {
-//                                                AlertDialog.Builder dialog = new
-//                                                        AlertDialog.Builder(getApplicationContext());
-//                                                dialog.setView(R.layout.bg_alert_dialog)
-//                                                        .show();
-                                                Snackbar.make(btnLogin, msg,
-                                                        Snackbar.LENGTH_SHORT).show();
+                                                AlertDialog.Builder dialogBuilder = new
+                                                        AlertDialog.Builder(LoginActivity.this);
+                                                AlertDialog dialog = dialogBuilder.create();
+                                                View dialogView = LayoutInflater.from(LoginActivity.this)
+                                                        .inflate(R.layout.bg_alert_dialog, null, false);
+                                                dialog.setView(dialogView);
+                                                dialog.show();
+                                                WindowManager m = getWindowManager();
+                                                Display d = m.getDefaultDisplay();
+                                                WindowManager.LayoutParams p = dialog.getWindow()
+                                                        .getAttributes();
+                                                p.width = (int) (d.getWidth() * 0.6);
+//                                                p.height = (int) (d.getHeight() * 0.25);
+                                                dialog.getWindow().setAttributes(p);
+                                                TextView tv = dialogView.findViewById(R.id.tv_show_error_msg);
+                                                tv.setText(msg);
+                                                dialog.setCanceledOnTouchOutside(true);
                                             }
                                         });
                                     } else {

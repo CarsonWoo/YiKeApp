@@ -15,7 +15,6 @@
         android:background="#fff"
         app:navigationIcon="@drawable/ic_back_black"
         android:isScrollContainer="true"
-        app:title="返回"
         app:popupTheme="@style/AppTheme.PopupOverlay">
 
     </android.support.v7.widget.Toolbar>

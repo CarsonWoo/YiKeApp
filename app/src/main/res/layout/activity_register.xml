@@ -13,13 +13,13 @@
         android:theme="@style/AppTheme.NoActionBar"
         android:background="#fff"
         app:navigationIcon="@drawable/ic_back_black"
-        app:popupTheme="@style/AppTheme.PopupOverlay"
-        app:title="返回">
+        app:popupTheme="@style/AppTheme.PopupOverlay">
 
     </android.support.v7.widget.Toolbar>
 
     <RelativeLayout
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="41dp"
+        android:background="@android:color/white"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 

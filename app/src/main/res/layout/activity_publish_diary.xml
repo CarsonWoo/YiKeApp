@@ -18,13 +18,11 @@
 
         <Button
             android:id="@+id/btn_diary_post_send"
-            android:layout_marginLeft="87dp"
-            android:background="@android:color/white"
-            android:text="发送"
+            android:layout_marginLeft="110dp"
+            android:background="@drawable/ic_send"
             android:textColor="#e26323"
-            android:textSize="17.6sp"
-            android:layout_width="65dp"
-            android:layout_height="35.6dp" />
+            android:layout_width="35dp"
+            android:layout_height="20.6dp" />
 
     </android.support.v7.widget.Toolbar>
 
