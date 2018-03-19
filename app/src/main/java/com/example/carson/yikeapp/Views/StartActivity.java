@@ -1,7 +1,5 @@
 package com.example.carson.yikeapp.Views;
 
-import android.animation.AnimatorSet;
-import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -150,7 +148,7 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
                     }
                     FormBody.Builder builder = new FormBody.Builder();
                     builder.add("token", token);
-                    HttpUtils.sendRequest(client, ConstantValues.URL_GET_USER_INFO,
+                    HttpUtils.sendRequest(client, ConstantValues.URL_GET_USER_TYPE,
                             builder, new Callback() {
                                 @Override
                                 public void onFailure(Call call, IOException e) {
@@ -165,6 +163,8 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
                                         int code = object.getInt("code");
                                         if (code == 200) {
                                             Intent intent = new Intent(StartActivity.this, HomeActivity.class);
+                                            intent.putExtra(ConstantValues.KEY_TOKEN,token);
+                                            intent.putExtra(ConstantValues.KEY_USER_TYPE,object.getString("msg"));
                                             startActivity(intent);
                                             finish();
                                         } else {

@@ -13,14 +13,11 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.carson.yikeapp.Adapter.DiscussItemPartnerRVAdapter;
 import com.example.carson.yikeapp.R;
 import com.example.carson.yikeapp.Utils.ConstantValues;
 import com.example.carson.yikeapp.Utils.HttpUtils;
@@ -55,6 +52,7 @@ public class HomeActivity extends AppCompatActivity implements FragmentHome.OnFr
 
     private final static String TAG = "HomeActivity";
 
+    private Intent data = null;
     private TabLayout tabLayout;
 
     /**
@@ -75,6 +73,7 @@ public class HomeActivity extends AppCompatActivity implements FragmentHome.OnFr
     private String[] titles = new String[]{"义客", "交流", "消息", ""};
 
     private String token;
+    private String userType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,7 +83,9 @@ public class HomeActivity extends AppCompatActivity implements FragmentHome.OnFr
         final Toolbar toolbar = findViewById(R.id.toolbar_home);
         setSupportActionBar(toolbar);
 
-        token = ConstantValues.getCachedToken(this);
+        data = getIntent();
+        token = data.getStringExtra(ConstantValues.KEY_TOKEN);
+        userType = data.getStringExtra(ConstantValues.KEY_USER_TYPE);
 
         // Create the adapter that will return a fragment for each of the four
         // primary sections of the activity.
@@ -129,26 +130,31 @@ public class HomeActivity extends AppCompatActivity implements FragmentHome.OnFr
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         // 动态设置ToolBar状态
+        Log.d(TAG,"userType: "+userType);
         switch (mViewPager.getCurrentItem()) {
             case 0:
                 menu.findItem(R.id.action_scan).setVisible(true);
                 menu.findItem(R.id.action_setting).setVisible(false);
                 menu.findItem(R.id.action_publish).setVisible(false);
+                menu.findItem(R.id.action_my_store).setVisible(userType.equals("店主"));
                 break;
             case 1:
                 menu.findItem(R.id.action_scan).setVisible(false);
                 menu.findItem(R.id.action_setting).setVisible(false);
                 menu.findItem(R.id.action_publish).setVisible(true);
+                menu.findItem(R.id.action_my_store).setVisible(false);
                 break;
             case 2:
                 menu.findItem(R.id.action_scan).setVisible(false);
                 menu.findItem(R.id.action_setting).setVisible(false);
                 menu.findItem(R.id.action_publish).setVisible(false);
+                menu.findItem(R.id.action_my_store).setVisible(false);
                 break;
             case 3:
                 menu.findItem(R.id.action_scan).setVisible(false);
                 menu.findItem(R.id.action_setting).setVisible(true);
                 menu.findItem(R.id.action_publish).setVisible(false);
+                menu.findItem(R.id.action_my_store).setVisible(false);
                 break;
 
         }

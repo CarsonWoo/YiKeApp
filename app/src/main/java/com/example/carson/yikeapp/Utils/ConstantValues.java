@@ -79,6 +79,8 @@ public class ConstantValues {
 
     public static final String URL_QUESTION_COMMENT_SHOW = "https://www.yiluzou.cn/yike/public/index.php/show_help_comment";
 
+    public static final String URL_GET_USER_TYPE = "https://www.yiluzou.cn/yike/public/index.php/getusertype";
+
     public static final int CODE_TAKE_PHOTO = 1;
 
     public static final int TYPE_TAKE_PHOTO = 1;

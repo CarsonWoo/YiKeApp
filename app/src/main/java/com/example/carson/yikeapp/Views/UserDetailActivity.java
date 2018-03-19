@@ -420,6 +420,7 @@ public class UserDetailActivity extends AppCompatActivity implements View.OnClic
                                                     Intent intent = new Intent(UserDetailActivity.this,
                                                             HomeActivity.class);
                                                     intent.putExtra("token", token);
+                                                    intent.putExtra(ConstantValues.KEY_USER_TYPE,ConstantValues.USER_TYPE_NORMAL);
                                                     startActivity(intent);
                                                     finish();
                                                 } else {

@@ -1,13 +1,12 @@
 package com.example.carson.yikeapp.Views;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Display;
@@ -211,6 +210,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                             Intent intent = new Intent(LoginActivity.this,
                                                     HomeActivity.class);
                                             intent.putExtra("token", token);
+                                            intent.putExtra(ConstantValues.KEY_USER_TYPE,userType);
                                             startActivity(intent);
                                             finish();
                                         } else {
