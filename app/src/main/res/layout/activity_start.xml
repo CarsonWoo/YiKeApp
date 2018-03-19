@@ -8,9 +8,10 @@
 
     <LinearLayout
         android:id="@+id/ll_slogan"
+        android:background="@drawable/bg_start"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="5"
+        android:layout_weight="10"
         android:gravity="center"
         android:orientation="vertical"
         android:weightSum="1">
@@ -19,16 +20,16 @@
             android:layout_width="158sp"
             android:layout_height="0dp"
             android:layout_weight="0.18"
-            android:src="@mipmap/ic_launcher"
+            android:src="@drawable/logo_white"
             tools:ignore="NestedWeights"
             android:contentDescription="@string/description_start" />
 
         <com.example.carson.yikeapp.Views.ArchRivalTextView
-            android:textColor="#e26323"
+            android:textColor="@android:color/white"
             android:id="@+id/artv_slogan"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30sp"
+            android:layout_marginTop="27sp"
             android:text="@string/slogan"
             android:textSize="30sp" />
 
@@ -44,7 +45,8 @@
         android:baselineAligned="false">
 
         <LinearLayout
-            android:gravity="center_horizontal"
+
+            android:gravity="center"
             android:layout_weight="1"
             android:layout_width="0dp"
             android:orientation="vertical"
@@ -54,9 +56,9 @@
 
             <ImageButton
                 android:id="@+id/ib_to_regis"
-                android:background="@mipmap/ic_launcher"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:background="@drawable/ic_send"
+                android:layout_width="40dp"
+                android:layout_height="30dp"
                 tools:ignore="ContentDescription" />
 
             <com.example.carson.yikeapp.Views.ArchRivalTextView
@@ -72,16 +74,16 @@
 
         <LinearLayout
             android:orientation="vertical"
-            android:gravity="center_horizontal"
+            android:gravity="center"
             android:layout_weight="1"
             android:layout_width="0dp"
             android:layout_height="match_parent">
 
             <ImageButton
                 android:id="@+id/ib_to_login"
-                android:background="@mipmap/ic_launcher"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:background="@drawable/ic_send"
+                android:layout_width="40dp"
+                android:layout_height="30dp"
                 tools:ignore="ContentDescription" />
 
             <com.example.carson.yikeapp.Views.ArchRivalTextView

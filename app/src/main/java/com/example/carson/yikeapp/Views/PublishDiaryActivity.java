@@ -136,7 +136,9 @@ public class PublishDiaryActivity extends AppCompatActivity implements View.OnCl
                             }
                             MediaType type = MediaType.parse("image/*");
                             RequestBody fileBody = RequestBody.create(type, photoFile);
+                            Log.i(TAG, token);
                             RequestBody multiBody = new MultipartBody.Builder()
+                                    .setType(MultipartBody.FORM)
                                     .addFormDataPart(ConstantValues.KEY_TOKEN, token)
                                     .addFormDataPart(ConstantValues.KEY_PUBLISH_DIARY_TEXT,
                                             etText.getText().toString())
@@ -155,6 +157,7 @@ public class PublishDiaryActivity extends AppCompatActivity implements View.OnCl
                                             try {
                                                 JSONObject object = new JSONObject(response.body().string());
                                                 int code = object.getInt(ConstantValues.KEY_CODE);
+//                                                Log.i(TAG, object.getString("token"));
                                                 if (code == 200) {
                                                     runOnUiThread(new Runnable() {
                                                         @Override

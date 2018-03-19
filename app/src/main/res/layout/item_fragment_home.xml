@@ -50,7 +50,7 @@
         <TextView
             android:id="@+id/bnb_host"
             android:text="xxx"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
             android:layout_margin="@dimen/text_margin"
@@ -59,13 +59,14 @@
 
         <TextView
             android:id="@+id/bnb_duration"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="00000"
-            android:textSize="13.7sp"
-            android:layout_margin="@dimen/text_margin"
+            android:gravity="end"
+            android:text="15"
+            android:layout_margin="4dp"
+            android:textAppearance="?attr/textAppearanceListItem"
             android:textColor="#999999"
-            android:textAppearance="?attr/textAppearanceListItem" />
+            android:textSize="13.7sp" />
 
     </LinearLayout>
 

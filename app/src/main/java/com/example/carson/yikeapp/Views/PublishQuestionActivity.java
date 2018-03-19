@@ -30,7 +30,7 @@ import okhttp3.Response;
 public class PublishQuestionActivity extends AppCompatActivity {
 
     private TextView tvSend;
-    private EditText etTitle, etText;
+    private EditText etText;
     private Toolbar toolbar;
     private String token;
 
@@ -59,7 +59,6 @@ public class PublishQuestionActivity extends AppCompatActivity {
         tvSend = findViewById(R.id.tv_publish_help);
 
         etText = findViewById(R.id.et_question_post_text);
-        etTitle = findViewById(R.id.et_question_post_title);
 
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -83,7 +82,7 @@ public class PublishQuestionActivity extends AppCompatActivity {
                             e.printStackTrace();
                         }
                         FormBody.Builder builder = new FormBody.Builder();
-                        String text = etTitle.getText().toString() + "\n" + etText.getText().toString();
+                        String text = etText.getText().toString();
                         builder.add(ConstantValues.KEY_TOKEN, token);
                         builder.add(ConstantValues.KEY_PUBLISH_QUESTION_TEXT, text);
                         HttpUtils.sendRequest(client, ConstantValues.URL_QUESTION_PUBLISH, builder,

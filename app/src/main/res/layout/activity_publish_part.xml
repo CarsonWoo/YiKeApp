@@ -41,7 +41,7 @@
         app:layout_anchorGravity="bottom|end"
         app:layout_anchor="@id/et_part_post_comment"
         app:srcCompat="@drawable/ic_publish"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_width="38dp"
+        android:layout_height="38dp" />
 
 </android.support.design.widget.CoordinatorLayout>

@@ -67,21 +67,21 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
         buttonRegis.setOnClickListener(this);
         buttonLogin.setOnClickListener(this);
 
-        float curSloganTranslationY = llSlogan.getTranslationY();
-        float curRNLTranslationY = llRNL.getTranslationY();
-
-
-        ObjectAnimator sloganMoveIn = ObjectAnimator.ofFloat(llSlogan, "translationY",
-                500f, -60f, curSloganTranslationY);
-        ObjectAnimator itemMoveIn = ObjectAnimator.ofFloat(llRNL, "translationY",
-                500f, -60f, curRNLTranslationY);
-        AnimatorSet animSet = new AnimatorSet();
-        animSet.play(sloganMoveIn).with(itemMoveIn);
-        animSet.setDuration(3000);
-        animSet.start();
+//        float curSloganTranslationY = llSlogan.getTranslationY();
+//        float curRNLTranslationY = llRNL.getTranslationY();
+//
+//
+//        ObjectAnimator sloganMoveIn = ObjectAnimator.ofFloat(llSlogan, "translationY",
+//                500f, -60f, curSloganTranslationY);
+//        ObjectAnimator itemMoveIn = ObjectAnimator.ofFloat(llRNL, "translationY",
+//                500f, -60f, curRNLTranslationY);
+//        AnimatorSet animSet = new AnimatorSet();
+//        animSet.play(sloganMoveIn).with(itemMoveIn);
+//        animSet.setDuration(3000);
+//        animSet.start();
 
         //JumpingBeans的用法如下一句
-        jumpingSlogan = JumpingBeans.with(tvSlogan).makeTextJump(0, 6)
+        jumpingSlogan = JumpingBeans.with(tvSlogan).makeTextJump(0, 4)
                 .setIsWave(false).setWavePerCharDelay(5).setLoopDuration(1000).build();
         Runnable runnableJumpSlogan = new Runnable() {
             @Override
