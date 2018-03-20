@@ -1,10 +1,12 @@
 package com.example.carson.yikeapp.Views;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,7 +24,6 @@ import java.io.IOException;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 
-import de.hdodenhof.circleimageview.*;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.FormBody;
@@ -35,13 +36,15 @@ public class ExpDetailActivity extends AppCompatActivity implements View.OnClick
 
     private TextView tvName, tvDate, tvLike, tvContent, tvTitle;
 
-    private Button btnAgree;
+    private Button btnFollow;
 
     private de.hdodenhof.circleimageview.CircleImageView headView;
 
     private String token, titleStr, contentStr, textID, agreeNum, time, userPortrait, userName;
 
     private int isAgree;
+
+    private ImageButton ibtnAgree, ibtnCollect, ibtnComment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,8 +64,11 @@ public class ExpDetailActivity extends AppCompatActivity implements View.OnClick
         tvTitle = findViewById(R.id.tv_exp_detail_title);
         toolbar = findViewById(R.id.toolbar_exp_detail);
 
-        btnAgree = findViewById(R.id.btn_agree_exp_detail);
+        btnFollow = findViewById(R.id.btn_follow_exp_detail);
         headView = findViewById(R.id.civ_exp_detail);
+        ibtnAgree = findViewById(R.id.ibtn_exp_agree);
+        ibtnCollect = findViewById(R.id.ibtn_exp_collect);
+        ibtnComment = findViewById(R.id.ibtn_exp_comment);
 
         token = ConstantValues.getCachedToken(this);
         titleStr = getIntent().getStringExtra(ConstantValues.KEY_EXP_DETAIL_TITLE);
@@ -74,14 +80,22 @@ public class ExpDetailActivity extends AppCompatActivity implements View.OnClick
         userPortrait = getIntent().getStringExtra(ConstantValues.KEY_EXP_DETAIL_USER_PORTRAIT);
 
         tvTitle.setText(titleStr);
-        tvContent.setText(contentStr);
+        tvContent.setText(formedText(contentStr));
         tvName.setText(userName);
         tvLike.setText(agreeNum);
         tvDate.setText(time);
         Glide.with(this).load(userPortrait).into(headView);
 
         isAgree = getIntent().getIntExtra(ConstantValues.KEY_EXP_LIST_IS_AGREE, 0);
+        if (isAgree == 1) {
+            ibtnAgree.setBackgroundResource(R.drawable.ic_like);
+        }
 
+    }
+
+    private String formedText(String contentStr) {
+        //未判断是否有存在连空两行
+        return contentStr.replaceAll("\n", "\n\n");
     }
 
     private void initEvents() {
@@ -102,7 +116,11 @@ public class ExpDetailActivity extends AppCompatActivity implements View.OnClick
                 .setSwipeEdgePercent(0.15f)
                 .setClosePercent(0.5f);
 
-        btnAgree.setOnClickListener(this);
+        btnFollow.setOnClickListener(this);
+
+        ibtnComment.setOnClickListener(this);
+        ibtnCollect.setOnClickListener(this);
+        ibtnAgree.setOnClickListener(this);
 
     }
 
@@ -115,7 +133,7 @@ public class ExpDetailActivity extends AppCompatActivity implements View.OnClick
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.btn_agree_exp_detail:
+            case R.id.ibtn_exp_agree:
                 if (isAgree == 0) {
                     OkHttpClient client = null;
                     try {
@@ -172,7 +190,16 @@ public class ExpDetailActivity extends AppCompatActivity implements View.OnClick
                     Toast.makeText(ExpDetailActivity.this, "您已经点过赞了",
                             Toast.LENGTH_SHORT).show();
                 }
-
+                break;
+            case R.id.btn_follow_exp_detail:
+                break;
+            case R.id.ibtn_exp_collect:
+                break;
+            case R.id.ibtn_exp_comment:
+                Intent toComment = new Intent(ExpDetailActivity.this,
+                        ExpCommentActivity.class);
+                startActivity(toComment);
+                overridePendingTransition(R.anim.ani_right_get_into, R.anim.ani_left_sign_out);
                 break;
         }
     }

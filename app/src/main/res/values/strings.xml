@@ -177,4 +177,5 @@
     <string-array name="option_message">
         <item>删除该聊天</item>
     </string-array>
+
 </resources>

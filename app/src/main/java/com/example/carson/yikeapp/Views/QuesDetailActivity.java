@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Handler;
 import android.os.Message;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -79,6 +80,7 @@ public class QuesDetailActivity extends AppCompatActivity {
 
     private String token, nameStr, headRes, textStr, id;
 
+
     @SuppressLint("HandlerLeak")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -140,7 +142,6 @@ public class QuesDetailActivity extends AppCompatActivity {
                     InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
                     if (imm != null) {
                         imm.hideSoftInputFromWindow(fabComment.getWindowToken(), 0);
-
                     }
                 } else {
                     JSONArray array = (JSONArray) msg.obj;
@@ -303,5 +304,11 @@ public class QuesDetailActivity extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         overridePendingTransition(R.anim.ani_left_get_into, R.anim.ani_right_sign_out);
+    }
+
+    @Override
+    protected void onDestroy() {
+        SwipeBackHelper.onDestroy(this);
+        super.onDestroy();
     }
 }

@@ -1,5 +1,7 @@
 package com.example.carson.yikeapp.Views;
 
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -37,7 +39,7 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
 
     private Handler mHandler = new Handler();
 
-    private ArchRivalTextView tvLogin, tvRegis, tvSlogan;
+    private ArchRivalTextView tvLogin, tvRegis;
 
     private JumpingBeans jumpingLogin, jumpingRegister, jumpingSlogan;
 
@@ -55,7 +57,6 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
 
         tvLogin = findViewById(R.id.artv_login);
         tvRegis = findViewById(R.id.artv_register);
-        tvSlogan = findViewById(R.id.artv_slogan);
 
         llSlogan = findViewById(R.id.ll_slogan);
         llRNL = findViewById(R.id.ll_regis_and_login);
@@ -65,54 +66,54 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
         buttonRegis.setOnClickListener(this);
         buttonLogin.setOnClickListener(this);
 
-//        float curSloganTranslationY = llSlogan.getTranslationY();
-//        float curRNLTranslationY = llRNL.getTranslationY();
-//
-//
-//        ObjectAnimator sloganMoveIn = ObjectAnimator.ofFloat(llSlogan, "translationY",
-//                500f, -60f, curSloganTranslationY);
-//        ObjectAnimator itemMoveIn = ObjectAnimator.ofFloat(llRNL, "translationY",
-//                500f, -60f, curRNLTranslationY);
-//        AnimatorSet animSet = new AnimatorSet();
-//        animSet.play(sloganMoveIn).with(itemMoveIn);
-//        animSet.setDuration(3000);
-//        animSet.start();
+        float curSloganTranslationY = llSlogan.getTranslationY();
+        float curRNLTranslationY = llRNL.getTranslationY();
+
+
+        ObjectAnimator sloganMoveIn = ObjectAnimator.ofFloat(llSlogan, "translationY",
+                500f, -60f, curSloganTranslationY);
+        ObjectAnimator itemMoveIn = ObjectAnimator.ofFloat(llRNL, "translationY",
+                500f, -60f, curRNLTranslationY);
+        AnimatorSet animSet = new AnimatorSet();
+        animSet.play(sloganMoveIn).with(itemMoveIn);
+        animSet.setDuration(3000);
+        animSet.start();
 
         //JumpingBeans的用法如下一句
-        jumpingSlogan = JumpingBeans.with(tvSlogan).makeTextJump(0, 4)
-                .setIsWave(false).setWavePerCharDelay(5).setLoopDuration(1000).build();
-        Runnable runnableJumpSlogan = new Runnable() {
-            @Override
-            public void run() {
-                mHandler.postDelayed(this, TIME);
-                jumpingSlogan.stopJumping();
-                jumpingRegister = JumpingBeans.with(tvRegis).makeTextJump(0, 8)
-                        .setIsWave(true).setLoopDuration(1000).build();
-            }
-        };
-        mHandler.postDelayed(runnableJumpSlogan, TIME);
-
-
-        Runnable runnableJumpRegis = new Runnable() {
-            @Override
-            public void run() {
-                mHandler.postDelayed(this, TIME * 2);
-                jumpingRegister.stopJumping();
-                jumpingLogin = JumpingBeans.with(tvLogin).makeTextJump(0, 5)
-                        .setIsWave(true).setLoopDuration(1000).build();
-            }
-        };
-        mHandler.postDelayed(runnableJumpRegis, TIME * 2);
-
-
-        Runnable runnableJumpLogin = new Runnable() {
-            @Override
-            public void run() {
-                mHandler.postDelayed(this, TIME * 4);
-                jumpingLogin.stopJumping();
-            }
-        };
-        mHandler.postDelayed(runnableJumpLogin, TIME * 4);
+//        jumpingSlogan = JumpingBeans.with(tvSlogan).makeTextJump(0, 4)
+//                .setIsWave(false).setWavePerCharDelay(5).setLoopDuration(1000).build();
+//        Runnable runnableJumpSlogan = new Runnable() {
+//            @Override
+//            public void run() {
+//                mHandler.postDelayed(this, TIME);
+//                jumpingSlogan.stopJumping();
+//                jumpingRegister = JumpingBeans.with(tvRegis).makeTextJump(0, 8)
+//                        .setIsWave(true).setLoopDuration(1000).build();
+//            }
+//        };
+//        mHandler.postDelayed(runnableJumpSlogan, TIME);
+//
+//
+//        Runnable runnableJumpRegis = new Runnable() {
+//            @Override
+//            public void run() {
+//                mHandler.postDelayed(this, TIME * 2);
+//                jumpingRegister.stopJumping();
+//                jumpingLogin = JumpingBeans.with(tvLogin).makeTextJump(0, 5)
+//                        .setIsWave(true).setLoopDuration(1000).build();
+//            }
+//        };
+//        mHandler.postDelayed(runnableJumpRegis, TIME * 2);
+//
+//
+//        Runnable runnableJumpLogin = new Runnable() {
+//            @Override
+//            public void run() {
+//                mHandler.postDelayed(this, TIME * 4);
+//                jumpingLogin.stopJumping();
+//            }
+//        };
+//        mHandler.postDelayed(runnableJumpLogin, TIME * 4);
 
 
     }

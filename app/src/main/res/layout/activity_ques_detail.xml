@@ -93,7 +93,7 @@
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab_comment"
-        app:srcCompat="@drawable/ic_message_square"
+        app:srcCompat="@drawable/ic_comment_white"
         app:layout_anchor="@id/rl_no_use"
         app:layout_anchorGravity="bottom|end"
         android:layout_margin="19dp"

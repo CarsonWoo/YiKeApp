@@ -17,21 +17,12 @@
         android:weightSum="1">
 
         <ImageView
-            android:layout_width="158sp"
+            android:layout_width="100dp"
             android:layout_height="0dp"
             android:layout_weight="0.18"
             android:src="@drawable/logo_white"
             tools:ignore="NestedWeights"
             android:contentDescription="@string/description_start" />
-
-        <com.example.carson.yikeapp.Views.ArchRivalTextView
-            android:textColor="@android:color/white"
-            android:id="@+id/artv_slogan"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="27sp"
-            android:text="@string/slogan"
-            android:textSize="30sp" />
 
     </LinearLayout>
 
