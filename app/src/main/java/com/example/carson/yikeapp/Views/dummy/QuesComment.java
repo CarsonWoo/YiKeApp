@@ -4,7 +4,7 @@ package com.example.carson.yikeapp.Views.dummy;
  * Created by 84594 on 2018/3/10.
  */
 
-public class Comment {
+public class QuesComment {
 
     public static class CommentItem {
         public final String headRes;

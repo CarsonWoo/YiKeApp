@@ -17,6 +17,13 @@
         android:layout_width="match_parent"
         android:layout_height="39dp">
 
+        <ImageButton
+            android:id="@+id/btn_publish_exp_post"
+            android:background="@drawable/ic_send"
+            android:layout_marginLeft="120dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
     </android.support.v7.widget.Toolbar>
 
     <android.support.v4.widget.NestedScrollView
@@ -81,20 +88,44 @@
                     android:layout_height="400dp" />
 
             </LinearLayout>
-
-
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
 
-    <Button
-        android:id="@+id/btn_publish_exp_post"
-        android:layout_marginLeft="2dp"
-        android:layout_marginRight="2dp"
+    <LinearLayout
+        android:id="@+id/ll_exp_add"
         android:layout_alignParentBottom="true"
-        android:textColor="@android:color/white"
-        android:text="发布"
-        android:background="@drawable/bg_button_style2"
         android:layout_width="match_parent"
-        android:layout_height="45dp" />
+        android:orientation="vertical"
+        android:layout_height="35dp">
+
+        <View
+            android:background="#e4e4e4"
+            android:layout_width="match_parent"
+            android:layout_height="1dp" />
+
+        <LinearLayout
+            android:layout_marginTop="1dp"
+            android:layout_width="match_parent"
+            android:layout_height="34dp">
+            <ImageView
+                android:id="@+id/iv_add_pic_exp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_add_pic"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="20dp" />
+
+            <ImageView
+                android:id="@+id/iv_add_well_tag"
+                android:layout_gravity="center"
+                app:srcCompat="@drawable/ic_well"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="18dp" />
+        </LinearLayout>
+
+
+
+    </LinearLayout>
 
 </RelativeLayout>

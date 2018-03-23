@@ -362,7 +362,6 @@ public class FragmentHome extends Fragment implements HomeItemRecyclerViewAdapte
                                     JSONObject object = new JSONObject(response
                                             .body().string());
                                     int code = object.getInt("code");
-                                    Log.d(TAG, object.toString());
                                     if (code == 200) {
                                         JSONArray jsonArray = object.getJSONArray("msg");
                                         Message msg = new Message();
@@ -417,7 +416,6 @@ public class FragmentHome extends Fragment implements HomeItemRecyclerViewAdapte
                                     JSONObject object = new JSONObject(response
                                             .body().string());
                                     int code = object.getInt("code");
-                                    Log.d(TAG, object.toString());
                                     if (code == 200) {
                                         JSONArray jsonArray = object.getJSONArray("msg");
                                         Message msg = new Message();

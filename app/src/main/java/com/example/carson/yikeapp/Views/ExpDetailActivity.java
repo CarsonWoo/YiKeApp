@@ -192,12 +192,20 @@ public class ExpDetailActivity extends AppCompatActivity implements View.OnClick
                 }
                 break;
             case R.id.btn_follow_exp_detail:
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        //TODO 做关注操作
+                        //还缺少userid的参数
+                    }
+                }).start();
                 break;
             case R.id.ibtn_exp_collect:
                 break;
             case R.id.ibtn_exp_comment:
                 Intent toComment = new Intent(ExpDetailActivity.this,
                         ExpCommentActivity.class);
+                toComment.putExtra(ConstantValues.KEY_EXP_LIST_ID, textID);
                 startActivity(toComment);
                 overridePendingTransition(R.anim.ani_right_get_into, R.anim.ani_left_sign_out);
                 break;

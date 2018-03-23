@@ -9,7 +9,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.carson.yikeapp.R;
 import com.example.carson.yikeapp.Views.ArchRivalTextView;
-import com.example.carson.yikeapp.Views.dummy.Comment;
+import com.example.carson.yikeapp.Views.dummy.QuesComment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,18 +20,18 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * Created by 84594 on 2018/3/10.
  */
 
-public class CommentRVAdapter extends RecyclerView.Adapter<CommentRVAdapter.CommentVH> {
+public class CommentQuesRVAdapter extends RecyclerView.Adapter<CommentQuesRVAdapter.CommentVH> {
 
-    private List<Comment.CommentItem> mValues = new ArrayList<>();
+    private List<QuesComment.CommentItem> mValues = new ArrayList<>();
 
-    public CommentRVAdapter() {
+    public CommentQuesRVAdapter() {
 
     }
 
     @Override
     public CommentVH onCreateViewHolder(ViewGroup parent, int viewType) {
         CommentVH vh = new CommentVH(LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.rv_comment_item, parent, false));
+                .inflate(R.layout.rv_comment_ques_item, parent, false));
         return vh;
     }
 
@@ -48,7 +48,7 @@ public class CommentRVAdapter extends RecyclerView.Adapter<CommentRVAdapter.Comm
         return mValues.size();
     }
 
-    public void addData(ArrayList<Comment.CommentItem> mValues) {
+    public void addData(ArrayList<QuesComment.CommentItem> mValues) {
         this.mValues.addAll(mValues);
         notifyDataSetChanged();
     }
@@ -60,7 +60,7 @@ public class CommentRVAdapter extends RecyclerView.Adapter<CommentRVAdapter.Comm
 
     public class CommentVH extends RecyclerView.ViewHolder {
 
-        public Comment.CommentItem item;
+        public QuesComment.CommentItem item;
         CircleImageView head;
         ArchRivalTextView userName;
         TextView text;

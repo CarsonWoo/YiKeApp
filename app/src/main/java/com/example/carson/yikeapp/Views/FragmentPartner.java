@@ -12,6 +12,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -148,6 +149,127 @@ public class FragmentPartner extends Fragment implements OnHeadViewClickedListen
         }
     }
 
+    private void showInfoDialog(final ArrayList<String> datas, final String userID) {
+        AlertDialog.Builder dialogBuilder =
+                new AlertDialog.Builder(getContext());
+        final AlertDialog dialog = dialogBuilder.create();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            View dialogView = LayoutInflater.from(getContext())
+                    .inflate(R.layout.dialog_show_target_user, null);
+            CircleImageView head = dialogView
+                    .findViewById(R.id.civ_dialog_show_target);
+            ArchRivalTextView userName = dialogView
+                    .findViewById(R.id.artv_dialog_name);
+            TextView info = dialogView
+                    .findViewById(R.id.tv_dialog_info);
+            Button btnFollow = dialogView
+                    .findViewById(R.id.btn_dialog_follow);
+            Button btnChat = dialogView
+                    .findViewById(R.id.btn_dialog_chat);
+            ImageView back = dialogView
+                    .findViewById(R.id.iv_dialog_back);
+            Glide.with(getContext()).load(datas.get(1))
+                    .into(head);
+            userName.setText(datas.get(0));
+            info.setText(datas.get(2));
+            back.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.dismiss();
+                }
+            });
+            dialog.setView(dialogView);
+            dialog.show();
+            WindowManager m = getActivity().getWindowManager();
+            //获取屏幕的宽高
+            Display d = m.getDefaultDisplay();
+            //获取当前对话框的宽高
+            WindowManager.LayoutParams p = dialog.getWindow()
+                    .getAttributes();
+            p.height = (int) (d.getHeight() * 0.7);
+            p.width = (int) (d.getWidth() * 0.8);
+            dialog.getWindow().setAttributes(p);
+            btnChat.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent toChat = new Intent(getContext(),
+                            ChatWindowActivity.class);
+                    toChat.putExtra(ConstantValues
+                            .KEY_CHAT_WIN_USERNAME, datas.get(0))
+                            .putExtra(ConstantValues.KEY_CHAT_WIN_USER_ID, userID);
+                    startActivity(toChat);
+                    getActivity().overridePendingTransition(R.anim.ani_right_get_into,
+                            R.anim.ani_left_sign_out);
+                }
+            });
+            btnFollow.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    doFollow(userID, dialog);
+                }
+            });
+        }
+    }
+
+    private void doFollow(final String userId, final AlertDialog dialog) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                OkHttpClient client = null;
+                try {
+                    client = HttpUtils.getUnsafeOkHttpClient();
+                } catch (NoSuchAlgorithmException e) {
+                    e.printStackTrace();
+                } catch (KeyManagementException e) {
+                    e.printStackTrace();
+                }
+                FormBody.Builder builder = new FormBody.Builder();
+                builder.add(ConstantValues.KEY_TOKEN, token);
+                builder.add("id", userId);
+                HttpUtils.sendRequest(client, ConstantValues.URL_FOLLOW, builder,
+                        new Callback() {
+                            @Override
+                            public void onFailure(Call call, IOException e) {
+
+                            }
+
+                            @Override
+                            public void onResponse(Call call, Response response) throws IOException {
+                                try {
+                                    final JSONObject object = new JSONObject(response.body().string());
+                                    int code = object.getInt(ConstantValues.KEY_CODE);
+                                    if (code == 200) {
+                                        getActivity().runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                //还未做关注重复以及关注对象限定的判断
+                                                Toast.makeText(getContext(), "关注成功",
+                                                        Toast.LENGTH_SHORT).show();
+                                                dialog.dismiss();
+                                            }
+                                        });
+                                    } else {
+                                        getActivity().runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                try {
+                                                    Toast.makeText(getContext(), object.getString("msg"),
+                                                            Toast.LENGTH_SHORT).show();
+                                                } catch (JSONException e) {
+                                                    e.printStackTrace();
+                                                }
+                                            }
+                                        });
+                                    }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        });
+            }
+        }).start();
+    }
+
     @Override
     public void onHeadViewClicked(View view, final String userID) {
         new Thread(new Runnable() {
@@ -189,59 +311,7 @@ public class FragmentPartner extends Fragment implements OnHeadViewClickedListen
                                         getActivity().runOnUiThread(new Runnable() {
                                             @Override
                                             public void run() {
-                                                AlertDialog.Builder dialogBuilder =
-                                                        new AlertDialog.Builder(getContext());
-                                                final AlertDialog dialog = dialogBuilder.create();
-                                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                                                    View dialogView = LayoutInflater.from(getContext())
-                                                            .inflate(R.layout.dialog_show_target_user, null);
-                                                    CircleImageView head = dialogView
-                                                            .findViewById(R.id.civ_dialog_show_target);
-                                                    ArchRivalTextView userName = dialogView
-                                                            .findViewById(R.id.artv_dialog_name);
-                                                    TextView info = dialogView
-                                                            .findViewById(R.id.tv_dialog_info);
-                                                    Button btnFollow = dialogView
-                                                            .findViewById(R.id.btn_dialog_follow);
-                                                    Button btnChat = dialogView
-                                                            .findViewById(R.id.btn_dialog_chat);
-                                                    ImageView back = dialogView
-                                                            .findViewById(R.id.iv_dialog_back);
-                                                    Glide.with(getContext()).load(datas.get(1))
-                                                            .into(head);
-                                                    userName.setText(datas.get(0));
-                                                    info.setText(datas.get(2));
-                                                    back.setOnClickListener(new View.OnClickListener() {
-                                                        @Override
-                                                        public void onClick(View v) {
-                                                            dialog.dismiss();
-                                                        }
-                                                    });
-                                                    dialog.setView(dialogView);
-                                                    dialog.show();
-                                                    WindowManager m = getActivity().getWindowManager();
-                                                    //获取屏幕的宽高
-                                                    Display d = m.getDefaultDisplay();
-                                                    //获取当前对话框的宽高
-                                                    WindowManager.LayoutParams p = dialog.getWindow()
-                                                            .getAttributes();
-                                                    p.height = (int) (d.getHeight() * 0.7);
-                                                    p.width = (int) (d.getWidth() * 0.8);
-                                                    dialog.getWindow().setAttributes(p);
-                                                    btnChat.setOnClickListener(new View.OnClickListener() {
-                                                        @Override
-                                                        public void onClick(View v) {
-                                                            Intent toChat = new Intent(getContext(),
-                                                                    ChatWindowActivity.class);
-                                                            toChat.putExtra(ConstantValues
-                                                                    .KEY_CHAT_WIN_USERNAME, datas.get(0))
-                                                                    .putExtra(ConstantValues.KEY_CHAT_WIN_USER_ID, userID);
-                                                            startActivity(toChat);
-                                                            getActivity().overridePendingTransition(R.anim.ani_right_get_into,
-                                                                    R.anim.ani_left_sign_out);
-                                                        }
-                                                    });
-                                                }
+                                                showInfoDialog(datas, userID);
                                             }
                                         });
                                     }

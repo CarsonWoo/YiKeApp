@@ -8,6 +8,9 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.example.carson.yikeapp.R;
@@ -42,7 +45,11 @@ public class PublishExpActivity extends AppCompatActivity implements View.OnClic
 
     private EditText etTitle, etContent, etArea;
 
-    private Button btnPublish;
+    private ImageView addPic, addWellTag;
+
+    private LinearLayout layoutAdd;
+
+    private ImageButton btnPublish;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +70,11 @@ public class PublishExpActivity extends AppCompatActivity implements View.OnClic
         etArea = findViewById(R.id.et_exp_post_area);
 
         btnPublish = findViewById(R.id.btn_publish_exp_post);
+
+        addPic = findViewById(R.id.iv_add_pic_exp);
+        addWellTag = findViewById(R.id.iv_add_well_tag);
+
+        layoutAdd = findViewById(R.id.ll_exp_add);
 
         token = ConstantValues.getCachedToken(this);
     }

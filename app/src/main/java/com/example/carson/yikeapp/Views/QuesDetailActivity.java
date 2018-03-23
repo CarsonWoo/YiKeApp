@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Handler;
 import android.os.Message;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -13,16 +12,12 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.text.Editable;
 import android.text.TextUtils;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
-import android.view.inputmethod.InputMethod;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -30,13 +25,12 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.alibaba.fastjson.JSON;
 import com.bumptech.glide.Glide;
-import com.example.carson.yikeapp.Adapter.CommentRVAdapter;
+import com.example.carson.yikeapp.Adapter.CommentQuesRVAdapter;
 import com.example.carson.yikeapp.R;
 import com.example.carson.yikeapp.Utils.ConstantValues;
 import com.example.carson.yikeapp.Utils.HttpUtils;
-import com.example.carson.yikeapp.Views.dummy.Comment;
+import com.example.carson.yikeapp.Views.dummy.QuesComment;
 import com.jude.swipbackhelper.SwipeBackHelper;
 
 import org.json.JSONArray;
@@ -49,7 +43,6 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.hdodenhof.circleimageview.*;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.FormBody;
@@ -70,9 +63,9 @@ public class QuesDetailActivity extends AppCompatActivity {
 
     private PopupWindow window;
 
-    private CommentRVAdapter adapter;
+    private CommentQuesRVAdapter adapter;
 
-    private ArrayList<Comment.CommentItem> itemList = new ArrayList<>();
+    private ArrayList<QuesComment.CommentItem> itemList = new ArrayList<>();
 
     private List<String> idList = new ArrayList<>();
 
@@ -125,7 +118,7 @@ public class QuesDetailActivity extends AppCompatActivity {
 
         showComment(id);
 
-        adapter = new CommentRVAdapter();
+        adapter = new CommentQuesRVAdapter();
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         rvComment.setLayoutManager(layoutManager);
         rvComment.setAdapter(adapter);
@@ -151,7 +144,7 @@ public class QuesDetailActivity extends AppCompatActivity {
                     for (int i = 0; i < array.length(); i++) {
                         try {
                             object = array.getJSONObject(i);
-                            itemList.add(new Comment.CommentItem(object.getString(ConstantValues.KEY_QUESTION_LIST_USER_PORTRAIT),
+                            itemList.add(new QuesComment.CommentItem(object.getString(ConstantValues.KEY_QUESTION_LIST_USER_PORTRAIT),
                                     object.getString(ConstantValues.KEY_QUESTION_LIST_USER_NAME),
                                     object.getString("text")));
                             Log.i(TAG, object.toString());

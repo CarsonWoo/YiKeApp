@@ -193,7 +193,7 @@
 
                 <ImageButton
                     android:id="@+id/ibtn_exp_collect"
-                    android:background="@drawable/ic_collect"
+                    android:background="@drawable/ic_collect_un"
                     android:layout_width="25dp"
                     android:layout_height="25dp" />
 

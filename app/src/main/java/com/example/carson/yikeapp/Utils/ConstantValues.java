@@ -81,6 +81,14 @@ public class ConstantValues {
 
     public static final String URL_GET_USER_TYPE = "https://www.yiluzou.cn/yike/public/index.php/getusertype";
 
+    public static final String URL_EXP_MAKE_COMMENT = "https://www.yiluzou.cn/yike/public/index.php/experience_comment";
+
+    public static final String URL_EXP_SHOW_COMMENT = "https://www.yiluzou.cn/yike/public/index.php/show_experience_comment";
+
+    public static final String URL_FOLLOW = "https://www.yiluzou.cn/yike/public/index.php/follow";
+
+    public static final String URL_SEARCH_USER = "https://www.yiluzou.cn/yike/public/index.php/search_user";
+
     public static final int CODE_TAKE_PHOTO = 1;
 
     public static final int TYPE_TAKE_PHOTO = 1;
@@ -193,6 +201,8 @@ public class ConstantValues {
     public static final String KEY_EXP_DETAIL_CONTENT = "EXP_DETAIL_CONTENT";
     public static final String KEY_EXP_DETAIL_USER_PORTRAIT = "user_portrait";
     public static final String KEY_EXP_DETAIL_USER_NAME = "username";
+
+    public static final String KEY_EXP_LIST_COMMENT = "text";
 
     //约伴传递参数名称
     public static final String KEY_PART_LIST_PAGE = "page";
