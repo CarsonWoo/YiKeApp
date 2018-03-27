@@ -1,12 +1,19 @@
 package com.example.carson.yikeapp.Views;
 
 import android.animation.AnimatorSet;
+import android.animation.Keyframe;
 import android.animation.ObjectAnimator;
+import android.animation.PropertyValuesHolder;
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationSet;
+import android.view.animation.TranslateAnimation;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -43,8 +50,11 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
 
     private JumpingBeans jumpingLogin, jumpingRegister, jumpingSlogan;
 
-    private LinearLayout llSlogan, llRNL;
+    private LinearLayout llSlogan, llRNL, llStart;
 
+    private Handler handler;
+
+    @SuppressLint("HandlerLeak")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,6 +70,7 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
 
         llSlogan = findViewById(R.id.ll_slogan);
         llRNL = findViewById(R.id.ll_regis_and_login);
+        llStart = findViewById(R.id.ll_start);
 
         tvLogin.setOnClickListener(this);
         tvRegis.setOnClickListener(this);
@@ -68,16 +79,46 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
 
         float curSloganTranslationY = llSlogan.getTranslationY();
         float curRNLTranslationY = llRNL.getTranslationY();
+        float curStartTranslationY = llStart.getTranslationY();
 
+//
+//        ObjectAnimator sloganMoveIn = ObjectAnimator.ofFloat(llSlogan, "translationY",
+//                500f, -60f, curSloganTranslationY);
+//        ObjectAnimator itemMoveIn = ObjectAnimator.ofFloat(llRNL, "translationY",
+//                500f, -60f, curRNLTranslationY);
+//        AnimatorSet animSet = new AnimatorSet();
+//        animSet.play(sloganMoveIn).with(itemMoveIn);
+//        animSet.setDuration(3000);
+//        animSet.start();
 
-        ObjectAnimator sloganMoveIn = ObjectAnimator.ofFloat(llSlogan, "translationY",
-                500f, -60f, curSloganTranslationY);
-        ObjectAnimator itemMoveIn = ObjectAnimator.ofFloat(llRNL, "translationY",
-                500f, -60f, curRNLTranslationY);
-        AnimatorSet animSet = new AnimatorSet();
-        animSet.play(sloganMoveIn).with(itemMoveIn);
-        animSet.setDuration(3000);
-        animSet.start();
+//        Keyframe k0 = Keyframe.ofFloat(0f, 500f);
+//        Keyframe k2 = Keyframe.ofFloat(10f, curStartTranslationY);
+//
+//        PropertyValuesHolder p = PropertyValuesHolder.ofKeyframe("translationY", k0, k2);
+//
+//        ObjectAnimator animator = ObjectAnimator.ofPropertyValuesHolder(llStart, p);
+
+        final ObjectAnimator animator = ObjectAnimator.ofFloat(llStart, "translationY",
+                500f, -60f, curStartTranslationY);
+        animator.setDuration(4 * 1000);
+//        animator.start();
+        llStart.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+               animator.start();
+            }
+        }, 30);
+
+//        handler = new Handler() {
+//            @Override
+//            public void handleMessage(Message msg) {
+//                super.handleMessage(msg);
+//                ObjectAnimator objectAnimator = (ObjectAnimator) msg.obj;
+//                objectAnimator.start();
+//            }
+//        };
+//
+//        handler.sendMessage(msg);
 
         //JumpingBeans的用法如下一句
 //        jumpingSlogan = JumpingBeans.with(tvSlogan).makeTextJump(0, 4)

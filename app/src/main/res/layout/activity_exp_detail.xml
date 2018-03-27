@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<android.support.design.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -19,6 +19,7 @@
             android:id="@+id/toolbar_exp_detail"
             android:layout_width="match_parent"
             android:layout_height="39dp"
+            app:layout_scrollFlags="scroll|enterAlways|snap"
             app:navigationIcon="@drawable/ic_back_black">
 
             <TextView
@@ -34,9 +35,12 @@
     </android.support.design.widget.AppBarLayout>
     
     <android.support.v4.widget.NestedScrollView
-        android:layout_marginTop="40dp"
+        android:id="@+id/sv_exp_detail"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:scrollbars="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_alignParentRight="true">
 
         <LinearLayout
             android:orientation="vertical"
@@ -46,7 +50,8 @@
             <LinearLayout
                 android:background="@android:color/white"
                 android:layout_width="match_parent"
-                android:layout_height="60dp">
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp">
 
                 <TextView
                     android:id="@+id/tv_exp_detail_title"
@@ -56,6 +61,7 @@
                     android:textColor="@android:color/black"
                     android:textStyle="bold"
                     android:textSize="18sp"
+                    android:lineSpacingMultiplier="1.2"
                     android:text="非985、211的本二学生怎样才能尽快提升自己并去英国留学?"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
@@ -130,10 +136,19 @@
                     android:layout_height="17.6dp"
                     android:layout_alignParentRight="true" />
 
-                <TextView
+                <View
+                    android:layout_below="@id/civ_exp_detail"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#dedede" />
+
+                <com.example.carson.yikeapp.Views.HtmlTextView
+                    android:lineSpacingMultiplier="1.15"
                     android:textSize="18sp"
                     android:layout_marginLeft="15dp"
                     android:layout_marginRight="15dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginBottom="50dp"
                     android:layout_below="@id/civ_exp_detail"
                     android:id="@+id/tv_exp_detail_content"
                     android:layout_width="wrap_content"
@@ -146,6 +161,9 @@
     </android.support.v4.widget.NestedScrollView>
 
     <LinearLayout
+        app:layout_anchor="@id/sv_exp_detail"
+        app:layout_anchorGravity="bottom"
+        android:isScrollContainer="true"
         android:orientation="vertical"
         android:layout_alignParentBottom="true"
         android:layout_width="match_parent"
@@ -157,6 +175,7 @@
             android:background="#dbdbdb" />
 
         <LinearLayout
+            android:background="@android:color/white"
             android:layout_marginTop="1dp"
             android:orientation="horizontal"
             android:layout_width="match_parent"
@@ -230,4 +249,4 @@
 
     </LinearLayout>
 
-</RelativeLayout>
+</android.support.design.widget.CoordinatorLayout>

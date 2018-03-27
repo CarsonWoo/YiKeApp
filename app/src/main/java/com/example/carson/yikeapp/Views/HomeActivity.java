@@ -185,6 +185,7 @@ public class HomeActivity extends AppCompatActivity implements FragmentHome.OnFr
                 overridePendingTransition(R.anim.ani_right_get_into, R.anim.ani_left_sign_out);
                 break;
             case R.id.action_publish:
+                //TODO 需要写个PopupWindow来实现点击弹出四个选项框的功能
                 Intent toPublish = new Intent(this, PublishExpActivity.class);
                 startActivity(toPublish);
                 overridePendingTransition(R.anim.ani_right_get_into, R.anim.ani_left_sign_out);
@@ -346,6 +347,7 @@ public class HomeActivity extends AppCompatActivity implements FragmentHome.OnFr
                                     final JSONObject object = new JSONObject(response.body().string());
                                     int code = object.getInt(ConstantValues.KEY_CODE);
                                     if (code == 200) {
+                                        Log.i(TAG, object.getString("msg"));
                                         Intent toExpDetail = new Intent(HomeActivity.this,
                                                 ExpDetailActivity.class);
                                         ArrayList<String> dataList = new ArrayList<>();
@@ -369,6 +371,10 @@ public class HomeActivity extends AppCompatActivity implements FragmentHome.OnFr
                                                 .putExtra(ConstantValues.KEY_EXP_DETAIL_USER_NAME,
                                                         dataList.get(7))
                                                 .putExtra(ConstantValues.KEY_EXP_LIST_IS_AGREE, isAgree);
+                                        if (!dataList.get(3).isEmpty() || !data.equals("")) {
+                                            toExpDetail.putExtra(ConstantValues.KEY_PUBLISH_EXP_PHOTO,
+                                                    dataList.get(3));
+                                        }
                                         startActivity(toExpDetail);
                                         overridePendingTransition(R.anim.ani_right_get_into
                                                 , R.anim.ani_left_sign_out);

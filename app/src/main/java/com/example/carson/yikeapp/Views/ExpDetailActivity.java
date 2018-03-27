@@ -1,9 +1,25 @@
 package com.example.carson.yikeapp.Views;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Matrix;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
+import android.nfc.Tag;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.ImageSpan;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -11,16 +27,21 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.bumptech.glide.DrawableTypeRequest;
 import com.bumptech.glide.Glide;
 import com.example.carson.yikeapp.R;
 import com.example.carson.yikeapp.Utils.ConstantValues;
 import com.example.carson.yikeapp.Utils.HttpUtils;
 import com.jude.swipbackhelper.SwipeBackHelper;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 
@@ -34,17 +55,21 @@ public class ExpDetailActivity extends AppCompatActivity implements View.OnClick
 
     private Toolbar toolbar;
 
-    private TextView tvName, tvDate, tvLike, tvContent, tvTitle;
+    private TextView tvName, tvDate, tvLike, tvTitle;
+
+    private HtmlTextView tvContent;
 
     private Button btnFollow;
 
     private de.hdodenhof.circleimageview.CircleImageView headView;
 
-    private String token, titleStr, contentStr, textID, agreeNum, time, userPortrait, userName;
+    private String token, titleStr, contentStr, textID, agreeNum, time, userPortrait, userName, photo;
 
     private int isAgree;
 
     private ImageButton ibtnAgree, ibtnCollect, ibtnComment;
+
+    private NestedScrollView sv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +95,8 @@ public class ExpDetailActivity extends AppCompatActivity implements View.OnClick
         ibtnCollect = findViewById(R.id.ibtn_exp_collect);
         ibtnComment = findViewById(R.id.ibtn_exp_comment);
 
+        sv = findViewById(R.id.sv_exp_detail);
+
         token = ConstantValues.getCachedToken(this);
         titleStr = getIntent().getStringExtra(ConstantValues.KEY_EXP_DETAIL_TITLE);
         contentStr = getIntent().getStringExtra(ConstantValues.KEY_EXP_DETAIL_CONTENT);
@@ -78,9 +105,14 @@ public class ExpDetailActivity extends AppCompatActivity implements View.OnClick
         time = getIntent().getStringExtra(ConstantValues.KEY_EXP_LIST_TIME);
         userName = getIntent().getStringExtra(ConstantValues.KEY_EXP_DETAIL_USER_NAME);
         userPortrait = getIntent().getStringExtra(ConstantValues.KEY_EXP_DETAIL_USER_PORTRAIT);
+        if (getIntent().hasExtra(ConstantValues.KEY_PUBLISH_EXP_PHOTO)) {
+            photo = getIntent().getStringExtra(ConstantValues.KEY_PUBLISH_EXP_PHOTO);
+        }
 
         tvTitle.setText(titleStr);
-        tvContent.setText(formedText(contentStr));
+        //未完成
+        tvContent.setHtmlFromString(formText(contentStr));
+        Log.i("ExpDetailActivity", tvContent.getText().toString());
         tvName.setText(userName);
         tvLike.setText(agreeNum);
         tvDate.setText(time);
@@ -93,9 +125,26 @@ public class ExpDetailActivity extends AppCompatActivity implements View.OnClick
 
     }
 
-    private String formedText(String contentStr) {
-        //未判断是否有存在连空两行
-        return contentStr.replaceAll("\n", "\n\n");
+    //将contentString转换成html（含标签）的字符串
+    private String formText(String contentStr) {
+        if (contentStr.contains("[图片]") || !photo.isEmpty()) {
+            int index = contentStr.indexOf("[图片]");
+            String bfStr = contentStr.substring(0, index);
+            String afStr = contentStr.substring(index + 4, contentStr.length());
+            contentStr = bfStr + "<img src=\"" + photo + "\" />" + afStr;
+            Log.i("ExpDetailActivity", contentStr);
+        }
+        if (contentStr.contains("\n")) {
+            String[] split = contentStr.split("\n");
+            StringBuilder builder = new StringBuilder();
+            for (int i = 0; i < split.length; i++) {
+                split[i] = "<ul>" + split[i] + "</ul>";
+                builder.append(split[i]);
+            }
+            Log.i("ExpDetailActivity", builder.toString());
+            contentStr = builder.toString();
+        }
+        return contentStr;
     }
 
     private void initEvents() {
@@ -121,6 +170,8 @@ public class ExpDetailActivity extends AppCompatActivity implements View.OnClick
         ibtnComment.setOnClickListener(this);
         ibtnCollect.setOnClickListener(this);
         ibtnAgree.setOnClickListener(this);
+
+
 
     }
 
@@ -217,4 +268,5 @@ public class ExpDetailActivity extends AppCompatActivity implements View.OnClick
         SwipeBackHelper.onDestroy(this);
         super.onDestroy();
     }
+
 }

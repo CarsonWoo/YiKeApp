@@ -58,6 +58,7 @@
         <TextView
             android:textColor="@android:color/black"
             android:id="@+id/tv_ques_post_text"
+            android:lineSpacingMultiplier="1.15"
             android:textSize="18.6sp"
             android:text="    "
             android:layout_marginLeft="5dp"

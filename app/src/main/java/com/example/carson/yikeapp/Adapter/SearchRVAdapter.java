@@ -2,7 +2,6 @@ package com.example.carson.yikeapp.Adapter;
 
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +11,7 @@ import com.bumptech.glide.Glide;
 import com.example.carson.yikeapp.R;
 import com.example.carson.yikeapp.Utils.ConstantValues;
 import com.example.carson.yikeapp.Views.ArchRivalTextView;
-import com.example.carson.yikeapp.Views.dummy.SearchContent;
+import com.example.carson.yikeapp.Datas.SearchContent;
 
 import java.util.ArrayList;
 import java.util.List;
