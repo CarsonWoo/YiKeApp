@@ -61,4 +61,9 @@
         <item name="android:layout_centerVertical">true</item>
     </style>
 
+    <style name="window_menu_in_and_out_style">
+        <item name="android:windowEnterAnimation">@anim/ani_top_get_into</item>
+        <item name="android:windowExitAnimation">@anim/ani_top_sign_out</item>
+    </style>
+
 </resources>

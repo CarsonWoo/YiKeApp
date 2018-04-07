@@ -5,12 +5,36 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <android.support.v7.widget.SearchView
+    <!--<android.support.v7.widget.SearchView-->
+        <!--android:id="@+id/search_view_discuss"-->
+        <!--android:layout_margin="10dp"-->
+        <!--android:background="#16483838"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="30.7dp" />-->
+
+    <LinearLayout
         android:id="@+id/search_view_discuss"
+        android:background="@drawable/bg_circle_image"
         android:layout_margin="10dp"
-        android:background="#16483838"
+        android:gravity="center"
         android:layout_width="match_parent"
-        android:layout_height="30.7dp" />
+        android:orientation="horizontal"
+        android:layout_height="30.7dp">
+
+        <ImageView
+            app:srcCompat="@drawable/ic_search"
+            android:layout_marginRight="5dp"
+            android:layout_width="20dp"
+            android:layout_height="20dp" />
+
+        <TextView
+            android:textSize="15.7sp"
+            android:textColor="#999"
+            android:text="搜索帖子"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
 
     <LinearLayout
         android:layout_marginTop="50dp"

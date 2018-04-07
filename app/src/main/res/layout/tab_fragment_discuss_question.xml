@@ -16,15 +16,4 @@
             android:layout_height="match_parent"></android.support.v7.widget.RecyclerView>
     </android.support.v4.widget.SwipeRefreshLayout>
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab_to_publish_question"
-        app:layout_anchor="@id/srl_refresh_question"
-        app:layout_anchorGravity="bottom|end"
-        android:layout_margin="19dp"
-        app:srcCompat="@drawable/ic_add"
-        android:layout_width="40dp"
-        android:layout_height="40dp" />
-
-
-
 </android.support.design.widget.CoordinatorLayout>

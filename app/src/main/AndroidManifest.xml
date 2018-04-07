@@ -102,7 +102,13 @@
         <activity
             android:name=".Views.QuesDetailActivity"
             android:theme="@style/TransparentTheme" />
-        <activity android:name=".Views.ExpCommentActivity"
+        <activity
+            android:name=".Views.ExpCommentActivity"
+            android:theme="@style/MainTheme" />
+        <activity
+            android:name=".Views.SearchUserActivity"
+            android:theme="@style/MainTheme" />
+        <activity android:name=".Views.FollowActivity"
             android:theme="@style/MainTheme"></activity>
     </application>
 

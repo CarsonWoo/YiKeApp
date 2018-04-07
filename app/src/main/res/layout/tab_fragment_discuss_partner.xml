@@ -19,14 +19,4 @@
     </android.support.v4.widget.SwipeRefreshLayout>
 
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab_to_publish_part"
-        android:layout_margin="19dp"
-        app:srcCompat="@drawable/ic_add"
-        app:layout_anchor="@id/srl_refresh_partner"
-        app:layout_anchorGravity="bottom|end"
-        android:layout_width="40dp"
-        android:layout_height="40dp" />
-
-
 </android.support.design.widget.CoordinatorLayout>

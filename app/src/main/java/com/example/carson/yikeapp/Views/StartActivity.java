@@ -15,6 +15,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
 import android.view.animation.TranslateAnimation;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -28,6 +29,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.security.Key;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 
@@ -47,6 +49,8 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
     private Handler mHandler = new Handler();
 
     private ArchRivalTextView tvLogin, tvRegis;
+
+    private ImageView ivBg, ivLogo;
 
     private JumpingBeans jumpingLogin, jumpingRegister, jumpingSlogan;
 
@@ -68,7 +72,9 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
         tvLogin = findViewById(R.id.artv_login);
         tvRegis = findViewById(R.id.artv_register);
 
-        llSlogan = findViewById(R.id.ll_slogan);
+        ivBg = findViewById(R.id.iv_start_bg);
+        ivLogo = findViewById(R.id.iv_start_logo);
+
         llRNL = findViewById(R.id.ll_regis_and_login);
         llStart = findViewById(R.id.ll_start);
 
@@ -77,10 +83,49 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
         buttonRegis.setOnClickListener(this);
         buttonLogin.setOnClickListener(this);
 
-        float curSloganTranslationY = llSlogan.getTranslationY();
-        float curRNLTranslationY = llRNL.getTranslationY();
-        float curStartTranslationY = llStart.getTranslationY();
+//        float curSloganTranslationY = llSlogan.getTranslationY();
+//        float curRNLTranslationY = llRNL.getTranslationY();
+//        float curStartTranslationY = llStart.getTranslationY();
 
+        float curBgTranslationY = ivBg.getTranslationY();
+        float curLogoTranslationY = ivLogo.getTranslationY();
+
+        float curRegisTranslationY = buttonRegis.getTranslationY();
+        float curLoginTranslationY = buttonLogin.getTranslationY();
+
+        float curTvTranslationY = tvLogin.getTranslationY();
+
+        ObjectAnimator bgMoveIn = ObjectAnimator.ofFloat(ivBg, "translationY", 500f,
+                -60f, curBgTranslationY);
+        ObjectAnimator logoMoveIn = ObjectAnimator.ofFloat(ivLogo, "translationY", 500f,
+                curLogoTranslationY - 60, curLogoTranslationY);
+        AnimatorSet animSet = new AnimatorSet();
+//        animSet.play(logoMoveIn);
+//        animSet.setDuration(3000);
+//        animSet.start();
+
+//        logoMoveIn.setDuration(3000);
+//        logoMoveIn.start();
+        Keyframe k0 = Keyframe.ofFloat(0, curLogoTranslationY - 60);
+        Keyframe k1 = Keyframe.ofFloat(1, curLogoTranslationY);
+
+        PropertyValuesHolder p = PropertyValuesHolder.ofKeyframe("translationY", k0, k1);
+
+        ObjectAnimator regisMoveIn = ObjectAnimator.ofFloat(buttonRegis, "translationY",
+                300f, curRegisTranslationY);
+        ObjectAnimator loginMoveIn = ObjectAnimator.ofFloat(buttonLogin, "translationY",
+                300f, curLoginTranslationY);
+        ObjectAnimator tvLoginMoveIn = ObjectAnimator.ofFloat(tvLogin, "translationY",
+                300f, curTvTranslationY);
+        ObjectAnimator tvRegisMoveIn = ObjectAnimator.ofFloat(tvRegis, "translationY",
+                300f, curTvTranslationY);
+        AnimatorSet set = new AnimatorSet();
+        set.play(regisMoveIn).with(loginMoveIn).with(tvLoginMoveIn).with(tvRegisMoveIn);
+        set.setDuration(2000);
+        set.start();
+
+        ObjectAnimator animator = ObjectAnimator.ofPropertyValuesHolder(ivLogo, p);
+        animator.setDuration(2000).start();
 //
 //        ObjectAnimator sloganMoveIn = ObjectAnimator.ofFloat(llSlogan, "translationY",
 //                500f, -60f, curSloganTranslationY);
@@ -98,16 +143,16 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
 //
 //        ObjectAnimator animator = ObjectAnimator.ofPropertyValuesHolder(llStart, p);
 
-        final ObjectAnimator animator = ObjectAnimator.ofFloat(llStart, "translationY",
-                500f, -60f, curStartTranslationY);
-        animator.setDuration(4 * 1000);
-//        animator.start();
-        llStart.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-               animator.start();
-            }
-        }, 30);
+//        final ObjectAnimator animator = ObjectAnimator.ofFloat(llStart, "translationY",
+//                500f, -60f, curStartTranslationY);
+//        animator.setDuration(4 * 1000);
+////        animator.start();
+//        llStart.postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//               animator.start();
+//            }
+//        }, 30);
 
 //        handler = new Handler() {
 //            @Override

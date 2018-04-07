@@ -21,6 +21,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -56,7 +57,7 @@ public class FragmentDiscuss extends Fragment  {
 
     private Fragment tabSelected = null;
 
-    private SearchView searchView;
+    private LinearLayout searchView;
 
     public FragmentDiscuss() {
 
@@ -108,14 +109,11 @@ public class FragmentDiscuss extends Fragment  {
                 toSearchIntent();
             }
         });
-        searchView.setIconifiedByDefault(true);
-        searchView.setFocusable(false);
         return view;
 
     }
 
     private void toSearchIntent() {
-        searchView.clearFocus();
         Intent toSearch = new Intent(getContext(), SearchActivity.class);
         startActivity(toSearch);
         getActivity().overridePendingTransition(R.anim.ani_right_get_into, R.anim.ani_left_sign_out);

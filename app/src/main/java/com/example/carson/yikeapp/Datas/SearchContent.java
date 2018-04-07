@@ -29,6 +29,8 @@ public class SearchContent {
         public String title;
         public String agreeNum;
 
+        public String photoFile;
+
         public SearchItem(String id, String userName, String headResFile,
                           String content, String currentTime, String typeStr) {
             this.id = id;

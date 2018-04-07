@@ -63,11 +63,14 @@ public class ExpDetailActivity extends AppCompatActivity implements View.OnClick
 
     private de.hdodenhof.circleimageview.CircleImageView headView;
 
-    private String token, titleStr, contentStr, textID, agreeNum, time, userPortrait, userName, photo;
+    private String token, titleStr, contentStr, textID, agreeNum, time, userPortrait, userName, photo,
+            userId;
 
-    private int isAgree;
+    private int isAgree, isCollect;
 
     private ImageButton ibtnAgree, ibtnCollect, ibtnComment;
+
+    private TextView tvIsAgree, tvIsCollect;
 
     private NestedScrollView sv;
 
@@ -95,6 +98,9 @@ public class ExpDetailActivity extends AppCompatActivity implements View.OnClick
         ibtnCollect = findViewById(R.id.ibtn_exp_collect);
         ibtnComment = findViewById(R.id.ibtn_exp_comment);
 
+        tvIsAgree = findViewById(R.id.tv_exp_detail_is_like);
+        tvIsCollect = findViewById(R.id.tv_exp_detail_is_collect);
+
         sv = findViewById(R.id.sv_exp_detail);
 
         token = ConstantValues.getCachedToken(this);
@@ -105,6 +111,7 @@ public class ExpDetailActivity extends AppCompatActivity implements View.OnClick
         time = getIntent().getStringExtra(ConstantValues.KEY_EXP_LIST_TIME);
         userName = getIntent().getStringExtra(ConstantValues.KEY_EXP_DETAIL_USER_NAME);
         userPortrait = getIntent().getStringExtra(ConstantValues.KEY_EXP_DETAIL_USER_PORTRAIT);
+        userId = getIntent().getStringExtra(ConstantValues.KEY_FOLLOW_USER_ID);
         if (getIntent().hasExtra(ConstantValues.KEY_PUBLISH_EXP_PHOTO)) {
             photo = getIntent().getStringExtra(ConstantValues.KEY_PUBLISH_EXP_PHOTO);
         }
@@ -112,15 +119,27 @@ public class ExpDetailActivity extends AppCompatActivity implements View.OnClick
         tvTitle.setText(titleStr);
         //未完成
         tvContent.setHtmlFromString(formText(contentStr));
-        Log.i("ExpDetailActivity", tvContent.getText().toString());
+//        Log.i("ExpDetailActivity", tvContent.getText().toString());
+
         tvName.setText(userName);
         tvLike.setText(agreeNum);
         tvDate.setText(time);
         Glide.with(this).load(userPortrait).into(headView);
 
         isAgree = getIntent().getIntExtra(ConstantValues.KEY_EXP_LIST_IS_AGREE, 0);
+        isCollect = getIntent().getIntExtra(ConstantValues.KEY_EXP_LIST_IS_COLLECT, 0);
         if (isAgree == 1) {
             ibtnAgree.setBackgroundResource(R.drawable.ic_like);
+            tvIsAgree.setText("已点赞");
+        }
+        if (isCollect == 1) {
+            ibtnCollect.setBackgroundResource(R.drawable.ic_collect);
+            tvIsCollect.setText("已收藏");
+        }
+        if (ConstantValues.followIdList.contains(userId)) {
+            btnFollow.setEnabled(false);
+            btnFollow.setClickable(false);
+            btnFollow.setText("已关注");
         }
 
     }
@@ -213,8 +232,8 @@ public class ExpDetailActivity extends AppCompatActivity implements View.OnClick
                                             runOnUiThread(new Runnable() {
                                                 @Override
                                                 public void run() {
-                                                    Toast.makeText(ExpDetailActivity.this,
-                                                            "点赞成功", Toast.LENGTH_SHORT).show();
+                                                    ibtnAgree.setBackgroundResource(R.drawable.ic_like);
+                                                    tvIsAgree.setText("已点赞");
                                                 }
                                             });
                                         } else {
@@ -246,12 +265,83 @@ public class ExpDetailActivity extends AppCompatActivity implements View.OnClick
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        //TODO 做关注操作
-                        //还缺少userid的参数
+                        OkHttpClient client = null;
+                        try {
+                            client = HttpUtils.getUnsafeOkHttpClient();
+                        } catch (NoSuchAlgorithmException e) {
+                            e.printStackTrace();
+                        } catch (KeyManagementException e) {
+                            e.printStackTrace();
+                        }
+                        FormBody.Builder builder = new FormBody.Builder();
+                        builder.add(ConstantValues.KEY_TOKEN, token);
+                        builder.add("id", userId);
+                        HttpUtils.sendRequest(client, ConstantValues.URL_FOLLOW, builder,
+                                new Callback() {
+                                    @Override
+                                    public void onFailure(Call call, IOException e) {
+
+                                    }
+
+                                    @Override
+                                    public void onResponse(Call call, Response response) throws IOException {
+                                        try {
+                                            JSONObject object = new JSONObject(response.body().string());
+                                            int code = object.getInt(ConstantValues.KEY_CODE);
+                                            if (code == 200) {
+                                                ConstantValues.followIdList.add(userId);
+                                            }
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                });
                     }
                 }).start();
                 break;
             case R.id.ibtn_exp_collect:
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        OkHttpClient client = null;
+                        try {
+                            client = HttpUtils.getUnsafeOkHttpClient();
+                        } catch (NoSuchAlgorithmException e) {
+                            e.printStackTrace();
+                        } catch (KeyManagementException e) {
+                            e.printStackTrace();
+                        }
+                        FormBody.Builder builder = new FormBody.Builder();
+                        builder.add(ConstantValues.KEY_EXPERIENCE_ID, textID);
+                        builder.add(ConstantValues.KEY_TOKEN, token);
+                        HttpUtils.sendRequest(client, ConstantValues.URL_COLLECT, builder,
+                                new Callback() {
+                                    @Override
+                                    public void onFailure(Call call, IOException e) {
+
+                                    }
+
+                                    @Override
+                                    public void onResponse(Call call, Response response) throws IOException {
+                                        try {
+                                            JSONObject object = new JSONObject(response.body().string());
+                                            int code = object.getInt(ConstantValues.KEY_CODE);
+                                            if (code == 200) {
+                                                runOnUiThread(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        tvIsCollect.setText("已收藏");
+                                                        ibtnCollect.setBackgroundResource(R.drawable.ic_collect);
+                                                    }
+                                                });
+                                            }
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                });
+                    }
+                }).start();
                 break;
             case R.id.ibtn_exp_comment:
                 Intent toComment = new Intent(ExpDetailActivity.this,

@@ -6,6 +6,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -74,7 +75,7 @@ public class FragmentPartner extends Fragment implements OnHeadViewClickedListen
 
     private OnFragmentInteractionListener mListener;
 
-    private FloatingActionButton fabPublish;
+//    private FloatingActionButton fabPublish;
 
     private ArrayList<PartnerItem.PartItem> mPartnerPostData = new ArrayList<>();
 
@@ -170,6 +171,13 @@ public class FragmentPartner extends Fragment implements OnHeadViewClickedListen
                     .findViewById(R.id.iv_dialog_back);
             Glide.with(getContext()).load(datas.get(1))
                     .into(head);
+            if (ConstantValues.followIdList.contains(userID)) {
+                //已关注该用户
+                btnFollow.setEnabled(false);
+                btnFollow.setClickable(false);
+                btnFollow.setText("已关注");
+//                btnFollow.setTextColor(Color.GRAY);
+            }
             userName.setText(datas.get(0));
             info.setText(datas.get(2));
             back.setOnClickListener(new View.OnClickListener() {
@@ -242,10 +250,10 @@ public class FragmentPartner extends Fragment implements OnHeadViewClickedListen
                                         getActivity().runOnUiThread(new Runnable() {
                                             @Override
                                             public void run() {
-                                                //还未做关注重复以及关注对象限定的判断
                                                 Toast.makeText(getContext(), "关注成功",
                                                         Toast.LENGTH_SHORT).show();
                                                 dialog.dismiss();
+                                                ConstantValues.followIdList.add(userId);
                                             }
                                         });
                                     } else {
@@ -286,7 +294,7 @@ public class FragmentPartner extends Fragment implements OnHeadViewClickedListen
                 FormBody.Builder builder = new FormBody.Builder();
                 builder.add(ConstantValues.KEY_TOKEN, token);
                 builder.add(ConstantValues.KEY_PART_LIST_ID, userID);
-                Log.i(TAG, userID);
+//                Log.i(TAG, userID);
                 HttpUtils.sendRequest(client, ConstantValues.URL_GET_TARGET_USER_INFO,
                         builder, new Callback() {
                             @Override
@@ -307,7 +315,7 @@ public class FragmentPartner extends Fragment implements OnHeadViewClickedListen
                                             String key = (String) iterator.next();
                                             datas.add(detailObj.getString(key));
                                         }
-                                        Log.i(TAG, "responseName = " + datas.get(0));
+//                                        Log.i(TAG, "responseName = " + datas.get(0));
                                         getActivity().runOnUiThread(new Runnable() {
                                             @Override
                                             public void run() {
@@ -370,7 +378,7 @@ public class FragmentPartner extends Fragment implements OnHeadViewClickedListen
                 false);
         rvPartner = view.findViewById(R.id.rv_discuss_partner);
 
-        fabPublish = view.findViewById(R.id.fab_to_publish_part);
+//        fabPublish = view.findViewById(R.id.fab_to_publish_part);
 
         partnerRVAdapter = new DiscussItemPartnerRVAdapter(PartnerItem.ITEMS, mListener,
                 this, this);
@@ -394,14 +402,14 @@ public class FragmentPartner extends Fragment implements OnHeadViewClickedListen
             }
         });
 
-        fabPublish.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent toPublishPartner = new Intent(getContext(), PublishPartActivity.class);
-                startActivity(toPublishPartner);
-                getActivity().overridePendingTransition(R.anim.ani_right_get_into, R.anim.ani_left_sign_out);
-            }
-        });
+//        fabPublish.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent toPublishPartner = new Intent(getContext(), PublishPartActivity.class);
+//                startActivity(toPublishPartner);
+//                getActivity().overridePendingTransition(R.anim.ani_right_get_into, R.anim.ani_left_sign_out);
+//            }
+//        });
 
         mDataHandler = new Handler() {
             @Override

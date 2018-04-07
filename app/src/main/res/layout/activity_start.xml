@@ -7,9 +7,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/ll_slogan"
-        android:background="@drawable/bg_start"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="10"
@@ -18,14 +17,21 @@
         android:weightSum="1">
 
         <ImageView
+            android:id="@+id/iv_start_bg"
+            android:background="@drawable/bg_start"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <ImageView
+            android:layout_centerInParent="true"
+            android:id="@+id/iv_start_logo"
             android:layout_width="100dp"
-            android:layout_height="0dp"
-            android:layout_weight="0.18"
+            android:layout_height="80dp"
             android:src="@drawable/logo_white"
             tools:ignore="NestedWeights"
             android:contentDescription="@string/description_start" />
 
-    </LinearLayout>
+    </RelativeLayout>
 
 
     <LinearLayout

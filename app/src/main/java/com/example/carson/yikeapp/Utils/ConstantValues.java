@@ -5,6 +5,8 @@ import android.content.SharedPreferences;
 import android.os.Environment;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Set;
 
 /**
  * Created by 84594 on 2018/1/17.
@@ -89,6 +91,10 @@ public class ConstantValues {
 
     public static final String URL_SEARCH_USER = "https://www.yiluzou.cn/yike/public/index.php/search_user";
 
+    public static final String URL_SHOW_FOLLOW = "https://www.yiluzou.cn/yike/public/index.php/show_fo";
+
+    public static final String URL_COLLECT = "https://www.yiluzou.cn/yike/public/index.php/collection";
+
     public static final int CODE_TAKE_PHOTO = 1;
 
     public static final int TYPE_TAKE_PHOTO = 1;
@@ -119,11 +125,12 @@ public class ConstantValues {
 
     public static final String TYPE_QUESTION_STRING = "互助";
 
+    //作为关注列表
+    public static ArrayList<String> followIdList = new ArrayList<>();
+
     //还缺一个首页的type
 
     public static final String KEY_CODE = "code";
-
-    public static final String KEY_SEARCH_WORD = "search_word";
 
     //拍照临时存放地址
     public static final String MY_TEMPPHOTO_PATH = Environment.getExternalStorageDirectory() + File.separator ;
@@ -197,12 +204,15 @@ public class ConstantValues {
     public static final String KEY_EXP_LIST_TIME = "time";
     public static final String KEY_EXP_LIST_AGREE_NUM = "agree_number";
     public static final String KEY_EXP_LIST_IS_AGREE = "is_agree";//0代表本用户未点赞，1代表已点赞
+    public static final String KEY_EXP_LIST_IS_COLLECT = "is_collect";
     public static final String KEY_EXP_DETAIL_TITLE = "EXP_DETAIL_TITLE";
     public static final String KEY_EXP_DETAIL_CONTENT = "EXP_DETAIL_CONTENT";
     public static final String KEY_EXP_DETAIL_USER_PORTRAIT = "user_portrait";
     public static final String KEY_EXP_DETAIL_USER_NAME = "username";
 
     public static final String KEY_EXP_LIST_COMMENT = "text";
+
+    public static final String KEY_EXPERIENCE_ID = "experience_id";
 
     //约伴传递参数名称
     public static final String KEY_PART_LIST_PAGE = "page";
@@ -280,6 +290,25 @@ public class ConstantValues {
     public static final String KEY_PUBLISH_QUESTION_TEXT = "text";
     private static final String KEY_RUSUME_ISFINISHED = "resumeState";
 
+    //搜索参数名
+    public static final String KEY_SEARCH_WORD = "search_word";
+    public static final String KEY_USER_PORTRAIT = "user_portrait";
+    public static final String KEY_USER_NAME = "username";
+    public static final String KEY_SEARCH_USER_ID = "id";
+    public static final String KEY_SEARCH_USER_INFO = "introduction";
+    public static final String KEY_SEARCH_TYPE = "type";
+    public static final String KEY_TEXT = "text";
+    public static final String KEY_TIME = "time";
+
+    //关注参数
+    public static final String KEY_FOLLOW_LIST_LENGTH = "follow_list_length";
+    public static final String KEY_FOLLOW_LIST_ID = "follow_id";
+    public static final String KEY_FOLLOW_USER_ID = "follow";
+    public static final String KEY_FOLLOW_USER_TYPE = "usertype";
+    public static final String KEY_FOLLOW_USER_NAME = "username";
+    public static final String KEY_FOLLOW_EXP_POST_NUM = "experience_number";
+    public static final String KEY_FOLLOW_USER_PORTRAIT = "photo_url";
+    public static final String KEY_FOLLOW_USER_LOCATION = "location";
 
     //取得token
     public static String getCachedToken(Context context){
@@ -314,7 +343,7 @@ public class ConstantValues {
 
     //获取密码
     public static String getCachedPsw(Context context){
-        return context.getSharedPreferences(APP_ID,Context.MODE_PRIVATE).getString(KEY_PSW,null);
+        return context.getSharedPreferences(APP_ID, Context.MODE_PRIVATE).getString(KEY_PSW,null);
     }
 
     //储存密码
@@ -323,6 +352,35 @@ public class ConstantValues {
         editor.putString(KEY_PSW,psw);
         editor.apply();
     }
+
+//    //储存关注列表
+//    public static void cacheFollowList(Context context, ArrayList<String> list) {
+//        SharedPreferences.Editor editor = context.getSharedPreferences(APP_ID, Context.MODE_PRIVATE).edit();
+//        cacheFollowListLength(context, list.size(), editor);
+//        for (int i = 0; i < list.size(); i++) {
+//            editor.putString(KEY_FOLLOW_LIST_ID + i, list.get(i));
+//        }
+//        editor.apply();
+//    }
+//
+//    public static void cacheFollowListLength(Context context, int length, SharedPreferences.Editor editor) {
+//        editor.putInt(KEY_FOLLOW_LIST_LENGTH, length);
+//        editor.apply();
+//    }
+//
+//    public static int getCacheListLength(Context context) {
+//        return context.getSharedPreferences(APP_ID, Context.MODE_PRIVATE).getInt(KEY_FOLLOW_LIST_LENGTH, 0);
+//    }
+//
+//    public static ArrayList<String> getCacheFollowList(Context context) {
+//        ArrayList<String> list = new ArrayList<>(getCacheListLength(context));
+//        for (int i = 0; i < list.size(); i++) {
+//            if (context.getSharedPreferences(APP_ID, Context.MODE_PRIVATE).getString(KEY_FOLLOW_LIST_ID, null) != null) {
+//                list.add(context.getSharedPreferences(APP_ID, Context.MODE_PRIVATE).getString(KEY_FOLLOW_LIST_ID, null) + i);
+//            }
+//        }
+//        return list;
+//    }
 
     //获取简历完成状态
     public static Boolean getCachRusumeState(Context context){

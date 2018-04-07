@@ -1,8 +1,16 @@
 package com.example.carson.yikeapp.Views;
 
+import android.animation.ObjectAnimator;
+import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.TabLayout.TabLayoutOnPageChangeListener;
 import android.support.v4.app.Fragment;
@@ -13,11 +21,18 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.carson.yikeapp.R;
 import com.example.carson.yikeapp.Utils.ConstantValues;
 import com.example.carson.yikeapp.Utils.HttpUtils;
@@ -28,6 +43,7 @@ import com.example.carson.yikeapp.Views.dummy.HomeContent;
 import com.example.carson.yikeapp.Views.dummy.PartnerItem;
 import com.example.carson.yikeapp.Views.dummy.QuestionItem;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -55,6 +71,11 @@ public class HomeActivity extends AppCompatActivity implements FragmentHome.OnFr
     private Intent data = null;
     private TabLayout tabLayout;
 
+    private Toolbar toolbar;
+
+    private TextView tv2PubExp, tv2PubPart, tv2PubQues, tv2PubDiary;
+    private ImageView iv2PubExp, iv2PubPart, iv2PubQues, iv2PubDiary;
+
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
      * fragments for each of the sections. We use a
@@ -70,18 +91,37 @@ public class HomeActivity extends AppCompatActivity implements FragmentHome.OnFr
      */
     private ViewPager mViewPager;
 
+    private PopupWindow window = null;
+
     private String[] titles = new String[]{"义客", "交流", "消息", ""};
 
     private String token;
     private String userType;
+    private ArrayList<String> followIdList;
 
+    private Handler mHandler;
+
+    @SuppressLint("HandlerLeak")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        final Toolbar toolbar = findViewById(R.id.toolbar_home);
+        toolbar = findViewById(R.id.toolbar_home);
         setSupportActionBar(toolbar);
+
+        View windowView = LayoutInflater.from(this).inflate(R.layout.layout_popwin_pub_type, null, false);
+        window = new PopupWindow(windowView, ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT);
+
+        tv2PubExp = window.getContentView().findViewById(R.id.tv2publish_exp);
+        tv2PubPart = window.getContentView().findViewById(R.id.tv2publish_partner);
+        tv2PubQues = window.getContentView().findViewById(R.id.tv2publish_ques);
+        tv2PubDiary = window.getContentView().findViewById(R.id.tv2publish_diary);
+        iv2PubExp = window.getContentView().findViewById(R.id.iv2publish_exp);
+        iv2PubPart = window.getContentView().findViewById(R.id.iv2publish_partner);
+        iv2PubQues = window.getContentView().findViewById(R.id.iv2publish_ques);
+        iv2PubDiary = window.getContentView().findViewById(R.id.iv2publish_diary);
 
         data = getIntent();
         token = data.getStringExtra(ConstantValues.KEY_TOKEN);
@@ -125,12 +165,47 @@ public class HomeActivity extends AppCompatActivity implements FragmentHome.OnFr
 
             }
         });
+
+//        followIdList = ConstantValues.getCacheFollowList(this);
+        followIdList = ConstantValues.followIdList;
+        Log.i(TAG, ConstantValues.followIdList.toString());
+//        if (followIdList != null) {
+//        } else {
+//            followIdList = new ArrayList<>();
+//        }
+        //进入首页时先获取关注用户的列表
+        getFollowList();
+        mHandler = new Handler() {
+            @Override
+            public void handleMessage(Message msg) {
+                super.handleMessage(msg);
+                JSONArray array = (JSONArray) msg.obj;
+                JSONObject object;
+                for (int i = 0; i < array.length(); i++) {
+                    try {
+                        object = array.getJSONObject(i);
+                        String id = object.getString(ConstantValues.KEY_FOLLOW_USER_ID);
+                        if (!followIdList.contains(id)) {
+                            followIdList.add(id);
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+//                ConstantValues.cacheFollowList(HomeActivity.this, followIdList);
+//                Log.i(TAG, "follow list " + followIdList);
+//                Log.i(TAG, "cache follow list " + ConstantValues.getCacheFollowList(HomeActivity.this));
+                ConstantValues.followIdList = followIdList;
+                Log.i(TAG, ConstantValues.followIdList.toString());
+            }
+        };
+
     }
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         // 动态设置ToolBar状态
-        Log.d(TAG,"userType: "+userType);
+        Log.d(TAG,"userType: "+ userType);
         switch (mViewPager.getCurrentItem()) {
             case 0:
                 menu.findItem(R.id.action_scan).setVisible(true);
@@ -168,6 +243,7 @@ public class HomeActivity extends AppCompatActivity implements FragmentHome.OnFr
         return true;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -185,14 +261,84 @@ public class HomeActivity extends AppCompatActivity implements FragmentHome.OnFr
                 overridePendingTransition(R.anim.ani_right_get_into, R.anim.ani_left_sign_out);
                 break;
             case R.id.action_publish:
-                //TODO 需要写个PopupWindow来实现点击弹出四个选项框的功能
-                Intent toPublish = new Intent(this, PublishExpActivity.class);
-                startActivity(toPublish);
-                overridePendingTransition(R.anim.ani_right_get_into, R.anim.ani_left_sign_out);
+                initializeItem();
+                if (window.isShowing()) {
+                    window.dismiss();
+                } else {
+                    window.setOutsideTouchable(true);
+                    window.setBackgroundDrawable(new BitmapDrawable());
+                    window.setAnimationStyle(R.style.window_menu_in_and_out_style);
+                    window.showAsDropDown(toolbar, 100, 0, Gravity.BOTTOM | Gravity.RIGHT);
+                    tv2PubExp.setOnClickListener(new View.OnClickListener() {
+                        @SuppressLint("ResourceAsColor")
+                        @Override
+                        public void onClick(View v) {
+                            tv2PubExp.setTextColor(Color.parseColor("#ff6600"));
+                            iv2PubExp.setImageResource(R.drawable.ic_exp_clicked);
+                            Intent toExp = new Intent(HomeActivity.this,
+                                    PublishExpActivity.class);
+                            startActivity(toExp);
+                            overridePendingTransition(R.anim.ani_right_get_into, R.anim.ani_left_sign_out);
+                            window.dismiss();
+                        }
+                    });
+                    tv2PubPart.setOnClickListener(new View.OnClickListener() {
+                        @SuppressLint("ResourceAsColor")
+                        @Override
+                        public void onClick(View v) {
+                            tv2PubPart.setTextColor(Color.parseColor("#ff6600"));
+                            iv2PubPart.setImageResource(R.drawable.ic_partner_clicked);
+                            Intent toPart = new Intent(HomeActivity.this,
+                                    PublishPartActivity.class);
+                            startActivity(toPart);
+                            overridePendingTransition(R.anim.ani_right_get_into, R.anim.ani_left_sign_out);
+                            window.dismiss();
+                        }
+                    });
+                    tv2PubQues.setOnClickListener(new View.OnClickListener() {
+                        @SuppressLint("ResourceAsColor")
+                        @Override
+                        public void onClick(View v) {
+                            tv2PubQues.setTextColor(Color.parseColor("#ff6600"));
+                            iv2PubQues.setImageResource(R.drawable.ic_search_clicked);
+                            Intent toQues = new Intent(HomeActivity.this,
+                                    PublishQuestionActivity.class);
+                            startActivity(toQues);
+                            overridePendingTransition(R.anim.ani_right_get_into, R.anim.ani_left_sign_out);
+                            window.dismiss();
+                        }
+                    });
+                    tv2PubDiary.setOnClickListener(new View.OnClickListener() {
+                        @SuppressLint("ResourceAsColor")
+                        @Override
+                        public void onClick(View v) {
+                            tv2PubDiary.setTextColor(Color.parseColor("#ff6600"));
+                            iv2PubDiary.setImageResource(R.drawable.ic_like_stroke_clicked);
+                            Intent toDiary = new Intent(HomeActivity.this,
+                                    PublishDiaryActivity.class);
+                            startActivity(toDiary);
+                            overridePendingTransition(R.anim.ani_right_get_into, R.anim.ani_left_sign_out);
+                            window.dismiss();
+                        }
+                    });
+                }
                 break;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @SuppressLint("ResourceAsColor")
+    private void initializeItem() {
+        tv2PubDiary.setTextColor(Color.BLACK);
+        tv2PubExp.setTextColor(Color.BLACK);
+        tv2PubPart.setTextColor(Color.BLACK);
+        tv2PubQues.setTextColor(Color.BLACK);
+
+        iv2PubExp.setImageResource(R.drawable.ic_exp);
+        iv2PubPart.setImageResource(R.drawable.ic_partner);
+        iv2PubQues.setImageResource(R.drawable.ic_search);
+        iv2PubDiary.setImageResource(R.drawable.ic_like_stroke);
     }
 
     @Override
@@ -219,8 +365,8 @@ public class HomeActivity extends AppCompatActivity implements FragmentHome.OnFr
     public void onFragmentInteraction(ArrayList item) {
         switch (mViewPager.getCurrentItem()) {
             case 0:
-                Log.d(TAG, "点击了首页的item");
-                Log.d(TAG, ((HomeContent.BNBHomeItem) (item.get(0))).id + "");
+//                Log.d(TAG, "点击了首页的item");
+//                Log.d(TAG, ((HomeContent.BNBHomeItem) (item.get(0))).id + "");
                 Intent toStoreDetail = new Intent(HomeActivity.this, StoreDetailActivity.class);
                 toStoreDetail.putExtra(ConstantValues.KEY_STORE_MORE_DETAIL, ((HomeContent.BNBHomeItem) (item.get(0))).moreDetail);
                 toStoreDetail.putExtra(ConstantValues.KEY_STORE_NAME, ((HomeContent.BNBHomeItem) (item.get(0))).name);
@@ -229,26 +375,23 @@ public class HomeActivity extends AppCompatActivity implements FragmentHome.OnFr
                 overridePendingTransition(R.anim.ani_right_get_into, R.anim.ani_left_sign_out);
                 break;
             case 1:
-                Log.i(TAG, item.get(0).getClass() + "");
+//                Log.i(TAG, item.get(0).getClass() + "");
                 if (item.get(0) instanceof DiaryItem.DItem) {
-                    Log.i(TAG, "点击了diaryItem");
+//                    Log.i(TAG, "点击了diaryItem");
                 } else if (item.get(0) instanceof ExperienceItem.ExpItem) {
-                    Log.i(TAG, "点击了ExpItem");
                     getToSingleExpPost(((ExperienceItem.ExpItem) item.get(0)).id,
-                            ((ExperienceItem.ExpItem) item.get(0)).isAgree);
+                            ((ExperienceItem.ExpItem) item.get(0)).isAgree,
+                            ((ExperienceItem.ExpItem) item.get(0)).isCollect);
                 } else if (item.get(0) instanceof PartnerItem.PartItem) {
-                    Log.i(TAG, "点击了partItem");
                     Log.i(TAG, ((PartnerItem.PartItem) item.get(0)).id + " " + ((PartnerItem.PartItem) item.get(0)).isAgree);
                 } else if (item.get(0) instanceof QuestionItem.QuesItem) {
-                    //haiweiwancheng
-                    Log.i(TAG, "点击了quesItem");
                     goToSingleQuestionPost(((QuestionItem.QuesItem) item.get(0)).id);
                 }
                 break;
             case 2:
                 Intent toChatWin = new Intent(HomeActivity.this, ChatWindowActivity.class);
                 toChatWin.putExtra(ConstantValues.KEY_HOME_LIST_USERNAME, ((ChatItem.ChatWinItem) (item.get(0))).name);
-                Log.d(TAG, "HomeList_HotelId: " + ((ChatItem.ChatWinItem) (item.get(0))).id);
+//                Log.d(TAG, "HomeList_HotelId: " + ((ChatItem.ChatWinItem) (item.get(0))).id);
                 toChatWin.putExtra(ConstantValues.KEY_CHAT_WIN_USER_ID, ((ChatItem.ChatWinItem) (item.get(0))).userId);
                 startActivityForResult(toChatWin, ConstantValues.REQUESTCODE_IF_MESSAGE_NEED_REFRESH);
                 overridePendingTransition(R.anim.ani_right_get_into, R.anim.ani_left_sign_out);
@@ -319,7 +462,7 @@ public class HomeActivity extends AppCompatActivity implements FragmentHome.OnFr
         }).start();
     }
 
-    private void getToSingleExpPost(final String id, final int isAgree) {
+    private void getToSingleExpPost(final String id, final int isAgree, final int isCollect) {
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -333,7 +476,7 @@ public class HomeActivity extends AppCompatActivity implements FragmentHome.OnFr
                 }
                 FormBody.Builder builder = new FormBody.Builder();
                 builder.add(ConstantValues.KEY_TOKEN, token);
-                builder.add("experience_id", id);
+                builder.add(ConstantValues.KEY_EXPERIENCE_ID, id);
                 HttpUtils.sendRequest(client, ConstantValues.URL_EXP_SINGLE_POST, builder,
                         new Callback() {
                             @Override
@@ -347,7 +490,8 @@ public class HomeActivity extends AppCompatActivity implements FragmentHome.OnFr
                                     final JSONObject object = new JSONObject(response.body().string());
                                     int code = object.getInt(ConstantValues.KEY_CODE);
                                     if (code == 200) {
-                                        Log.i(TAG, object.getString("msg"));
+//                                        Log.i(TAG, object.getString("msg"));
+//                                        Log.i(TAG, object.getString("msg"));
                                         Intent toExpDetail = new Intent(HomeActivity.this,
                                                 ExpDetailActivity.class);
                                         ArrayList<String> dataList = new ArrayList<>();
@@ -366,11 +510,14 @@ public class HomeActivity extends AppCompatActivity implements FragmentHome.OnFr
                                                         dataList.get(4))
                                                 .putExtra(ConstantValues.KEY_EXP_LIST_TIME,
                                                         dataList.get(5))
-                                                .putExtra(ConstantValues.KEY_EXP_DETAIL_USER_PORTRAIT,
+                                                .putExtra(ConstantValues.KEY_FOLLOW_USER_ID,
                                                         dataList.get(6))
-                                                .putExtra(ConstantValues.KEY_EXP_DETAIL_USER_NAME,
+                                                .putExtra(ConstantValues.KEY_EXP_DETAIL_USER_PORTRAIT,
                                                         dataList.get(7))
-                                                .putExtra(ConstantValues.KEY_EXP_LIST_IS_AGREE, isAgree);
+                                                .putExtra(ConstantValues.KEY_EXP_DETAIL_USER_NAME,
+                                                        dataList.get(8))
+                                                .putExtra(ConstantValues.KEY_EXP_LIST_IS_AGREE, isAgree)
+                                                .putExtra(ConstantValues.KEY_EXP_LIST_IS_COLLECT, isCollect);
                                         if (!dataList.get(3).isEmpty() || !data.equals("")) {
                                             toExpDetail.putExtra(ConstantValues.KEY_PUBLISH_EXP_PHOTO,
                                                     dataList.get(3));
@@ -418,6 +565,47 @@ public class HomeActivity extends AppCompatActivity implements FragmentHome.OnFr
 //        } else if (fragment instanceof FragmentDiary) {
 //            Log.i(TAG, "Instance of FragmentDiary");
 //        }
+    }
+
+    public void getFollowList() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                OkHttpClient client = null;
+                try {
+                    client = HttpUtils.getUnsafeOkHttpClient();
+                } catch (NoSuchAlgorithmException e) {
+                    e.printStackTrace();
+                } catch (KeyManagementException e) {
+                    e.printStackTrace();
+                }
+                FormBody.Builder builder = new FormBody.Builder();
+                builder.add(ConstantValues.KEY_TOKEN, token);
+                HttpUtils.sendRequest(client, ConstantValues.URL_SHOW_FOLLOW, builder,
+                        new Callback() {
+                            @Override
+                            public void onFailure(Call call, IOException e) {
+
+                            }
+
+                            @Override
+                            public void onResponse(Call call, Response response) throws IOException {
+                                try {
+                                    JSONObject object = new JSONObject(response.body().string());
+                                    int code = object.getInt(ConstantValues.KEY_CODE);
+                                    if (code == 200) {
+                                        JSONArray array = object.getJSONArray("msg");
+                                        Message msg = new Message();
+                                        msg.obj = array;
+                                        mHandler.sendMessage(msg);
+                                    }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        });
+            }
+        }).start();
     }
 
     /**

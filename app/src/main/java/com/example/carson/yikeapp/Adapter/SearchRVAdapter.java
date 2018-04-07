@@ -68,7 +68,7 @@ public class SearchRVAdapter extends RecyclerView.Adapter<SearchRVAdapter.ItemVi
         View view;
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
 
-        view = inflater.inflate(R.layout.search_rv_item_list, parent, false);
+        view = inflater.inflate(R.layout.search_rv_item_post, parent, false);
         return new ItemViewHolder(view);
     }
 
@@ -97,7 +97,7 @@ public class SearchRVAdapter extends RecyclerView.Adapter<SearchRVAdapter.ItemVi
                 public void onClick(View v) {
                     mListener.onExpItemClick(v, holder.item.id, holder.item.userName,
                             holder.item.headResFile, holder.item.title, holder.item.content,
-                            holder.item.currentTime, holder.item.agreeNum);
+                            holder.item.currentTime, holder.item.agreeNum, holder.item.photoFile);
                 }
             });
         } else if (mValues.get(position).typeStr.equals(ConstantValues.TYPE_QUESTION_STRING)) {
@@ -122,7 +122,7 @@ public class SearchRVAdapter extends RecyclerView.Adapter<SearchRVAdapter.ItemVi
         void onSearchItemClick(View view, String type);
 
         void onExpItemClick(View v, String id, String name, String res, String title,
-                            String content, String time, String agreeNum);
+                            String content, String time, String agreeNum, String photoUrl);
 
         void onQuesItemClick(View v, String id, String name, String res, String text);
 

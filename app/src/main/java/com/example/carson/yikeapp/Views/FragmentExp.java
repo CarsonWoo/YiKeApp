@@ -45,7 +45,7 @@ import okhttp3.Response;
  * Created by 84594 on 2018/2/26.
  */
 
-public class FragmentExp extends Fragment {
+public class FragmentExp extends Fragment implements DiscussItemExperienceRVAdapter.OnCollectClickListener {
 
     private static final String TAG = "FragmentExperience";
 
@@ -65,7 +65,11 @@ public class FragmentExp extends Fragment {
 
     private int judgeCode = 1;
 
-    private boolean isChanged;
+    @Override
+    public void onCollectClick(View v, String id) {
+        actionCollect(id);
+    }
+
     public interface OnFragmentInteractionListener {
         void onFragmentInteraction(ArrayList item);
     }
@@ -88,7 +92,7 @@ public class FragmentExp extends Fragment {
         token = ConstantValues.getCachedToken(getContext());
 
 
-        getExpPostList(judgeCode);
+
     }
 
     @SuppressLint("HandlerLeak")
@@ -105,7 +109,7 @@ public class FragmentExp extends Fragment {
 
         rvExp = view.findViewById(R.id.rv_discuss_experience);
         rvExp.setLayoutManager(new LinearLayoutManager(view.getContext()));
-        adapter = new DiscussItemExperienceRVAdapter(ExperienceItem.ITEMS, mListener);
+        adapter = new DiscussItemExperienceRVAdapter(mListener, this);
         rvExp.setAdapter(adapter);
         rvExp.addItemDecoration(new DividerItemDecoration(view.getContext(),
                 DividerItemDecoration.VERTICAL));
@@ -130,6 +134,8 @@ public class FragmentExp extends Fragment {
             }
         });
 
+        getExpPostList(judgeCode);
+
         mDataHandler = new Handler() {
             @Override
             public void handleMessage(Message msg) {
@@ -152,14 +158,18 @@ public class FragmentExp extends Fragment {
                                     Integer.parseInt(object
                                             .getString(ConstantValues.KEY_EXP_LIST_AGREE_NUM)),
                                     Integer.parseInt(object
-                                            .getString(ConstantValues.KEY_EXP_LIST_IS_AGREE))));
+                                            .getString(ConstantValues.KEY_EXP_LIST_IS_AGREE)),
+                                    Integer.parseInt(object
+                                            .getString(ConstantValues.KEY_EXP_LIST_IS_COLLECT))));
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
                 }
                 if (dataSize == expPostData.size()) {
-                    Toast.makeText(getContext(), "暂时没有更多经验帖", Toast.LENGTH_SHORT).show();
+                    if (srl.isRefreshing()) {
+                        Toast.makeText(getContext(), "暂时没有更多经验帖", Toast.LENGTH_SHORT).show();
+                    }
                     if (judgeCode == 1) {
                         //以时间排序
                         expPostData.clear();
@@ -175,7 +185,9 @@ public class FragmentExp extends Fragment {
                                         Integer.parseInt(object
                                                 .getString(ConstantValues.KEY_EXP_LIST_AGREE_NUM)),
                                         Integer.parseInt(object
-                                                .getString(ConstantValues.KEY_EXP_LIST_IS_AGREE))));
+                                                .getString(ConstantValues.KEY_EXP_LIST_IS_AGREE)),
+                                        Integer.parseInt(object
+                                                .getString(ConstantValues.KEY_EXP_LIST_IS_COLLECT))));
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
@@ -194,7 +206,9 @@ public class FragmentExp extends Fragment {
                                         Integer.parseInt(object
                                                 .getString(ConstantValues.KEY_EXP_LIST_AGREE_NUM)),
                                         Integer.parseInt(object
-                                                .getString(ConstantValues.KEY_EXP_LIST_IS_AGREE))));
+                                                .getString(ConstantValues.KEY_EXP_LIST_IS_AGREE)),
+                                        Integer.parseInt(object
+                                                .getString(ConstantValues.KEY_EXP_LIST_IS_COLLECT))));
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
@@ -237,6 +251,58 @@ public class FragmentExp extends Fragment {
         });
 
         return view;
+    }
+
+    private void actionCollect(String id) {
+        OkHttpClient client = null;
+        try {
+            client = HttpUtils.getUnsafeOkHttpClient();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (KeyManagementException e) {
+            e.printStackTrace();
+        }
+        FormBody.Builder builder = new FormBody.Builder();
+        builder.add(ConstantValues.KEY_TOKEN, token);
+        builder.add(ConstantValues.KEY_EXPERIENCE_ID, id);
+        HttpUtils.sendRequest(client, ConstantValues.URL_COLLECT, builder,
+                new Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+
+                    }
+
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+                        try {
+                            final JSONObject object = new JSONObject(response.body().string());
+                            int code = object.getInt(ConstantValues.KEY_CODE);
+                            if (code == 200) {
+                                getActivity().runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Toast.makeText(getContext(), "收藏成功", Toast.LENGTH_SHORT)
+                                                .show();
+                                    }
+                                });
+                            } else {
+                                getActivity().runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        try {
+                                            Toast.makeText(getContext(), object.getString("msg"),
+                                                    Toast.LENGTH_SHORT).show();
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                });
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
     }
 
     private void getExpPostList(final int sortCode) {

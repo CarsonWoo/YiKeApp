@@ -53,7 +53,7 @@ public class FragmentQuestion extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-    private FloatingActionButton fabToPublish;
+//    private FloatingActionButton fabToPublish;
 
     private ArrayList<QuestionItem.QuesItem> mPostData = new ArrayList<>();
 
@@ -152,15 +152,15 @@ public class FragmentQuestion extends Fragment {
             }
         };
 
-        fabToPublish = view.findViewById(R.id.fab_to_publish_question);
-        fabToPublish.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent toPublish = new Intent(getContext(), PublishQuestionActivity.class);
-                startActivity(toPublish);
-                getActivity().overridePendingTransition(R.anim.ani_right_get_into, R.anim.ani_left_sign_out);
-            }
-        });
+//        fabToPublish = view.findViewById(R.id.fab_to_publish_question);
+//        fabToPublish.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent toPublish = new Intent(getContext(), PublishQuestionActivity.class);
+//                startActivity(toPublish);
+//                getActivity().overridePendingTransition(R.anim.ani_right_get_into, R.anim.ani_left_sign_out);
+//            }
+//        });
 
         getQuestionPostList();
 

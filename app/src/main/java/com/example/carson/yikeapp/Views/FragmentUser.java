@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -103,6 +104,7 @@ public class FragmentUser extends Fragment {
             final TextView userCredit = view.findViewById(R.id.tv_user_credit_value);
             final TextView userExpPost = view.findViewById(R.id.tv_user_info_exp_post_value);
             RelativeLayout itemResume = view.findViewById(R.id.item_user_normal_resume);
+            RelativeLayout itemFollow = view.findViewById(R.id.item_user_follow);
 
             //向服务器获取用户信息
             final JSONObject[] userInfo = {new JSONObject()};
@@ -140,7 +142,6 @@ public class FragmentUser extends Fragment {
 
                 }
             };
-
             //设置点击头像编辑资料
             userHead.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -167,6 +168,17 @@ public class FragmentUser extends Fragment {
                     getActivity().overridePendingTransition(R.anim.ani_right_get_into, R.anim.ani_left_sign_out);
                 }
             });
+
+            //关注点击
+            itemFollow.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent toFollow = new Intent(getContext(), FollowActivity.class);
+                    startActivity(toFollow);
+                    getActivity().overridePendingTransition(R.anim.ani_right_get_into, R.anim.ani_left_sign_out);
+                }
+            });
+
             return view;
 
         } else {

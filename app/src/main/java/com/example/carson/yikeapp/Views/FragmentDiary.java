@@ -91,7 +91,7 @@ public class FragmentDiary extends Fragment implements OnLikeClickedListener {
 
     private SwipeRefreshLayout srl;
 
-    private FloatingActionButton fabToPublish;
+//    private FloatingActionButton fabToPublish;
 
     private RecyclerView rvDiary;
 
@@ -251,16 +251,16 @@ public class FragmentDiary extends Fragment implements OnLikeClickedListener {
 
         srl = view.findViewById(R.id.srl_refresh_diary);
 
-        fabToPublish = view.findViewById(R.id.fab_to_publish_diary);
+//        fabToPublish = view.findViewById(R.id.fab_to_publish_diary);
 
-        fabToPublish.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getContext(), PublishDiaryActivity.class);
-                startActivity(intent);
-                getActivity().overridePendingTransition(R.anim.ani_right_get_into, R.anim.ani_left_sign_out);
-            }
-        });
+//        fabToPublish.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(getContext(), PublishDiaryActivity.class);
+//                startActivity(intent);
+//                getActivity().overridePendingTransition(R.anim.ani_right_get_into, R.anim.ani_left_sign_out);
+//            }
+//        });
 
         srl.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override

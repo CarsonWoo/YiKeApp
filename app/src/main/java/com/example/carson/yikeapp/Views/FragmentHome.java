@@ -125,6 +125,7 @@ public class FragmentHome extends Fragment implements HomeItemRecyclerViewAdapte
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+//        Log.i(TAG, ConstantValues.followIdList.toString());
         //获取屏幕宽度
         if (mScreenW == -1) {
             DisplayMetrics metrics = new DisplayMetrics();
@@ -158,6 +159,9 @@ public class FragmentHome extends Fragment implements HomeItemRecyclerViewAdapte
         rvList.setLayoutManager(layoutManager);
 
         searchView = view.findViewById(R.id.search_view_home);
+
+        searchView.setQueryHint("搜索用户");
+
         searchView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -216,7 +220,7 @@ public class FragmentHome extends Fragment implements HomeItemRecyclerViewAdapte
                         }
 
                     }
-                    if ((listNum == storeData.size() && refreshLayout.isRefreshing())||loadingMore) {
+                    if ((listNum == storeData.size() && refreshLayout.isRefreshing())|| loadingMore) {
                         Toast.makeText(getContext(), "暂时没有更多店家", Toast.LENGTH_SHORT).show();
                         refreshLayout.setRefreshing(false);
                         loadingMore = false;
@@ -326,7 +330,7 @@ public class FragmentHome extends Fragment implements HomeItemRecyclerViewAdapte
 
     private void toSearchIntent() {
         searchView.clearFocus();
-        Intent toSearch = new Intent(getContext(), SearchActivity.class);
+        Intent toSearch = new Intent(getContext(), SearchUserActivity.class);
         startActivity(toSearch);
         getActivity().overridePendingTransition(R.anim.ani_right_get_into,R.anim.ani_left_sign_out);
     }

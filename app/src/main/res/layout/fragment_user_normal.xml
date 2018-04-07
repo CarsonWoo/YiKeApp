@@ -194,7 +194,7 @@
 
         <View
             android:layout_below="@+id/tv_user_normal_resume"
-            android:background="@android:color/darker_gray"
+            android:background="#999999"
             android:layout_width="match_parent"
             android:layout_height="1dp"/>
 
@@ -231,7 +231,7 @@
 
         <View
             android:layout_below="@+id/tv_user_info_credit"
-            android:background="@android:color/darker_gray"
+            android:background="#999999"
             android:layout_width="match_parent"
             android:layout_height="1dp"/>
 
@@ -268,7 +268,7 @@
 
         <View
             android:layout_below="@+id/tv_user_info_area"
-            android:background="@android:color/darker_gray"
+            android:background="#999999"
             android:layout_width="match_parent"
             android:layout_height="1dp"/>
 
@@ -305,7 +305,7 @@
 
         <View
             android:layout_below="@+id/tv_user_info_exp_post"
-            android:background="@android:color/darker_gray"
+            android:background="#999999"
             android:layout_width="match_parent"
             android:layout_height="1dp"/>
 
@@ -339,7 +339,7 @@
 
         <View
             android:layout_below="@+id/tv_user_info_follow"
-            android:background="@android:color/darker_gray"
+            android:background="#999999"
             android:layout_width="match_parent"
             android:layout_height="1dp"/>
 

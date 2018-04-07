@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="48dp"
+    android:height="48dp"
+    android:viewportHeight="12"
+    android:viewportWidth="12">
+
+    <path android:strokeColor="@color/bg_bnb_loca"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:strokeWidth="1"
+        android:pathData="M 6,4 Q 4,1.4 2,4.4 Q 0.5,7 6,10 M 6,4 Q 8,1.4 10,4.4 Q 11.5,7 6,10" />
+
+</vector>

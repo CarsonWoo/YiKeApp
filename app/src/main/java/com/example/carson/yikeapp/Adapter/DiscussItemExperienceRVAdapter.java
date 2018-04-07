@@ -23,14 +23,15 @@ import java.util.List;
 
 public class DiscussItemExperienceRVAdapter extends RecyclerView.Adapter<DiscussItemExperienceRVAdapter.DiscussVH> {
 
-   private final List<ExperienceItem.ExpItem> mValues;
+   private final ArrayList<ExperienceItem.ExpItem> mValues = new ArrayList<>();
    private final FragmentExp.OnFragmentInteractionListener mListener;
    private final ArrayList<ExperienceItem.ExpItem> itemSelected = new ArrayList<>();
+   private final OnCollectClickListener collectListener;
 
-    public DiscussItemExperienceRVAdapter(List<ExperienceItem.ExpItem> items,
-                                          FragmentExp.OnFragmentInteractionListener listener) {
-        mValues = items;
+    public DiscussItemExperienceRVAdapter(FragmentExp.OnFragmentInteractionListener listener,
+                                          OnCollectClickListener collectListener) {
         mListener = listener;
+        this.collectListener = collectListener;
     }
 
     @Override
@@ -62,7 +63,12 @@ public class DiscussItemExperienceRVAdapter extends RecyclerView.Adapter<Discuss
         holder.tvCollect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(v.getContext(), "You clicked collect", Toast.LENGTH_SHORT).show();
+                if (holder.item.isCollect == 1) {
+                    Toast.makeText(holder.itemView.getContext(), "您已经收藏过了", Toast.LENGTH_SHORT)
+                            .show();
+                } else {
+                    collectListener.onCollectClick(v, holder.item.id);
+                }
             }
         });
 
@@ -107,6 +113,10 @@ public class DiscussItemExperienceRVAdapter extends RecyclerView.Adapter<Discuss
             btnTag = itemView.findViewById(R.id.btn_discuss_rv_item_ex_tag);
 
         }
+    }
+
+    public interface OnCollectClickListener {
+        void onCollectClick(View v, String id);
     }
 
 }

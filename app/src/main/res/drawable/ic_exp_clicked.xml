@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="48dp"
+    android:height="48dp"
+    android:viewportWidth="12"
+    android:viewportHeight="12">
+
+    <path android:strokeColor="@color/bg_bnb_loca"
+        android:strokeWidth="1"
+        android:pathData="M 2, 3 L 0, 3 L 0, 9 L 2, 9 M 0, 6 L 2.5, 6"
+        android:strokeLineJoin="round"
+        android:strokeLineCap="round"
+        android:strokeAlpha="0.7" />
+
+    <path android:strokeColor="@color/bg_bnb_loca"
+        android:strokeWidth="0.7"
+        android:pathData="M 3.5, 3 L 6.5, 9 M 6.5, 3 L 3.5, 9"
+        android:strokeLineJoin="round"
+        android:strokeLineCap="round"
+        android:strokeAlpha="0.7" />
+
+    <path android:strokeColor="@color/bg_bnb_loca"
+        android:strokeWidth="0.7"
+        android:pathData="M 8, 3 L 8, 9.2 M 8, 3 C 9.5, 2 11, 3.5 10.8, 4 C 11, 4.5 9.5, 6 8, 5.5"
+        android:strokeLineJoin="round"
+        android:strokeLineCap="round"
+        android:strokeAlpha="0.7" />
+
+
+</vector>

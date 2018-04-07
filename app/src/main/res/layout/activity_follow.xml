@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.carson.yikeapp.Views.FollowActivity">
+
+    <android.support.v7.widget.Toolbar
+        app:layout_scrollFlags="enterAlways|scroll|snap"
+        android:id="@+id/toolbar_follow"
+        app:title="已关注的人"
+        app:titleMarginStart="85dp"
+        app:navigationIcon="@drawable/ic_back_black"
+        android:layout_width="match_parent"
+        android:layout_height="39dp" />
+
+    <android.support.v7.widget.RecyclerView
+        android:layout_centerInParent="true"
+        android:layout_marginTop="40dp"
+        android:layout_below="@id/toolbar_follow"
+        android:id="@+id/rv_follow"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+</RelativeLayout>

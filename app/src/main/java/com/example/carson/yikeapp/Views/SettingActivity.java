@@ -138,6 +138,8 @@ public class SettingActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         ConstantValues.removeToken(SettingActivity.this);
+                        //退出时要将关注列表清空
+                        ConstantValues.followIdList.clear();
                         setResult(ConstantValues.RESULTCODE_SETTING_ACCOUNT_QUIT);
                         Intent toStartAty = new Intent(SettingActivity.this, StartActivity.class);
                         startActivity(toStartAty);

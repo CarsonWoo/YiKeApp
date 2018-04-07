@@ -107,6 +107,8 @@ public class SearchActivity extends AppCompatActivity implements SearchRVAdapter
 //            }
 //        });
 
+        dataList.clear();
+
         mHandler = new Handler() {
             @Override
             public void handleMessage(Message msg) {
@@ -118,15 +120,16 @@ public class SearchActivity extends AppCompatActivity implements SearchRVAdapter
                         object = array.getJSONObject(i);
                         SearchContent.SearchItem item = new
                                 SearchContent.SearchItem(object.getString("id"),
-                                object.getString("username"),
-                                object.getString("user_portrait"),
-                                object.getString("text") ,
-                                object.getString("time"),
-                                object.getString("type"));
+                                object.getString(ConstantValues.KEY_USER_NAME),
+                                object.getString(ConstantValues.KEY_USER_PORTRAIT),
+                                object.getString(ConstantValues.KEY_TEXT),
+                                object.getString(ConstantValues.KEY_TIME),
+                                object.getString(ConstantValues.KEY_SEARCH_TYPE));
                         dataList.add(item);
                         if (object.has("title")) {
                             item.title = object.getString("title");
                             item.agreeNum = object.getString("agree_number");
+                            item.photoFile = object.getString("photo");
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -243,13 +246,12 @@ public class SearchActivity extends AppCompatActivity implements SearchRVAdapter
 
     @Override
     public void onSearchItemClick(View view, String type) {
-        Toast.makeText(getApplicationContext(), "您点击的是" + type, Toast.LENGTH_SHORT)
-                .show();
+        Log.i(TAG, type);
     }
 
     @Override
     public void onExpItemClick(View v, String id, String name, String res, String title,
-                               String content, String time, String agreeNum) {
+                               String content, String time, String agreeNum, String photoUrl) {
         Intent toExpPost = new Intent(SearchActivity.this, ExpDetailActivity.class);
         toExpPost.putExtra(ConstantValues.KEY_EXP_LIST_ID, id)
                 .putExtra(ConstantValues.KEY_EXP_DETAIL_CONTENT, content)
@@ -258,7 +260,9 @@ public class SearchActivity extends AppCompatActivity implements SearchRVAdapter
                 .putExtra(ConstantValues.KEY_EXP_LIST_AGREE_NUM, agreeNum)
                 .putExtra(ConstantValues.KEY_EXP_DETAIL_USER_PORTRAIT, res)
                 .putExtra(ConstantValues.KEY_EXP_DETAIL_USER_NAME, name)
-                .putExtra(ConstantValues.KEY_EXP_LIST_IS_AGREE, 1);
+                .putExtra(ConstantValues.KEY_EXP_LIST_IS_AGREE, 1)//先默认为已点赞与已收藏
+                .putExtra(ConstantValues.KEY_EXP_LIST_IS_COLLECT, 1)
+                .putExtra(ConstantValues.KEY_PUBLISH_EXP_PHOTO, photoUrl);
         startActivity(toExpPost);
         overridePendingTransition(R.anim.ani_right_get_into, R.anim.ani_left_sign_out);
     }
