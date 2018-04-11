@@ -121,6 +121,11 @@ public class ExpDetailActivity extends AppCompatActivity implements View.OnClick
             photo = getIntent().getStringExtra(ConstantValues.KEY_PUBLISH_EXP_PHOTO);
         }
 
+        if (ConstantValues.getCachedUserId(this).equals(userId)) {
+            btnFollow.setEnabled(false);
+            btnFollow.setClickable(false);
+            btnFollow.setVisibility(View.GONE);
+        }
         tvTitle.setText(titleStr);
         //未完成
         tvContent.setHtmlFromString(formText(contentStr));

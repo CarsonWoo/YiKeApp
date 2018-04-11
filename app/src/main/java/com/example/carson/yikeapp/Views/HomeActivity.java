@@ -221,9 +221,9 @@ public class HomeActivity extends AppCompatActivity implements FragmentHome.OnFr
         Log.i(TAG, lastDate);
         Log.i(TAG, currentDate);
         if (lastDate.equals(currentDate)) {
-            return true;
-        } else {
             return false;
+        } else {
+            return true;
         }
     }
 
