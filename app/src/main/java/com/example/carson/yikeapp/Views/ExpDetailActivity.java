@@ -1,5 +1,8 @@
 package com.example.carson.yikeapp.Views;
 
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -21,6 +24,7 @@ import android.text.Spanned;
 import android.text.style.ImageSpan;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.Animation;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -30,6 +34,7 @@ import android.widget.Toast;
 import com.bumptech.glide.DrawableTypeRequest;
 import com.bumptech.glide.Glide;
 import com.example.carson.yikeapp.R;
+import com.example.carson.yikeapp.Utils.AnimationUtils;
 import com.example.carson.yikeapp.Utils.ConstantValues;
 import com.example.carson.yikeapp.Utils.HttpUtils;
 import com.jude.swipbackhelper.SwipeBackHelper;
@@ -141,7 +146,11 @@ public class ExpDetailActivity extends AppCompatActivity implements View.OnClick
             btnFollow.setClickable(false);
             btnFollow.setText("已关注");
         }
-
+        if (ConstantValues.getCachedUserId(this).equals(userId)) {
+            btnFollow.setEnabled(false);
+            btnFollow.setClickable(false);
+            btnFollow.setVisibility(View.GONE);
+        }
     }
 
     //将contentString转换成html（含标签）的字符串
@@ -204,6 +213,8 @@ public class ExpDetailActivity extends AppCompatActivity implements View.OnClick
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ibtn_exp_agree:
+                //TODO 将下方动画代码加入至成功关注后
+//                AnimationUtils.setScaleAnimation(ibtnAgree, 600, 1.3f, 1.0f);
                 if (isAgree == 0) {
                     OkHttpClient client = null;
                     try {
@@ -233,6 +244,9 @@ public class ExpDetailActivity extends AppCompatActivity implements View.OnClick
                                                 @Override
                                                 public void run() {
                                                     ibtnAgree.setBackgroundResource(R.drawable.ic_like);
+                                                    AnimationUtils.setScaleAnimation(ibtnAgree,
+                                                            600, AnimationUtils.TYPE_SCALE_BOTH,
+                                                            1.3f, 1.0f);
                                                     tvIsAgree.setText("已点赞");
                                                 }
                                             });
@@ -300,6 +314,7 @@ public class ExpDetailActivity extends AppCompatActivity implements View.OnClick
                 }).start();
                 break;
             case R.id.ibtn_exp_collect:
+//                AnimationUtils.setScaleAnimation(ibtnCollect, 600, 1.3f, 1.0f);
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
@@ -330,8 +345,11 @@ public class ExpDetailActivity extends AppCompatActivity implements View.OnClick
                                                 runOnUiThread(new Runnable() {
                                                     @Override
                                                     public void run() {
-                                                        tvIsCollect.setText("已收藏");
                                                         ibtnCollect.setBackgroundResource(R.drawable.ic_collect);
+                                                        AnimationUtils.setScaleAnimation(ibtnCollect,
+                                                                600, AnimationUtils.TYPE_SCALE_BOTH,
+                                                                1.3f, 1.0f);
+                                                        tvIsCollect.setText("已收藏");
                                                     }
                                                 });
                                             }

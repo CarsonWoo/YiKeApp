@@ -2,6 +2,7 @@ package com.example.carson.yikeapp.Views;
 
 import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
@@ -50,7 +51,9 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -101,6 +104,8 @@ public class HomeActivity extends AppCompatActivity implements FragmentHome.OnFr
 
     private Handler mHandler;
 
+    private boolean isFirstLogin = false;
+
     @SuppressLint("HandlerLeak")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,6 +114,13 @@ public class HomeActivity extends AppCompatActivity implements FragmentHome.OnFr
 
         toolbar = findViewById(R.id.toolbar_home);
         setSupportActionBar(toolbar);
+
+        isFirstLogin = getIsFirstLogin(this);
+        if (isFirstLogin) {
+            Toast.makeText(this, "First Login, Exp up!", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, "Not first login", Toast.LENGTH_SHORT).show();
+        }
 
         View windowView = LayoutInflater.from(this).inflate(R.layout.layout_popwin_pub_type, null, false);
         window = new PopupWindow(windowView, ViewGroup.LayoutParams.WRAP_CONTENT,
@@ -200,6 +212,19 @@ public class HomeActivity extends AppCompatActivity implements FragmentHome.OnFr
             }
         };
 
+    }
+
+    private boolean getIsFirstLogin(Context context) {
+        String lastDate = ConstantValues.getCacheExitTime(context);
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        String currentDate = df.format(new Date());
+        Log.i(TAG, lastDate);
+        Log.i(TAG, currentDate);
+        if (lastDate.equals(currentDate)) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @Override
@@ -641,5 +666,12 @@ public class HomeActivity extends AppCompatActivity implements FragmentHome.OnFr
             // Show 4 total pages.
             return 4;
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.i(TAG, "onDestroy");
+        ConstantValues.cacheExitTime(this, new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
     }
 }

@@ -1,6 +1,5 @@
 package com.example.carson.yikeapp.Views;
 
-import android.content.Intent;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -171,7 +170,7 @@ public class ChangePasswordActivity extends AppCompatActivity implements View.On
                                                     runOnUiThread(new Runnable() {
                                                         @Override
                                                         public void run() {
-                                                            ConstantValues.cachPsw(ChangePasswordActivity.this,
+                                                            ConstantValues.cachePsw(ChangePasswordActivity.this,
                                                                     etPwd.getText().toString());
                                                             Toast.makeText(getApplicationContext(), msg,
                                                                     Toast.LENGTH_SHORT).show();

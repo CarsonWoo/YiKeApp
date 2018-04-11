@@ -131,6 +131,7 @@ public class ConstantValues {
     //还缺一个首页的type
 
     public static final String KEY_CODE = "code";
+    public static final String KEY_LAST_EXIT_TIME = "exit_time";
 
     //拍照临时存放地址
     public static final String MY_TEMPPHOTO_PATH = Environment.getExternalStorageDirectory() + File.separator ;
@@ -309,6 +310,7 @@ public class ConstantValues {
     public static final String KEY_FOLLOW_EXP_POST_NUM = "experience_number";
     public static final String KEY_FOLLOW_USER_PORTRAIT = "photo_url";
     public static final String KEY_FOLLOW_USER_LOCATION = "location";
+    public static final String KEY_USER_ID = "user_id";
 
     //取得token
     public static String getCachedToken(Context context){
@@ -316,7 +318,7 @@ public class ConstantValues {
     }
 
     //储存token
-    public static void cachToken(Context context,String token){
+    public static void cacheToken(Context context, String token){
         SharedPreferences.Editor editor = context.getSharedPreferences(APP_ID,Context.MODE_PRIVATE).edit();
         editor.putString(KEY_TOKEN,token);
         editor.apply();
@@ -324,21 +326,33 @@ public class ConstantValues {
 
     //清除token（退出登录用）
     public static void removeToken(Context context){
-        SharedPreferences.Editor editor = context.getSharedPreferences(APP_ID,Context.MODE_PRIVATE).edit();
+        SharedPreferences.Editor editor = context.getSharedPreferences(APP_ID, Context.MODE_PRIVATE).edit();
         editor.remove(KEY_TOKEN);
         editor.apply();
     }
 
     //获取用户类型
     public static String getCachedUserType(Context context){
-        return context.getSharedPreferences(APP_ID,Context.MODE_PRIVATE).getString(KEY_USER_TYPE,null);
+        return context.getSharedPreferences(APP_ID, Context.MODE_PRIVATE).getString(KEY_USER_TYPE,null);
     }
 
     //储存用户类型
-    public static void cachUserType(Context context,String userType){
-        SharedPreferences.Editor editor = context.getSharedPreferences(APP_ID,Context.MODE_PRIVATE).edit();
+    public static void cacheUserType(Context context, String userType){
+        SharedPreferences.Editor editor = context.getSharedPreferences(APP_ID, Context.MODE_PRIVATE).edit();
         editor.putString(KEY_USER_TYPE,userType);
         editor.apply();
+    }
+
+    //存储当前用户的id
+    public static void cacheUserId(Context context, String userId) {
+        SharedPreferences.Editor editor = context.getSharedPreferences(APP_ID, Context.MODE_PRIVATE).edit();
+        editor.putString(KEY_USER_ID, userId);
+        editor.apply();
+    }
+
+    //获取当前用户id
+    public static String getCachedUserId(Context context) {
+        return context.getSharedPreferences(APP_ID, Context.MODE_PRIVATE).getString(KEY_USER_ID, null);
     }
 
     //获取密码
@@ -347,40 +361,23 @@ public class ConstantValues {
     }
 
     //储存密码
-    public static void cachPsw(Context context,String psw){
-        SharedPreferences.Editor editor = context.getSharedPreferences(APP_ID,Context.MODE_PRIVATE).edit();
+    public static void cachePsw(Context context, String psw){
+        SharedPreferences.Editor editor = context.getSharedPreferences(APP_ID, Context.MODE_PRIVATE).edit();
         editor.putString(KEY_PSW,psw);
         editor.apply();
     }
 
-//    //储存关注列表
-//    public static void cacheFollowList(Context context, ArrayList<String> list) {
-//        SharedPreferences.Editor editor = context.getSharedPreferences(APP_ID, Context.MODE_PRIVATE).edit();
-//        cacheFollowListLength(context, list.size(), editor);
-//        for (int i = 0; i < list.size(); i++) {
-//            editor.putString(KEY_FOLLOW_LIST_ID + i, list.get(i));
-//        }
-//        editor.apply();
-//    }
-//
-//    public static void cacheFollowListLength(Context context, int length, SharedPreferences.Editor editor) {
-//        editor.putInt(KEY_FOLLOW_LIST_LENGTH, length);
-//        editor.apply();
-//    }
-//
-//    public static int getCacheListLength(Context context) {
-//        return context.getSharedPreferences(APP_ID, Context.MODE_PRIVATE).getInt(KEY_FOLLOW_LIST_LENGTH, 0);
-//    }
-//
-//    public static ArrayList<String> getCacheFollowList(Context context) {
-//        ArrayList<String> list = new ArrayList<>(getCacheListLength(context));
-//        for (int i = 0; i < list.size(); i++) {
-//            if (context.getSharedPreferences(APP_ID, Context.MODE_PRIVATE).getString(KEY_FOLLOW_LIST_ID, null) != null) {
-//                list.add(context.getSharedPreferences(APP_ID, Context.MODE_PRIVATE).getString(KEY_FOLLOW_LIST_ID, null) + i);
-//            }
-//        }
-//        return list;
-//    }
+    //存储最后退出时间，以作每日首次登录判断
+    public static void cacheExitTime(Context context, String time) {
+        SharedPreferences.Editor editor = context.getSharedPreferences(APP_ID, Context.MODE_PRIVATE).edit();
+        editor.putString(KEY_LAST_EXIT_TIME, time);
+        editor.apply();
+    }
+
+    //获取最后退出时间
+    public static String getCacheExitTime(Context context) {
+        return context.getSharedPreferences(APP_ID, Context.MODE_PRIVATE).getString(KEY_LAST_EXIT_TIME, "1970-01-01");
+    }
 
     //获取简历完成状态
     public static Boolean getCachRusumeState(Context context){

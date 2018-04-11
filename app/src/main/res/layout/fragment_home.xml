@@ -19,13 +19,29 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <android.support.v7.widget.SearchView
+            <LinearLayout
                 android:id="@+id/search_view_home"
-                android:layout_width="match_parent"
-                android:layout_height="30.7dp"
-                android:layout_alignParentTop="true"
+                android:background="@drawable/bg_circle_image"
                 android:layout_margin="10dp"
-                android:background="#16483838" />
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:orientation="horizontal"
+                android:layout_height="30.7dp">
+
+                <ImageView
+                    app:srcCompat="@drawable/ic_search"
+                    android:layout_marginRight="5dp"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp" />
+
+                <TextView
+                    android:textSize="15.7sp"
+                    android:textColor="#999"
+                    android:text="搜索用户"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
 
             <android.support.v4.view.ViewPager
                 android:id="@+id/vp_home_header"

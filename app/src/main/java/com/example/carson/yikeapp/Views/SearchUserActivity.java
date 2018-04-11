@@ -302,6 +302,14 @@ public class SearchUserActivity extends AppCompatActivity implements SearchUserR
                 btnFollow.setText("已关注");
 //                btnFollow.setTextColor(Color.GRAY);
             }
+            if (ConstantValues.getCachedUserId(this).equals(userId)) {
+                btnFollow.setEnabled(false);
+                btnFollow.setClickable(false);
+                btnChat.setEnabled(false);
+                btnChat.setClickable(false);
+                btnFollow.setVisibility(View.GONE);
+                btnChat.setVisibility(View.GONE);
+            }
             userName.setText(data.get(0));
             info.setText(data.get(2));
             back.setOnClickListener(new View.OnClickListener() {

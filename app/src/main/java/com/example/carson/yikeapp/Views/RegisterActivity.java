@@ -236,7 +236,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                                                     final JSONObject object = new JSONObject(responseData);
                                                     int code = object.getInt("code");
                                                     if (code == 200) {
-                                                        ConstantValues.cachPsw(RegisterActivity.this,
+                                                        ConstantValues.cachePsw(RegisterActivity.this,
                                                                 pwd);
                                                         runOnUiThread(new Runnable() {
                                                             @Override

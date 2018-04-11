@@ -178,6 +178,14 @@ public class FragmentPartner extends Fragment implements OnHeadViewClickedListen
                 btnFollow.setText("已关注");
 //                btnFollow.setTextColor(Color.GRAY);
             }
+            if (ConstantValues.getCachedUserId(getContext()).equals(userID)) {
+                btnFollow.setEnabled(false);
+                btnFollow.setClickable(false);
+                btnChat.setEnabled(false);
+                btnChat.setClickable(false);
+                btnFollow.setVisibility(View.GONE);
+                btnChat.setVisibility(View.GONE);
+            }
             userName.setText(datas.get(0));
             info.setText(datas.get(2));
             back.setOnClickListener(new View.OnClickListener() {

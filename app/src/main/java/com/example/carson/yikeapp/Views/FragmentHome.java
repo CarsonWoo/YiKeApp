@@ -21,6 +21,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -84,7 +85,7 @@ public class FragmentHome extends Fragment implements HomeItemRecyclerViewAdapte
     private SwipeRefreshLayout refreshLayout;
     private boolean loadingMore = false;
 
-    private SearchView searchView;
+    private LinearLayout searchView;
     /**
      * 屏幕宽度
      */
@@ -160,8 +161,6 @@ public class FragmentHome extends Fragment implements HomeItemRecyclerViewAdapte
 
         searchView = view.findViewById(R.id.search_view_home);
 
-        searchView.setQueryHint("搜索用户");
-
         searchView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -170,8 +169,6 @@ public class FragmentHome extends Fragment implements HomeItemRecyclerViewAdapte
         });
 
         searchView.setFocusable(false);
-
-        searchView.setIconifiedByDefault(true);
 
         //下拉刷新
         refreshLayout = view.findViewById(R.id.srl_refresh);

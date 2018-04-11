@@ -203,7 +203,7 @@ public class SettingActivity extends AppCompatActivity {
                                             public void run() {
                                                 Toast.makeText(SettingActivity.this,
                                                         "修改成功!", Toast.LENGTH_SHORT).show();
-                                                ConstantValues.cachPsw(SettingActivity.this, newPsw);
+                                                ConstantValues.cachePsw(SettingActivity.this, newPsw);
                                             }
                                         });
                                     } else {

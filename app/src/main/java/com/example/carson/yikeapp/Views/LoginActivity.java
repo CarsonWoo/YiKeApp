@@ -201,11 +201,16 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                         }
                                         //token信息
                                         String token = dataList.get(0);
-                                        ConstantValues.cachToken(LoginActivity.this,token);
+                                        ConstantValues.cacheToken(LoginActivity.this,token);
                                         //识别用户还是商家
                                         String userType = dataList.get(1);
-                                        ConstantValues.cachUserType(LoginActivity.this,userType);
-                                        ConstantValues.cachPsw(LoginActivity.this,pwd);
+                                        String userId = dataList.get(2);
+                                        ConstantValues.cacheUserType(LoginActivity.this,userType);
+                                        ConstantValues.cachePsw(LoginActivity.this,pwd);
+                                        //只有用户才能关注
+                                        if (userType.equals(ConstantValues.USER_TYPE_NORMAL)) {
+                                            ConstantValues.cacheUserId(LoginActivity.this, userId);
+                                        }
                                         if (!isFirstFilled) {
                                             Intent intent = new Intent(LoginActivity.this,
                                                     HomeActivity.class);
@@ -217,13 +222,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                             if (userType.equals(ConstantValues.USER_TYPE_NORMAL)) {
                                                 Intent intent = new Intent(LoginActivity.this,
                                                         UserDetailActivity.class);
-                                                intent.putExtra("token", token);
+                                                intent.putExtra(ConstantValues.KEY_TOKEN, token);
                                                 startActivity(intent);
                                                 finish();
                                             } else {
                                                 Intent intent = new Intent(LoginActivity.this,
                                                         ShopDetailActivity.class);
-                                                intent.putExtra("token", token);
+                                                intent.putExtra(ConstantValues.KEY_TOKEN, token);
                                                 startActivity(intent);
                                                 finish();
                                             }
