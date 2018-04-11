@@ -17,17 +17,15 @@
     <RelativeLayout
         android:id="@+id/rl_no_use"
         android:layout_marginTop="41.5dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="12dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <de.hdodenhof.circleimageview.CircleImageView
-            android:layout_marginLeft="3dp"
+            android:layout_marginLeft="13dp"
             android:id="@+id/civ_question_post_head"
             android:src="#e6e5e5"
-            android:layout_width="55dp"
-            android:layout_height="55dp" />
+            android:layout_width="65dp"
+            android:layout_height="65dp" />
 
         <com.example.carson.yikeapp.Views.ArchRivalTextView
             android:id="@+id/artv_ques_post_name"
@@ -35,6 +33,7 @@
             android:layout_toRightOf="@id/civ_question_post_head"
             android:layout_marginLeft="8dp"
             android:hint="username"
+            android:textSize="23.6sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
@@ -56,19 +55,21 @@
         </LinearLayout>
 
         <TextView
+            android:layout_marginBottom="30dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
             android:textColor="@android:color/black"
             android:id="@+id/tv_ques_post_text"
             android:lineSpacingMultiplier="1.15"
             android:textSize="18.6sp"
-            android:text="    "
-            android:layout_marginLeft="5dp"
+            android:text="  "
+            android:lineSpacingExtra="5dp"
             android:layout_below="@id/ll_no_use_ques_detail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
         <LinearLayout
             android:id="@+id/ll_ques_post_no_use"
-            android:layout_marginTop="20dp"
             android:background="@drawable/bg_button_style2"
             android:layout_below="@id/tv_ques_post_text"
             android:layout_width="match_parent"
@@ -76,7 +77,7 @@
 
             <TextView
                 android:textColor="#fff"
-                android:text="评论"
+                android:text="评  论"
                 android:gravity="center_horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
@@ -84,7 +85,7 @@
         </LinearLayout>
 
         <android.support.v7.widget.RecyclerView
-            android:layout_marginTop="5dp"
+            android:layout_margin="5dp"
             android:id="@+id/rv_ques_comment_show"
             android:layout_below="@id/ll_ques_post_no_use"
             android:layout_width="match_parent"

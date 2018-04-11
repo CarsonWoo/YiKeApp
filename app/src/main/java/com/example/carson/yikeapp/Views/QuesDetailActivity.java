@@ -114,7 +114,9 @@ public class QuesDetailActivity extends AppCompatActivity {
 
         Glide.with(this).load(headRes).into(head);
         name.setText(nameStr);
-        text.setText(textStr);
+        text.setText("   " + textStr);
+
+        Log.i(TAG, textStr);
 
         showComment(id);
 
