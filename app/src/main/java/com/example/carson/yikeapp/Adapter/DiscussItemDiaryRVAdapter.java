@@ -10,8 +10,8 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.carson.yikeapp.R;
-import com.example.carson.yikeapp.Views.FragmentDiary;
-import com.example.carson.yikeapp.Views.dummy.DiaryItem;
+import com.example.carson.yikeapp.Views.Discuss.FragmentDiary;
+import com.example.carson.yikeapp.Datas.DiaryItem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +30,10 @@ public class DiscussItemDiaryRVAdapter extends RecyclerView.Adapter<DiscussItemD
     private final OnLikeClickedListener mOnLikeClickedListener;
 
     private static final int LINES = 2;
+
+    //保存item的状态
+    private View oldItemViewLike, oldItemViewAll;
+    private int oldPositionLike, oldPositionAll;
 
     public DiscussItemDiaryRVAdapter(List<DiaryItem.DItem> items,
                                      FragmentDiary.OnFragmentInteractionListener listener,
@@ -65,6 +69,18 @@ public class DiscussItemDiaryRVAdapter extends RecyclerView.Adapter<DiscussItemD
             public void onClick(View v) {
                 mOnLikeClickedListener.onLikeClicked(v, mValues.get(position).id,
                         mValues.get(position).isAgree);
+                if (oldItemViewLike != null) {
+                    Glide.with(holder.itemView.getContext()).load(R.drawable.ic_unlike)
+                            .into(holder.like);
+                    if (oldPositionLike >= 0 && oldPositionLike < mValues.size()) {
+                        mValues.get(oldPositionLike).isAgree = 0;
+                    }
+                }
+                oldItemViewLike = holder.itemView;
+                oldPositionLike = position;
+
+                Glide.with(holder.like.getContext()).load(R.drawable.ic_like).into(holder.like);
+                mValues.get(oldPositionLike).isAgree = 1;
             }
         });
 

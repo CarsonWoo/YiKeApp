@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/white"
-    tools:context="com.example.carson.yikeapp.Views.ExpDetailActivity">
+    tools:context="com.example.carson.yikeapp.Views.Discuss.ExpDetailActivity">
 
     <android.support.design.widget.AppBarLayout
         android:background="@android:color/white"
@@ -22,13 +22,32 @@
             app:layout_scrollFlags="scroll|enterAlways|snap"
             app:navigationIcon="@drawable/ic_back_black">
 
-            <TextView
+            <LinearLayout
+                android:layout_marginStart="100dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="100dp"
+                android:orientation="horizontal">
+
+                <TextView
                 android:textColor="@android:color/black"
                 android:text="攻略"
                 android:textSize="18sp"
                 android:layout_gravity="center"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
+
+                <ImageView
+                    android:id="@+id/btn_more_info"
+                    android:layout_marginLeft="130dp"
+                    app:srcCompat="@drawable/ic_more_info"
+                    android:layout_gravity="center"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp" />
+
+            </LinearLayout>
+
+
 
         </android.support.v7.widget.Toolbar>
 
@@ -70,10 +89,11 @@
             <LinearLayout
                 android:background="#99f2f0f0"
                 android:layout_width="match_parent"
-                android:layout_height="8dp"></LinearLayout>
+                android:layout_height="8dp" />
 
             <RelativeLayout
                 android:background="@android:color/white"
+                android:layout_marginBottom="50dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
@@ -147,10 +167,18 @@
                     android:layout_marginLeft="15dp"
                     android:layout_marginRight="15dp"
                     android:layout_marginTop="15dp"
-                    android:layout_marginBottom="50dp"
                     android:layout_below="@id/civ_exp_detail"
                     android:id="@+id/tv_exp_detail_content"
                     android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <ImageView
+                    android:id="@+id/image_view_exp_detail"
+                    android:layout_marginStart="25dp"
+                    android:layout_marginEnd="25dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_below="@id/tv_exp_detail_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
 
             </RelativeLayout>

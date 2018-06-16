@@ -7,7 +7,6 @@
 
     <LinearLayout
         android:id="@+id/ll_dialog_top"
-
         android:layout_alignParentTop="true"
         android:layout_width="match_parent"
         android:layout_height="25dp">
@@ -21,6 +20,7 @@
     </LinearLayout>
 
     <ScrollView
+        android:layout_marginTop="2dp"
         android:layout_below="@id/ll_dialog_top"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -41,12 +41,12 @@
                 android:textColor="@android:color/black"
                 android:layout_toRightOf="@id/civ_dialog_show_target"
                 android:layout_marginTop="15dp"
-                android:textSize="13.6sp"
+                android:textSize="14.8sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
             <TextView
-                android:textSize="18.8sp"
+                android:textSize="16.8sp"
                 android:textColor="#e26323"
                 android:layout_below="@id/civ_dialog_show_target"
                 android:layout_margin="15dp"
@@ -55,7 +55,7 @@
                 android:layout_height="wrap_content" />
 
             <TextView
-                android:textSize="13.6sp"
+                android:textSize="14.6sp"
                 android:id="@+id/tv_dialog_info"
                 android:layout_marginTop="60dp"
                 android:layout_marginLeft="15dp"
@@ -67,8 +67,6 @@
         </RelativeLayout>
 
     </ScrollView>
-
-
 
     <LinearLayout
         android:layout_alignParentBottom="true"

@@ -4,22 +4,28 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.carson.yikeapp.Views.ResumeActivity">
+    tools:context="com.example.carson.yikeapp.Views.User.ResumeActivity">
 
     <android.support.v7.widget.Toolbar
         android:layout_alignParentTop="true"
         android:id="@+id/toolbar_resume"
         android:layout_width="match_parent"
         android:layout_height="39dp"
-        android:background="#fff"
         android:theme="@style/AppTheme.NoActionBar"
         app:navigationIcon="@drawable/ic_back_black"
         app:popupTheme="@style/AppTheme.PopupOverlay">
 
     </android.support.v7.widget.Toolbar>
 
+    <LinearLayout
+        android:layout_below="@id/toolbar_resume"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@android:color/darker_gray"/>
+
     <ScrollView
         android:layout_below="@+id/toolbar_resume"
+        android:layout_marginTop="2dp"
         android:scrollbars="none"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -336,6 +342,7 @@
                 android:orientation="horizontal">
 
                 <TextView
+                    android:layout_marginTop="5dp"
                     android:layout_alignParentLeft="true"
                     android:id="@+id/tv_intro_title"
                     android:layout_width="wrap_content"
@@ -346,6 +353,8 @@
                 <EditText
                     android:gravity="start"
                     android:layout_toRightOf="@+id/tv_intro_title"
+                    android:background="@drawable/bg_edittext_normal"
+                    android:padding="8dp"
                     android:id="@+id/et_resume_intro"
                     android:layout_width="match_parent"
                     android:freezesText="true"
@@ -366,6 +375,7 @@
                 android:orientation="horizontal">
 
                 <TextView
+                    android:layout_marginTop="5dp"
                     android:layout_alignParentLeft="true"
                     android:id="@+id/tv_exp_title"
                     android:layout_width="wrap_content"
@@ -376,12 +386,16 @@
                 <EditText
                     android:gravity="start"
                     android:layout_toRightOf="@+id/tv_exp_title"
+                    android:background="@drawable/bg_edittext_normal"
+                    android:padding="8dp"
                     android:id="@+id/et_resume_experience"
                     android:layout_width="match_parent"
                     android:freezesText="true"
                     android:layout_height="150dp"
+                    android:layout_marginRight="10dp"
                     android:inputType="textMultiLine"
-                    android:textSize="18sp" />
+                    android:textSize="18sp"
+                    android:layout_marginEnd="10dp" />
 
             </RelativeLayout>
 
@@ -394,15 +408,18 @@
                 android:layout_marginLeft="15dp">
 
                 <TextView
+                    android:layout_marginTop="5dp"
                     android:id="@+id/tv_thought_title"
                     android:layout_alignParentLeft="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="对义工旅行\n的想法    "
+                    android:text="对义工旅\n行的想法    "
                     android:textSize="18sp" />
 
                 <EditText
                     android:layout_toRightOf="@+id/tv_thought_title"
+                    android:background="@drawable/bg_edittext_normal"
+                    android:padding="8dp"
                     android:scrollbars="none"
                     android:gravity="start"
                     android:id="@+id/et_resume_thought"
@@ -410,7 +427,9 @@
                     android:freezesText="true"
                     android:layout_height="150dp"
                     android:inputType="textMultiLine"
-                    android:textSize="18sp" />
+                    android:layout_marginRight="10dp"
+                    android:textSize="18sp"
+                    android:layout_marginEnd="10dp" />
 
             </RelativeLayout>
 

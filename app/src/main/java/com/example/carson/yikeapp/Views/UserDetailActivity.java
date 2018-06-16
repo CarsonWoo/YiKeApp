@@ -43,6 +43,8 @@ import com.example.carson.yikeapp.Utils.AddressPickTask;
 import com.example.carson.yikeapp.Utils.BitmapUtils;
 import com.example.carson.yikeapp.Utils.ConstantValues;
 import com.example.carson.yikeapp.Utils.HttpUtils;
+import com.example.carson.yikeapp.Views.Home.HomeActivity;
+import com.example.carson.yikeapp.Views.User.CropPicActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;

@@ -9,7 +9,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.carson.yikeapp.R;
 import com.example.carson.yikeapp.Views.ArchRivalTextView;
-import com.example.carson.yikeapp.Views.dummy.QuesComment;
+import com.example.carson.yikeapp.Datas.QuesComment;
 
 import java.util.ArrayList;
 import java.util.List;

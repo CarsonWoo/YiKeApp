@@ -51,7 +51,7 @@
             android:label="注册"
             android:theme="@style/MainTheme" />
         <activity
-            android:name=".Views.HomeActivity"
+            android:name=".Views.Home.HomeActivity"
             android:theme="@style/MainTheme" />
         <activity
             android:name=".Views.LoginActivity"
@@ -64,51 +64,51 @@
             android:name=".Views.ShopDetailActivity"
             android:theme="@style/MainTheme" />
         <activity
-            android:name=".Views.SettingActivity"
+            android:name=".Views.User.SettingActivity"
             android:label="设置"
             android:theme="@style/MainTheme" />
         <activity
             android:name=".Views.StoreDetailActivity"
             android:theme="@style/TransparentTheme" />
         <activity
-            android:name=".Views.ResumeActivity"
+            android:name=".Views.User.ResumeActivity"
             android:theme="@style/MainTheme" />
         <activity
-            android:name=".Views.ExpDetailActivity"
+            android:name=".Views.Discuss.ExpDetailActivity"
             android:theme="@style/TransparentTheme" />
         <activity
-            android:name=".Views.ChatWindowActivity"
+            android:name=".Views.Message.ChatWindowActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:theme="@style/TransparentTheme" />
         <activity
-            android:name=".Views.PublishExpActivity"
+            android:name=".Views.Discuss.PublishExpActivity"
             android:theme="@style/TransparentTheme" />
         <activity
-            android:name=".Views.PublishPartActivity"
+            android:name=".Views.Discuss.PublishPartActivity"
             android:theme="@style/TransparentTheme" />
         <activity
-            android:name=".Views.PublishDiaryActivity"
+            android:name=".Views.Discuss.PublishDiaryActivity"
             android:theme="@style/TransparentTheme" />
         <activity
-            android:name=".Views.PublishQuestionActivity"
+            android:name=".Views.Discuss.PublishQuestionActivity"
             android:configChanges="keyboard"
             android:theme="@style/TransparentTheme" />
         <activity
-            android:name=".Views.SearchActivity"
+            android:name=".Views.Discuss.SearchActivity"
             android:theme="@style/TransparentTheme" />
         <activity
-            android:name=".Views.CropPicActivity"
+            android:name=".Views.User.CropPicActivity"
             android:theme="@style/MainTheme" />
         <activity
-            android:name=".Views.QuesDetailActivity"
+            android:name=".Views.Discuss.QuesDetailActivity"
             android:theme="@style/TransparentTheme" />
         <activity
-            android:name=".Views.ExpCommentActivity"
-            android:theme="@style/MainTheme" />
+            android:name=".Views.Discuss.ExpCommentActivity"
+            android:theme="@style/TransparentTheme" />
         <activity
-            android:name=".Views.SearchUserActivity"
+            android:name=".Views.Home.SearchUserActivity"
             android:theme="@style/MainTheme" />
-        <activity android:name=".Views.FollowActivity"
+        <activity android:name=".Views.User.FollowActivity"
             android:theme="@style/MainTheme"></activity>
     </application>
 

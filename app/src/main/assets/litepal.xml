@@ -3,6 +3,6 @@
     <dbname value = "ChatWindows"></dbname>
     <version value = "1"></version>
     <list>
-        <mapping class = "com.example.carson.yikeapp.Views.dummy.ChatWinData"></mapping>
+        <mapping class = "com.example.carson.yikeapp.Datas.ChatWinData"></mapping>
     </list>
 </litepal>

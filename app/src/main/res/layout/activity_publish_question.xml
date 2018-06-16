@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#f3f5f3f3"
-    tools:context="com.example.carson.yikeapp.Views.PublishQuestionActivity">
+    tools:context="com.example.carson.yikeapp.Views.Discuss.PublishQuestionActivity">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar_publish_question"

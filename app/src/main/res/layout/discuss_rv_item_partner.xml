@@ -10,8 +10,8 @@
         android:clickable="true"
         android:id="@+id/civ_discuss_rv_item_question_head"
         app:srcCompat="@drawable/ic_loader"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="55dp"
+        android:layout_height="55dp"
         android:focusable="true" />
 
     <com.example.carson.yikeapp.Views.ArchRivalTextView
@@ -20,7 +20,7 @@
         android:hint="username"
         android:textColor="#000"
         android:id="@+id/artv_discuss_rv_item_question_name"
-        android:textSize="16.6sp"
+        android:textSize="17.6sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
@@ -28,18 +28,18 @@
 
     <ImageView
         android:clickable="true"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="4dp"
         android:id="@+id/iv_discuss_rv_part_like"
         android:layout_alignParentRight="true"
         android:src="@drawable/ic_unlike"
         android:layout_marginRight="15dp"
-        android:layout_width="15dp"
-        android:layout_height="15dp"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
         android:focusable="true" />
     
     <TextView
         android:layout_marginTop="10dp"
-        android:textSize="11.6sp"
+        android:textSize="13.6sp"
         android:layout_marginLeft="20dp"
         android:layout_toRightOf="@id/civ_discuss_rv_item_question_head"
         android:layout_below="@id/artv_discuss_rv_item_question_name"

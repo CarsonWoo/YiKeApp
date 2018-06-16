@@ -8,20 +8,18 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationSet;
-import android.view.animation.TranslateAnimation;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.example.carson.yikeapp.R;
+import com.example.carson.yikeapp.Utils.AnimationUtils;
 import com.example.carson.yikeapp.Utils.ConstantValues;
 import com.example.carson.yikeapp.Utils.HttpUtils;
+import com.example.carson.yikeapp.Views.Home.HomeActivity;
 
 import net.frakbot.jumpingbeans.JumpingBeans;
 
@@ -29,7 +27,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.security.Key;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 
@@ -46,8 +43,6 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
     private ImageButton buttonRegis;
     private ImageButton buttonLogin;
 
-    private Handler mHandler = new Handler();
-
     private ArchRivalTextView tvLogin, tvRegis;
 
     private ImageView ivBg, ivLogo;
@@ -55,8 +50,6 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
     private JumpingBeans jumpingLogin, jumpingRegister, jumpingSlogan;
 
     private LinearLayout llSlogan, llRNL, llStart;
-
-    private Handler handler;
 
     @SuppressLint("HandlerLeak")
     @Override
@@ -83,87 +76,9 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
         buttonRegis.setOnClickListener(this);
         buttonLogin.setOnClickListener(this);
 
-//        float curSloganTranslationY = llSlogan.getTranslationY();
-//        float curRNLTranslationY = llRNL.getTranslationY();
-//        float curStartTranslationY = llStart.getTranslationY();
+        AnimationUtils.setAlphaAnimation(llStart, 2500,  0.0f, 1.0f);
 
-        float curBgTranslationY = ivBg.getTranslationY();
-        float curLogoTranslationY = ivLogo.getTranslationY();
 
-        float curRegisTranslationY = buttonRegis.getTranslationY();
-        float curLoginTranslationY = buttonLogin.getTranslationY();
-
-        float curTvTranslationY = tvLogin.getTranslationY();
-
-        ObjectAnimator bgMoveIn = ObjectAnimator.ofFloat(ivBg, "translationY", 500f,
-                -60f, curBgTranslationY);
-        ObjectAnimator logoMoveIn = ObjectAnimator.ofFloat(ivLogo, "translationY", 500f,
-                curLogoTranslationY - 60, curLogoTranslationY);
-        AnimatorSet animSet = new AnimatorSet();
-//        animSet.play(logoMoveIn);
-//        animSet.setDuration(3000);
-//        animSet.start();
-
-//        logoMoveIn.setDuration(3000);
-//        logoMoveIn.start();
-        Keyframe k0 = Keyframe.ofFloat(0, curLogoTranslationY - 60);
-        Keyframe k1 = Keyframe.ofFloat(1, curLogoTranslationY);
-
-        PropertyValuesHolder p = PropertyValuesHolder.ofKeyframe("translationY", k0, k1);
-
-        ObjectAnimator regisMoveIn = ObjectAnimator.ofFloat(buttonRegis, "translationY",
-                300f, curRegisTranslationY);
-        ObjectAnimator loginMoveIn = ObjectAnimator.ofFloat(buttonLogin, "translationY",
-                300f, curLoginTranslationY);
-        ObjectAnimator tvLoginMoveIn = ObjectAnimator.ofFloat(tvLogin, "translationY",
-                300f, curTvTranslationY);
-        ObjectAnimator tvRegisMoveIn = ObjectAnimator.ofFloat(tvRegis, "translationY",
-                300f, curTvTranslationY);
-        AnimatorSet set = new AnimatorSet();
-        set.play(regisMoveIn).with(loginMoveIn).with(tvLoginMoveIn).with(tvRegisMoveIn);
-        set.setDuration(2000);
-        set.start();
-
-        ObjectAnimator animator = ObjectAnimator.ofPropertyValuesHolder(ivLogo, p);
-        animator.setDuration(2000).start();
-//
-//        ObjectAnimator sloganMoveIn = ObjectAnimator.ofFloat(llSlogan, "translationY",
-//                500f, -60f, curSloganTranslationY);
-//        ObjectAnimator itemMoveIn = ObjectAnimator.ofFloat(llRNL, "translationY",
-//                500f, -60f, curRNLTranslationY);
-//        AnimatorSet animSet = new AnimatorSet();
-//        animSet.play(sloganMoveIn).with(itemMoveIn);
-//        animSet.setDuration(3000);
-//        animSet.start();
-
-//        Keyframe k0 = Keyframe.ofFloat(0f, 500f);
-//        Keyframe k2 = Keyframe.ofFloat(10f, curStartTranslationY);
-//
-//        PropertyValuesHolder p = PropertyValuesHolder.ofKeyframe("translationY", k0, k2);
-//
-//        ObjectAnimator animator = ObjectAnimator.ofPropertyValuesHolder(llStart, p);
-
-//        final ObjectAnimator animator = ObjectAnimator.ofFloat(llStart, "translationY",
-//                500f, -60f, curStartTranslationY);
-//        animator.setDuration(4 * 1000);
-////        animator.start();
-//        llStart.postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//               animator.start();
-//            }
-//        }, 30);
-
-//        handler = new Handler() {
-//            @Override
-//            public void handleMessage(Message msg) {
-//                super.handleMessage(msg);
-//                ObjectAnimator objectAnimator = (ObjectAnimator) msg.obj;
-//                objectAnimator.start();
-//            }
-//        };
-//
-//        handler.sendMessage(msg);
 
         //JumpingBeans的用法如下一句
 //        jumpingSlogan = JumpingBeans.with(tvSlogan).makeTextJump(0, 4)
@@ -250,11 +165,14 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
                                         int code = object.getInt("code");
                                         if (code == 200) {
                                             Intent intent = new Intent(StartActivity.this, HomeActivity.class);
-                                            intent.putExtra(ConstantValues.KEY_TOKEN,token);
-                                            intent.putExtra(ConstantValues.KEY_USER_TYPE,object.getString("msg"));
+                                            intent.putExtra(ConstantValues.KEY_TOKEN, token);
+                                            intent.putExtra(ConstantValues.KEY_USER_TYPE, object.getString("msg"));
                                             startActivity(intent);
                                             finish();
                                         } else {
+                                            if (code == 402) {
+                                                ConstantValues.removeToken(StartActivity.this);
+                                            }
                                             final String msg = object.getString("msg");
                                             runOnUiThread(new Runnable() {
                                                 @Override

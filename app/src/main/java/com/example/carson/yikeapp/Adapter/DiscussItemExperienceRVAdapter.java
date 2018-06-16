@@ -1,8 +1,6 @@
 package com.example.carson.yikeapp.Adapter;
 
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,11 +9,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.carson.yikeapp.R;
-import com.example.carson.yikeapp.Views.FragmentExp;
-import com.example.carson.yikeapp.Views.dummy.ExperienceItem;
+import com.example.carson.yikeapp.Views.Discuss.FragmentExp;
+import com.example.carson.yikeapp.Datas.ExperienceItem;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by 84594 on 2018/2/22.

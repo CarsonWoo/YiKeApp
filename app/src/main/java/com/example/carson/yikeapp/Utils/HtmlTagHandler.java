@@ -134,6 +134,7 @@ public class HtmlTagHandler implements Html.TagHandler {
         }
     }
 
+    //TODO 会存在过多换行的bug
     private void handleListTag(Editable output) {
         if (mListParents.lastElement().equals("ul")) {
             output.append("\n");

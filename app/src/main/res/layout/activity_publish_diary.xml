@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#f3f5f3f3"
-    tools:context="com.example.carson.yikeapp.Views.PublishDiaryActivity">
+    tools:context="com.example.carson.yikeapp.Views.Discuss.PublishDiaryActivity">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar_publish_diary"
@@ -30,9 +30,10 @@
     <LinearLayout
         android:orientation="vertical"
         android:layout_marginTop="41.5dp"
+        android:paddingBottom="50dp"
         android:background="@android:color/white"
         android:layout_width="match_parent"
-        android:layout_height="350dp">
+        android:layout_height="wrap_content">
 
         <EditText
             android:hint="写下你经历过的点点滴滴~"
@@ -46,12 +47,11 @@
             android:gravity="start" />
 
         <ImageView
-            android:background="#f2f1f1"
-            app:srcCompat="@drawable/ic_add"
+            android:background="@drawable/ic_add"
             android:id="@+id/iv_diary_post_photo"
             android:layout_marginLeft="15dp"
-            android:layout_width="105dp"
-            android:layout_height="130dp" />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
     </LinearLayout>
 

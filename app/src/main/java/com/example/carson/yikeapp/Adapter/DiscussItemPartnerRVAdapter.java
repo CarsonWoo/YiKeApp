@@ -10,8 +10,8 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.carson.yikeapp.R;
 import com.example.carson.yikeapp.Views.ArchRivalTextView;
-import com.example.carson.yikeapp.Views.FragmentPartner;
-import com.example.carson.yikeapp.Views.dummy.PartnerItem;
+import com.example.carson.yikeapp.Views.Discuss.FragmentPartner;
+import com.example.carson.yikeapp.Datas.PartnerItem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +30,10 @@ public class DiscussItemPartnerRVAdapter extends RecyclerView
     private final ArrayList<PartnerItem.PartItem> itemSelected = new ArrayList<>();
     private final OnLikeClickedListener onLikeClickedListener;
     private final OnHeadViewClickedListener onHeadViewClickedListener;
+
+    //用来保存item的状态
+    private View oldItemView;
+    private int oldPosition;
 
     public DiscussItemPartnerRVAdapter(List<PartnerItem.PartItem> items,
                                        FragmentPartner.OnFragmentInteractionListener listener,
@@ -97,8 +101,25 @@ public class DiscussItemPartnerRVAdapter extends RecyclerView
         holder.ivLike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onLikeClickedListener.onLikeClicked(v, mValues.get(position).id,
-                        mValues.get(position).isAgree);
+                if (onLikeClickedListener != null) {
+                    onLikeClickedListener.onLikeClicked(v, mValues.get(position).id,
+                            mValues.get(position).isAgree);
+                }
+                //复原旧位置
+                if (oldItemView != null) {
+                    Glide.with(holder.ivLike.getContext()).load(R.drawable.ic_unlike)
+                            .into(holder.ivLike);
+                    if (oldPosition >= 0 && oldPosition < mValues.size()) {
+                        mValues.get(oldPosition).isAgree = 0;
+                    }
+                }
+                //设置新位置
+                oldItemView = holder.itemView;
+                oldPosition = position;
+
+                Glide.with(holder.ivLike.getContext()).load(R.drawable.ic_like)
+                        .into(holder.ivLike);
+                mValues.get(oldPosition).isAgree = 1;
             }
         });
 

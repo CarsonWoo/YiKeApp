@@ -9,8 +9,8 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.carson.yikeapp.R;
 import com.example.carson.yikeapp.Views.ArchRivalTextView;
-import com.example.carson.yikeapp.Views.FragmentQuestion;
-import com.example.carson.yikeapp.Views.dummy.QuestionItem;
+import com.example.carson.yikeapp.Views.Discuss.FragmentQuestion;
+import com.example.carson.yikeapp.Datas.QuestionItem;
 
 import java.util.ArrayList;
 import java.util.List;

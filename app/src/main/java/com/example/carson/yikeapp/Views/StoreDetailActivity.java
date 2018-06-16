@@ -19,6 +19,7 @@ import com.bumptech.glide.Glide;
 import com.example.carson.yikeapp.R;
 import com.example.carson.yikeapp.Utils.ConstantValues;
 import com.example.carson.yikeapp.Utils.HttpUtils;
+import com.example.carson.yikeapp.Views.Message.ChatWindowActivity;
 import com.jude.swipbackhelper.SwipeBackHelper;
 
 import org.json.JSONException;

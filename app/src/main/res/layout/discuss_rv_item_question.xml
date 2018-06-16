@@ -9,7 +9,7 @@
     <de.hdodenhof.circleimageview.CircleImageView
         android:clickable="true"
         android:id="@+id/civ_discuss_rv_item_question_head"
-        android:src="@mipmap/ic_launcher"
+        app:srcCompat="@drawable/ic_loader"
         android:layout_width="55dp"
         android:layout_height="55dp"
         android:focusable="true" />
@@ -20,7 +20,7 @@
         android:hint="username"
         android:textColor="#000"
         android:id="@+id/artv_discuss_rv_item_question_name"
-        android:textSize="19.6sp"
+        android:textSize="17.6sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
@@ -29,7 +29,7 @@
     <TextView
         android:maxLines="2"
         android:layout_marginTop="6dp"
-        android:textSize="15.6sp"
+        android:textSize="13.6sp"
         android:ellipsize="end"
         android:layout_marginLeft="20dp"
         android:layout_toRightOf="@id/civ_discuss_rv_item_question_head"

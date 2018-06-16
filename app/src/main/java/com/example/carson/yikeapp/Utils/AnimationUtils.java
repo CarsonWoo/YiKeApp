@@ -19,7 +19,7 @@ public class AnimationUtils {
     public static final int TYPE_SCALE_BOTH = 5;
 
     @SuppressLint("ObjectAnimatorBinding")
-    public static void setScaleAnimation(Object obj, int duration, int type, float ...values) {
+    public static void setScaleAnimation(Object obj, long duration, int type, float ...values) {
         ObjectAnimator scaleX, scaleY;
         switch (type) {
             case TYPE_SCALE_X:
@@ -42,7 +42,7 @@ public class AnimationUtils {
     }
 
     @SuppressLint("ObjectAnimatorBinding")
-    public static void setTranslationAnimation(Object obj, int duration, int type, float ...values) {
+    public static void setTranslationAnimation(Object obj, long duration, int type, float ...values) {
         ObjectAnimator translationX, translationY;
         switch (type) {
             case TYPE_TRANSLATION_X:
@@ -63,6 +63,12 @@ public class AnimationUtils {
                 set.setDuration(duration).start();
                 break;
         }
+    }
+    @SuppressLint("ObjectAnimatorBinding")
+    public static void setAlphaAnimation(Object obj, long duration, float ...values) {
+         ObjectAnimator alphaAnim = ObjectAnimator.ofFloat(obj, "alpha", values);
+         alphaAnim.setDuration(duration);
+         alphaAnim.start();
     }
 
 }

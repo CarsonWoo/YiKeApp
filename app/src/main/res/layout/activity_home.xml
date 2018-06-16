@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     android:orientation="vertical"
-    tools:context="com.example.carson.yikeapp.Views.HomeActivity">
+    tools:context="com.example.carson.yikeapp.Views.Home.HomeActivity">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appbar"

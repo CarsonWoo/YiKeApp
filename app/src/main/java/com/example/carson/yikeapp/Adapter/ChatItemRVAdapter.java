@@ -11,8 +11,8 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.carson.yikeapp.R;
-import com.example.carson.yikeapp.Views.FragmentMessage;
-import com.example.carson.yikeapp.Views.dummy.ChatItem;
+import com.example.carson.yikeapp.Views.Message.FragmentMessage;
+import com.example.carson.yikeapp.Datas.ChatItem;
 
 import java.util.ArrayList;
 

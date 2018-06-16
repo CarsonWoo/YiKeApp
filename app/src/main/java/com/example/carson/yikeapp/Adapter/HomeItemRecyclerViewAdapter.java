@@ -10,8 +10,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.carson.yikeapp.R;
-import com.example.carson.yikeapp.Views.FragmentHome;
-import com.example.carson.yikeapp.Views.dummy.HomeContent.BNBHomeItem;
+import com.example.carson.yikeapp.Views.Home.FragmentHome;
+import com.example.carson.yikeapp.Datas.HomeContent.BNBHomeItem;
 
 import java.util.ArrayList;
 
@@ -20,6 +20,7 @@ import java.util.ArrayList;
  * specified {@link }.
  */
 public class HomeItemRecyclerViewAdapter extends RecyclerView.Adapter {
+
     private final static String TAG = "HomeItemRViewAdapter";
     private final static int VIEWTYPE_NORMAL = 1;
     private final static int VIEWTYPE_LAST = 2;

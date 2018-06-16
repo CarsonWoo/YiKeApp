@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.carson.yikeapp.Views.FollowActivity">
+    tools:context="com.example.carson.yikeapp.Views.User.FollowActivity">
 
     <android.support.v7.widget.Toolbar
         app:layout_scrollFlags="enterAlways|scroll|snap"

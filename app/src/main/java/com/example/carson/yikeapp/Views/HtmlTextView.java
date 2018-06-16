@@ -84,7 +84,7 @@ public class HtmlTextView extends android.support.v7.widget.AppCompatTextView {
                 @Override
                 public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
                     // 计算缩放比例
-                    float scaleWidth = ((float) width)/loadedImage.getWidth();
+                    float scaleWidth = ((float) width) / loadedImage.getWidth();
                     // 取得想要缩放的matrix参数
                     Matrix matrix = new Matrix();
                     matrix.postScale(scaleWidth, scaleWidth);
