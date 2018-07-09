@@ -10,6 +10,20 @@
         <attr name="border_overlay" format="boolean" />
         
     </declare-styleable>
+
+    <declare-styleable name="RoundRectImg" >
+
+        <attr name="top_left_radius" format="integer" />
+
+        <attr name="top_right_radius" format="integer" />
+
+        <attr name="bottom_left_radius" format="integer" />
+
+        <attr name="bottom_right_radius" format="integer" />
+
+        <attr name="radius" format="integer" />
+
+    </declare-styleable>
     
 
 </resources>

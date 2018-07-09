@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:background="@drawable/bg_button_style3"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:id="@+id/action2exp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="35dp">
+
+        <ImageView
+            android:id="@+id/iv2publish_exp"
+            app:srcCompat="@drawable/ic_exp"
+            android:layout_width="45dp"
+            android:layout_height="18dp" />
+
+        <TextView
+            android:id="@+id/tv2publish_exp"
+            android:textSize="15.6sp"
+            android:textColor="@android:color/black"
+            android:text="经验之谈"
+            android:layout_width="63dp"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+    <View
+        android:layout_marginLeft="5dp"
+        android:layout_width="115dp"
+        android:layout_height="1dp"
+        android:background="#999999" />
+
+    <LinearLayout
+        android:id="@+id/action2recruit"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="35dp">
+
+        <ImageView
+            app:srcCompat="@drawable/ic_recruit"
+            android:layout_width="45dp"
+            android:layout_height="18dp" />
+
+        <TextView
+            android:textSize="15.6sp"
+            android:textColor="@android:color/black"
+            android:text="店家招工"
+            android:layout_width="63dp"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+</LinearLayout>

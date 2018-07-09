@@ -17,6 +17,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.carson.yikeapp.R;
 import com.example.carson.yikeapp.Utils.ConstantValues;
@@ -174,23 +175,24 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                         runOnUiThread(new Runnable() {
                                             @Override
                                             public void run() {
-                                                AlertDialog.Builder dialogBuilder = new
-                                                        AlertDialog.Builder(LoginActivity.this);
-                                                AlertDialog dialog = dialogBuilder.create();
-                                                View dialogView = LayoutInflater.from(LoginActivity.this)
-                                                        .inflate(R.layout.bg_alert_dialog, null, false);
-                                                dialog.setView(dialogView);
-                                                dialog.show();
-                                                WindowManager m = getWindowManager();
-                                                Display d = m.getDefaultDisplay();
-                                                WindowManager.LayoutParams p = dialog.getWindow()
-                                                        .getAttributes();
-                                                p.width = (int) (d.getWidth() * 0.6);
-//                                                p.height = (int) (d.getHeight() * 0.25);
-                                                dialog.getWindow().setAttributes(p);
-                                                TextView tv = dialogView.findViewById(R.id.tv_show_error_msg);
-                                                tv.setText(msg);
-                                                dialog.setCanceledOnTouchOutside(true);
+//                                                AlertDialog.Builder dialogBuilder = new
+//                                                        AlertDialog.Builder(LoginActivity.this);
+//                                                AlertDialog dialog = dialogBuilder.create();
+//                                                View dialogView = LayoutInflater.from(LoginActivity.this)
+//                                                        .inflate(R.layout.bg_alert_dialog, null, false);
+//                                                dialog.setView(dialogView);
+//                                                dialog.show();
+//                                                WindowManager m = getWindowManager();
+//                                                Display d = m.getDefaultDisplay();
+//                                                WindowManager.LayoutParams p = dialog.getWindow()
+//                                                        .getAttributes();
+//                                                p.width = (int) (d.getWidth() * 0.6);
+////                                                p.height = (int) (d.getHeight() * 0.25);
+//                                                dialog.getWindow().setAttributes(p);
+//                                                TextView tv = dialogView.findViewById(R.id.tv_show_error_msg);
+//                                                tv.setText(msg);
+//                                                dialog.setCanceledOnTouchOutside(true);
+                                                Toast.makeText(LoginActivity.this, msg, Toast.LENGTH_LONG).show();
                                             }
                                         });
                                     } else {

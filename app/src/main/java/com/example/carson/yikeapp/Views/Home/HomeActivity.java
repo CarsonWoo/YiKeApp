@@ -28,6 +28,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -35,6 +36,7 @@ import android.widget.Toast;
 import com.example.carson.yikeapp.R;
 import com.example.carson.yikeapp.Utils.ConstantValues;
 import com.example.carson.yikeapp.Utils.HttpUtils;
+import com.example.carson.yikeapp.Views.Discuss.PublishRecruitment;
 import com.example.carson.yikeapp.Views.Message.ChatWindowActivity;
 import com.example.carson.yikeapp.Views.Discuss.ExpDetailActivity;
 import com.example.carson.yikeapp.Views.Discuss.FragmentDiary;
@@ -93,6 +95,8 @@ public class HomeActivity extends AppCompatActivity implements FragmentHome.OnFr
     private TextView tv2PubExp, tv2PubPart, tv2PubQues, tv2PubDiary;
     private ImageView iv2PubExp, iv2PubPart, iv2PubQues, iv2PubDiary;
 
+    private LinearLayout action2Exp, action2Recruit;
+
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
      * fragments for each of the sections. We use a
@@ -135,24 +139,29 @@ public class HomeActivity extends AppCompatActivity implements FragmentHome.OnFr
         } else {
             Toast.makeText(this, "Not first login", Toast.LENGTH_SHORT).show();
         }
-
-        View windowView = LayoutInflater.from(this).inflate(R.layout.layout_popwin_pub_type, null, false);
-        window = new PopupWindow(windowView, ViewGroup.LayoutParams.WRAP_CONTENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT);
-
-        tv2PubExp = window.getContentView().findViewById(R.id.tv2publish_exp);
-        tv2PubPart = window.getContentView().findViewById(R.id.tv2publish_partner);
-        tv2PubQues = window.getContentView().findViewById(R.id.tv2publish_ques);
-        tv2PubDiary = window.getContentView().findViewById(R.id.tv2publish_diary);
-        iv2PubExp = window.getContentView().findViewById(R.id.iv2publish_exp);
-        iv2PubPart = window.getContentView().findViewById(R.id.iv2publish_partner);
-        iv2PubQues = window.getContentView().findViewById(R.id.iv2publish_ques);
-        iv2PubDiary = window.getContentView().findViewById(R.id.iv2publish_diary);
-
         data = getIntent();
         token = data.getStringExtra(ConstantValues.KEY_TOKEN);
         userType = data.getStringExtra(ConstantValues.KEY_USER_TYPE);
-
+        View windowView;
+        if (userType.equals("用户")) {
+            windowView = LayoutInflater.from(this).inflate(R.layout.popwin_user_pub_type, null, false);
+            window = new PopupWindow(windowView, ViewGroup.LayoutParams.WRAP_CONTENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT);
+            tv2PubExp = window.getContentView().findViewById(R.id.tv2publish_exp);
+            tv2PubPart = window.getContentView().findViewById(R.id.tv2publish_partner);
+            tv2PubQues = window.getContentView().findViewById(R.id.tv2publish_ques);
+            tv2PubDiary = window.getContentView().findViewById(R.id.tv2publish_diary);
+            iv2PubExp = window.getContentView().findViewById(R.id.iv2publish_exp);
+            iv2PubPart = window.getContentView().findViewById(R.id.iv2publish_partner);
+            iv2PubQues = window.getContentView().findViewById(R.id.iv2publish_ques);
+            iv2PubDiary = window.getContentView().findViewById(R.id.iv2publish_diary);
+        } else {
+            windowView = LayoutInflater.from(this).inflate(R.layout.popwin_store_pub_type, null, false);
+            window = new PopupWindow(windowView, ViewGroup.LayoutParams.WRAP_CONTENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT);
+            action2Exp = window.getContentView().findViewById(R.id.action2exp);
+            action2Recruit = window.getContentView().findViewById(R.id.action2recruit);
+        }
         // Create the adapter that will return a fragment for each of the four
         // primary sections of the activity.
         mSectionsPagerAdapter = new HomePagerAdapter(getSupportFragmentManager());
@@ -308,58 +317,71 @@ public class HomeActivity extends AppCompatActivity implements FragmentHome.OnFr
                     window.setBackgroundDrawable(new BitmapDrawable());
                     window.setAnimationStyle(R.style.window_menu_in_and_out_style);
                     window.showAsDropDown(toolbar, 100, 0, Gravity.BOTTOM | Gravity.RIGHT);
-                    tv2PubExp.setOnClickListener(new View.OnClickListener() {
-                        @SuppressLint("ResourceAsColor")
-                        @Override
-                        public void onClick(View v) {
-                            tv2PubExp.setTextColor(Color.parseColor("#ff6600"));
-                            iv2PubExp.setImageResource(R.drawable.ic_exp_clicked);
-                            Intent toExp = new Intent(HomeActivity.this,
-                                    PublishExpActivity.class);
-                            startActivity(toExp);
-                            overridePendingTransition(R.anim.ani_right_get_into, R.anim.ani_left_sign_out);
-                            window.dismiss();
-                        }
-                    });
-                    tv2PubPart.setOnClickListener(new View.OnClickListener() {
-                        @SuppressLint("ResourceAsColor")
-                        @Override
-                        public void onClick(View v) {
-                            tv2PubPart.setTextColor(Color.parseColor("#ff6600"));
-                            iv2PubPart.setImageResource(R.drawable.ic_partner_clicked);
-                            Intent toPart = new Intent(HomeActivity.this,
-                                    PublishPartActivity.class);
-                            startActivity(toPart);
-                            overridePendingTransition(R.anim.ani_right_get_into, R.anim.ani_left_sign_out);
-                            window.dismiss();
-                        }
-                    });
-                    tv2PubQues.setOnClickListener(new View.OnClickListener() {
-                        @SuppressLint("ResourceAsColor")
-                        @Override
-                        public void onClick(View v) {
-                            tv2PubQues.setTextColor(Color.parseColor("#ff6600"));
-                            iv2PubQues.setImageResource(R.drawable.ic_search_clicked);
-                            Intent toQues = new Intent(HomeActivity.this,
-                                    PublishQuestionActivity.class);
-                            startActivity(toQues);
-                            overridePendingTransition(R.anim.ani_right_get_into, R.anim.ani_left_sign_out);
-                            window.dismiss();
-                        }
-                    });
-                    tv2PubDiary.setOnClickListener(new View.OnClickListener() {
-                        @SuppressLint("ResourceAsColor")
-                        @Override
-                        public void onClick(View v) {
-                            tv2PubDiary.setTextColor(Color.parseColor("#ff6600"));
-                            iv2PubDiary.setImageResource(R.drawable.ic_like_stroke_clicked);
-                            Intent toDiary = new Intent(HomeActivity.this,
-                                    PublishDiaryActivity.class);
-                            startActivity(toDiary);
-                            overridePendingTransition(R.anim.ani_right_get_into, R.anim.ani_left_sign_out);
-                            window.dismiss();
-                        }
-                    });
+                    if (userType.equals("用户")){
+                        tv2PubExp.setOnClickListener(new View.OnClickListener() {
+                            @SuppressLint("ResourceAsColor")
+                            @Override
+                            public void onClick(View v) {
+                                Intent toExp = new Intent(HomeActivity.this,
+                                        PublishExpActivity.class);
+                                startActivity(toExp);
+                                overridePendingTransition(R.anim.ani_right_get_into, R.anim.ani_left_sign_out);
+                                window.dismiss();
+                            }
+                        });
+                        tv2PubPart.setOnClickListener(new View.OnClickListener() {
+                            @SuppressLint("ResourceAsColor")
+                            @Override
+                            public void onClick(View v) {
+                                Intent toPart = new Intent(HomeActivity.this,
+                                        PublishPartActivity.class);
+                                startActivity(toPart);
+                                overridePendingTransition(R.anim.ani_right_get_into, R.anim.ani_left_sign_out);
+                                window.dismiss();
+                            }
+                        });
+                        tv2PubQues.setOnClickListener(new View.OnClickListener() {
+                            @SuppressLint("ResourceAsColor")
+                            @Override
+                            public void onClick(View v) {
+                                Intent toQues = new Intent(HomeActivity.this,
+                                        PublishQuestionActivity.class);
+                                startActivity(toQues);
+                                overridePendingTransition(R.anim.ani_right_get_into, R.anim.ani_left_sign_out);
+                                window.dismiss();
+                            }
+                        });
+                        tv2PubDiary.setOnClickListener(new View.OnClickListener() {
+                            @SuppressLint("ResourceAsColor")
+                            @Override
+                            public void onClick(View v) {
+                                Intent toDiary = new Intent(HomeActivity.this,
+                                        PublishDiaryActivity.class);
+                                startActivity(toDiary);
+                                overridePendingTransition(R.anim.ani_right_get_into, R.anim.ani_left_sign_out);
+                                window.dismiss();
+                            }
+                        });
+                    } else {
+                        action2Recruit.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent toRecruit = new Intent(HomeActivity.this, PublishRecruitment.class);
+                                startActivity(toRecruit);
+                                overridePendingTransition(R.anim.ani_right_get_into, R.anim.ani_left_sign_out);
+                                window.dismiss();
+                            }
+                        });
+                        action2Exp.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent toExp = new Intent(HomeActivity.this, PublishExpActivity.class);
+                                startActivity(toExp);
+                                overridePendingTransition(R.anim.ani_right_get_into, R.anim.ani_left_sign_out);
+                                window.dismiss();
+                            }
+                        });
+                    }
                 }
                 break;
         }

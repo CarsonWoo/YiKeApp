@@ -95,6 +95,8 @@ public class ConstantValues {
 
     public static final String URL_COLLECT = "https://www.yiluzou.cn/yike/public/index.php/collection";
 
+    public static final String URL_EMPLOYMENT = "https://www.yiluzou.cn/yike/public/index.php/employment";
+
     public static final int CODE_TAKE_PHOTO = 1;
 
     public static final int TYPE_TAKE_PHOTO = 1;

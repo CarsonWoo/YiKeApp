@@ -108,8 +108,11 @@
         <activity
             android:name=".Views.Home.SearchUserActivity"
             android:theme="@style/MainTheme" />
-        <activity android:name=".Views.User.FollowActivity"
-            android:theme="@style/MainTheme"></activity>
+        <activity
+            android:name=".Views.User.FollowActivity"
+            android:theme="@style/MainTheme" />
+        <activity android:name=".Views.Discuss.PublishRecruitment"
+            android:theme="@style/TransparentTheme"></activity>
     </application>
 
 </manifest>
