@@ -435,7 +435,7 @@ public class ShopDetailActivity extends AppCompatActivity implements View.OnClic
     //获取媒体uri
     private Uri getMediaFileUri(int type) {
         File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(Environment
-                .DIRECTORY_PICTURES), "相册名字");
+                .DIRECTORY_PICTURES), "义客");
         if (!mediaStorageDir.exists()) {
             if (!mediaStorageDir.mkdirs()) {
                 return null;
@@ -457,7 +457,7 @@ public class ShopDetailActivity extends AppCompatActivity implements View.OnClic
     //获取sdk24以上的媒体uri
     private Uri get24MediaFileUri(int type) {
         File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(Environment
-                .DIRECTORY_PICTURES), "相册名字");
+                .DIRECTORY_PICTURES), "义客");
         if (!mediaStorageDir.exists()) {
             if (!mediaStorageDir.mkdirs()) {
                 return null;

@@ -508,6 +508,7 @@ public class PublishExpActivity extends AppCompatActivity implements View.OnClic
         String[] filePathColumn = {MediaStore.Images.Media.DATA};
         Cursor cursor = getContentResolver().query(imgUri, filePathColumn,
                 null, null, null);
+        assert cursor != null;
         cursor.moveToFirst();
         int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
         String picPath = cursor.getString(columnIndex);

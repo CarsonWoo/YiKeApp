@@ -181,6 +181,12 @@ public class FragmentHome extends Fragment implements HomeItemRecyclerViewAdapte
             @Override
             public void onRefresh() {
                 getHomeBNBList( 1);
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        refreshLayout.setRefreshing(false);
+                    }
+                }, 500);
             }
         });
 

@@ -309,7 +309,7 @@ public class HomeActivity extends AppCompatActivity implements FragmentHome.OnFr
                 overridePendingTransition(R.anim.ani_right_get_into, R.anim.ani_left_sign_out);
                 break;
             case R.id.action_publish:
-                initializeItem();
+//                initializeItem();
                 if (window.isShowing()) {
                     window.dismiss();
                 } else {

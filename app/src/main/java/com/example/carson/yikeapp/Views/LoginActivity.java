@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -50,6 +51,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private boolean isNameChecked = false, isPwdChecked = false;
     private Toolbar toolbar;
     private List<String> dataList;
+    private CoordinatorLayout mContainer;
 
     private boolean isFirstFilled = false;
 
@@ -104,6 +106,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         btnLogin = findViewById(R.id.btn_login);
         tvToForget = findViewById(R.id.tv_forget_pwd);
         tvToRegis = findViewById(R.id.tv_to_regis);
+        mContainer = findViewById(R.id.login_container);
 
         toolbar = findViewById(R.id.toolbar_login);
 
@@ -214,6 +217,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                         if (userType.equals(ConstantValues.USER_TYPE_NORMAL)) {
                                             ConstantValues.cacheUserId(LoginActivity.this, userId);
                                         }
+                                        mContainer.setAlpha(0.6f);
                                         if (!isFirstFilled) {
                                             Intent intent = new Intent(LoginActivity.this,
                                                     HomeActivity.class);
