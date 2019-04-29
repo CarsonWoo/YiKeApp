@@ -20,6 +20,7 @@ import com.example.carson.yikeapp.R;
 import com.example.carson.yikeapp.Utils.ConstantValues;
 import com.example.carson.yikeapp.Utils.HttpUtils;
 import com.example.carson.yikeapp.Views.Message.ChatWindowActivity;
+import com.example.carson.yikeapp.Views.User.ResumeActivity;
 import com.jude.swipbackhelper.SwipeBackHelper;
 
 import org.json.JSONException;
@@ -143,6 +144,11 @@ public class StoreDetailActivity extends AppCompatActivity {
                     apply();
                 }else {
                     makeToast("报名之前需要先完成简历的填写。");
+                    Intent toResume = new Intent(StoreDetailActivity.this, ResumeActivity.class);
+                    toResume.putExtra("name", userName);
+                    toResume.putExtra("gender", "男");
+                    startActivity(toResume);
+                    StoreDetailActivity.this.overridePendingTransition(R.anim.ani_right_get_into, R.anim.ani_left_sign_out);
                 }
             }
         });

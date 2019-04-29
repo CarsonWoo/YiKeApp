@@ -90,7 +90,7 @@ public class FollowActivity extends AppCompatActivity {
 //        helper.attachToRecyclerView(rvFollow);
         adapter = new FollowAdapter();
         LinearLayoutManager manager = new LinearLayoutManager(this,
-                LinearLayoutManager.HORIZONTAL, false);
+                LinearLayoutManager.VERTICAL, false);
 
         rvFollow.setLayoutManager(manager);
         rvFollow.setAdapter(adapter);
@@ -121,7 +121,7 @@ public class FollowActivity extends AppCompatActivity {
             }
         };
         itemCount = rvFollow.getLayoutManager().getItemCount();
-        initWidth();
+//        initWidth();
         addRecyclerListener();
         LinearSnapHelper linearSnapHelper = new LinearSnapHelper(){
             @Override
@@ -160,7 +160,7 @@ public class FollowActivity extends AppCompatActivity {
                 if (rvFollow.getLayoutManager().getLayoutDirection() == LinearLayoutManager.HORIZONTAL) {
                     mDistances += dx;
                     computeCurrentItemPos();
-                    scaleItemView();
+//                    scaleItemView();
                 }
             }
         });

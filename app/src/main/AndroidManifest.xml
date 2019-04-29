@@ -34,8 +34,7 @@
                 android:resource="@xml/provider_path" />
         </provider>
 
-        <activity
-            android:name=".Views.StartActivity"
+        <activity android:name=".Views.LaunchActivity"
             android:theme="@style/MainTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -43,6 +42,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".Views.StartActivity"
+            android:theme="@style/MainTheme" />
         <activity
             android:name=".Views.ChangePasswordActivity"
             android:theme="@style/MainTheme" />
@@ -111,8 +113,9 @@
         <activity
             android:name=".Views.User.FollowActivity"
             android:theme="@style/MainTheme" />
-        <activity android:name=".Views.Discuss.PublishRecruitment"
-            android:theme="@style/TransparentTheme"></activity>
+        <activity
+            android:name=".Views.Discuss.PublishRecruitment"
+            android:theme="@style/TransparentTheme" />
     </application>
 
 </manifest>

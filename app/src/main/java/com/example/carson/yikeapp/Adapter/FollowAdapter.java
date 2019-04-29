@@ -6,6 +6,7 @@ import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -35,9 +36,9 @@ public class FollowAdapter extends RecyclerView.Adapter<FollowAdapter.FollowVH> 
     public class FollowVH extends RecyclerView.ViewHolder {
 
         ImageView ivHead;
-        ArchRivalTextView name;
-        TextView location;
+        TextView name,location;
         TextView userType;
+        Button btnFollowEdit;
         public View itemView;
         public FollowContent.FollowData item;
 
@@ -45,23 +46,24 @@ public class FollowAdapter extends RecyclerView.Adapter<FollowAdapter.FollowVH> 
             super(itemView);
             this.itemView = itemView;
             ivHead = itemView.findViewById(R.id.iv_follow_item);
-            name = itemView.findViewById(R.id.artv_follow_item_name);
+            name = itemView.findViewById(R.id.tv_follow_item_name);
             location = itemView.findViewById(R.id.tv_follow_location);
-            userType = itemView.findViewById(R.id.tv_follow_user_type);
+            btnFollowEdit = itemView.findViewById(R.id.btn_follow_item_edit);
+//            userType = itemView.findViewById(R.id.tv_follow_user_type);
         }
     }
 
     @Override
     public FollowVH onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_follow, parent,
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_follow_new, parent,
                 false);
 //        RecyclerSnapUtils.onCreateViewHolder(parent, view, ScreenUtils.dip2px(parent.getContext(), 30f));
-        RecyclerView.LayoutParams lp = (RecyclerView.LayoutParams) view.getLayoutParams();
-        if(margin <= 0){
-            margin = mDefaultMargin;
-        }
-        lp.width = parent.getWidth() - 4 * margin;
-        view.setLayoutParams(lp);
+//        RecyclerView.LayoutParams lp = (RecyclerView.LayoutParams) view.getLayoutParams();
+//        if(margin <= 0){
+//            margin = mDefaultMargin;
+//        }
+//        lp.width = parent.getWidth() - 4 * margin;
+//        view.setLayoutParams(lp);
         return new FollowVH(view);
     }
 
@@ -69,27 +71,27 @@ public class FollowAdapter extends RecyclerView.Adapter<FollowAdapter.FollowVH> 
     public void onBindViewHolder(FollowVH holder, int position) {
 //        RecyclerSnapUtils.onBindViewHolder(holder.itemView, position, getItemCount(),
 //                ScreenUtils.dip2px(holder.itemView.getContext(), 30f));
-        int leftMarin = 0;
-        int rightMarin =  0;
-        int topMarin = 0;
-        int bottomMarin =  0;
-        if(position == 0){
-            leftMarin = margin;
-            rightMarin = 0;
-        } else if (position == (getItemCount() - 1)){
-            leftMarin = 0;
-            rightMarin = margin;
-        }
-        ViewGroup.MarginLayoutParams lp = (ViewGroup.MarginLayoutParams) holder.itemView.getLayoutParams();
-        if (lp.leftMargin != leftMarin || lp.topMargin != topMarin || lp.rightMargin != rightMarin
-                || lp.bottomMargin != bottomMarin) {
-            lp.setMargins(leftMarin, topMarin, rightMarin, bottomMarin);
-            holder.itemView.setLayoutParams(lp);
-        }
+//        int leftMarin = 0;
+//        int rightMarin =  0;
+//        int topMarin = 0;
+//        int bottomMarin =  0;
+//        if(position == 0){
+//            leftMarin = margin;
+//            rightMarin = 0;
+//        } else if (position == (getItemCount() - 1)){
+//            leftMarin = 0;
+//            rightMarin = margin;
+//        }
+//        ViewGroup.MarginLayoutParams lp = (ViewGroup.MarginLayoutParams) holder.itemView.getLayoutParams();
+//        if (lp.leftMargin != leftMarin || lp.topMargin != topMarin || lp.rightMargin != rightMarin
+//                || lp.bottomMargin != bottomMarin) {
+//            lp.setMargins(leftMarin, topMarin, rightMarin, bottomMarin);
+//            holder.itemView.setLayoutParams(lp);
+//        }
         holder.item = mValues.get(position);
         holder.location.setText(holder.item.location);
         holder.name.setText(holder.item.name);
-        holder.userType.setText(holder.item.userType);
+//        holder.userType.setText(holder.item.userType);
         Glide.with(holder.itemView.getContext()).load(holder.item.photoUrl).into(holder.ivHead);
     }
 

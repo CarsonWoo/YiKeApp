@@ -1,6 +1,7 @@
 package com.example.carson.yikeapp.Views.Discuss;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -22,6 +23,7 @@ import android.widget.Toast;
 
 import com.example.carson.yikeapp.Adapter.DiscussItemExperienceRVAdapter;
 import com.example.carson.yikeapp.R;
+import com.example.carson.yikeapp.Utils.AnimationUtils;
 import com.example.carson.yikeapp.Utils.ConstantValues;
 import com.example.carson.yikeapp.Utils.HttpUtils;
 import com.example.carson.yikeapp.Datas.ExperienceItem;
@@ -45,7 +47,7 @@ import okhttp3.Response;
  * Created by 84594 on 2018/2/26.
  */
 
-public class FragmentExp extends Fragment implements DiscussItemExperienceRVAdapter.OnCollectClickListener {
+public class FragmentExp extends Fragment implements DiscussItemExperienceRVAdapter.OnCollectClickListener, DiscussItemExperienceRVAdapter.OnLikeClickListener {
 
     private static final String TAG = "FragmentExperience";
 
@@ -70,6 +72,11 @@ public class FragmentExp extends Fragment implements DiscussItemExperienceRVAdap
         actionCollect(id);
     }
 
+    @Override
+    public void onLikeClick(View v, String id) {
+        actionLike(id);
+    }
+
     public interface OnFragmentInteractionListener {
         void onFragmentInteraction(ArrayList item);
     }
@@ -92,7 +99,6 @@ public class FragmentExp extends Fragment implements DiscussItemExperienceRVAdap
         token = ConstantValues.getCachedToken(getContext());
 
 
-
     }
 
     @SuppressLint("HandlerLeak")
@@ -109,7 +115,7 @@ public class FragmentExp extends Fragment implements DiscussItemExperienceRVAdap
 
         rvExp = view.findViewById(R.id.rv_discuss_experience);
         rvExp.setLayoutManager(new LinearLayoutManager(view.getContext()));
-        adapter = new DiscussItemExperienceRVAdapter(mListener, this);
+        adapter = new DiscussItemExperienceRVAdapter(mListener, this, this);
         rvExp.setAdapter(adapter);
         rvExp.addItemDecoration(new DividerItemDecoration(view.getContext(),
                 DividerItemDecoration.VERTICAL));
@@ -296,6 +302,59 @@ public class FragmentExp extends Fragment implements DiscussItemExperienceRVAdap
                                         }
                                     }
                                 });
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+    }
+
+    private void actionLike(String id) {
+        OkHttpClient client = null;
+        try {
+            client = HttpUtils.getUnsafeOkHttpClient();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (KeyManagementException e) {
+            e.printStackTrace();
+        }
+        FormBody.Builder builder = new FormBody.Builder();
+        builder.add(ConstantValues.KEY_TOKEN, token);
+        builder.add(ConstantValues.KEY_EXP_LIST_ID, id);
+        HttpUtils.sendRequest(client, ConstantValues.URL_EXP_AGREE, builder,
+                new Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+
+                    }
+
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+                        try {
+                            final JSONObject object = new JSONObject(response.body().string());
+                            int code = object.getInt(ConstantValues.KEY_CODE);
+                            if (code == 200) {
+                                getActivity().runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Toast.makeText(getContext(),"点赞成功",Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                            } else {
+                                getActivity().runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        try {
+                                            Toast.makeText(getContext(),
+                                                    object.getString("msg"),
+                                                    Toast.LENGTH_SHORT).show();
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                });
+
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();

@@ -84,6 +84,12 @@ public class ChangePasswordActivity extends AppCompatActivity implements View.On
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_change_send_check_code:
+
+                if (etPhone.getText().length() == 0) {
+                    Toast.makeText(this, "请输入手机号码", Toast.LENGTH_SHORT).show();
+                    break;
+                }
+
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
@@ -134,7 +140,10 @@ public class ChangePasswordActivity extends AppCompatActivity implements View.On
                 if (!etPwd.getText().toString().equals(etPwdChecked.getText().toString())) {
                     Snackbar.make(btnConfirm, "两次密码输入不一致，请重新输入",
                             Snackbar.LENGTH_SHORT).show();
-                }else {
+                } else if (!ifFilled()) {
+                    Toast.makeText(this,"请完善所有修改信息",Toast.LENGTH_SHORT).show();
+                    break;
+                } else {
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
@@ -188,6 +197,20 @@ public class ChangePasswordActivity extends AppCompatActivity implements View.On
                 }
 
                 break;
+        }
+    }
+
+    private boolean ifFilled(){
+        if(etPhone.getText().length()==0){
+            return false;
+        }else if(etPhone.getText().length()==0){
+            return false;
+        }else if(etPhone.getText().length()==0){
+            return false;
+        }else if(etPhone.getText().length()==0){
+            return false;
+        }else{
+            return true;
         }
     }
 

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    android:padding="10dp">
+
+    <com.example.carson.yikeapp.Views.CircleImageView
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:id="@+id/iv_follow_item"
+        android:src="@color/bg_bnb_loca"/>
+
+        <LinearLayout
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="5dp"
+            android:layout_weight="3"
+            android:orientation="horizontal"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:textSize="17sp"
+                android:textColor="@android:color/black"
+                android:text="@string/app_name"
+                android:id="@+id/tv_follow_item_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <ImageView
+                android:layout_marginLeft="5dp"
+                android:layout_gravity="center_vertical"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                app:srcCompat="@drawable/ic_location"/>
+
+            <TextView
+                android:text="lacation"
+                android:id="@+id/tv_follow_location"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+    <Button
+        android:layout_marginLeft="5dp"
+        android:id="@+id/btn_follow_item_edit"
+        android:text="已关注"
+        android:layout_width="70dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="5dp" />
+
+</LinearLayout>

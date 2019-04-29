@@ -256,25 +256,21 @@ public class HomeActivity extends AppCompatActivity implements FragmentHome.OnFr
         Log.d(TAG,"userType: "+ userType);
         switch (mViewPager.getCurrentItem()) {
             case 0:
-                menu.findItem(R.id.action_scan).setVisible(true);
                 menu.findItem(R.id.action_setting).setVisible(false);
                 menu.findItem(R.id.action_publish).setVisible(false);
                 menu.findItem(R.id.action_my_store).setVisible(userType.equals("店主"));
                 break;
             case 1:
-                menu.findItem(R.id.action_scan).setVisible(false);
                 menu.findItem(R.id.action_setting).setVisible(false);
                 menu.findItem(R.id.action_publish).setVisible(true);
                 menu.findItem(R.id.action_my_store).setVisible(false);
                 break;
             case 2:
-                menu.findItem(R.id.action_scan).setVisible(false);
                 menu.findItem(R.id.action_setting).setVisible(false);
                 menu.findItem(R.id.action_publish).setVisible(false);
                 menu.findItem(R.id.action_my_store).setVisible(false);
                 break;
             case 3:
-                menu.findItem(R.id.action_scan).setVisible(false);
                 menu.findItem(R.id.action_setting).setVisible(true);
                 menu.findItem(R.id.action_publish).setVisible(false);
                 menu.findItem(R.id.action_my_store).setVisible(false);
@@ -301,8 +297,6 @@ public class HomeActivity extends AppCompatActivity implements FragmentHome.OnFr
 
         //noinspection SimplifiableIfStatement
         switch (id) {
-            case R.id.action_scan:
-                break;
             case R.id.action_setting:
                 Intent toSetting = new Intent(this, SettingActivity.class);
                 startActivityForResult(toSetting, ConstantValues.REQUESTCODE_START_SETTING);

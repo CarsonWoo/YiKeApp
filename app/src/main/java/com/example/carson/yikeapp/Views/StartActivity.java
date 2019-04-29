@@ -57,8 +57,6 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
 
-        checkLoginStatus();
-
         buttonLogin = findViewById(R.id.ib_to_login);
         buttonRegis = findViewById(R.id.ib_to_regis);
 
@@ -133,62 +131,5 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
         }
     }
 
-    private void checkLoginStatus() {
-        final String token = ConstantValues.getCachedToken(this);
 
-        if (token != null) {
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    OkHttpClient client = null;
-                    try {
-                        client = HttpUtils.getUnsafeOkHttpClient();
-                    } catch (NoSuchAlgorithmException e) {
-                        e.printStackTrace();
-                    } catch (KeyManagementException e) {
-                        e.printStackTrace();
-                    }
-                    FormBody.Builder builder = new FormBody.Builder();
-                    builder.add("token", token);
-                    HttpUtils.sendRequest(client, ConstantValues.URL_GET_USER_TYPE,
-                            builder, new Callback() {
-                                @Override
-                                public void onFailure(Call call, IOException e) {
-
-                                }
-
-                                @Override
-                                public void onResponse(Call call, Response response) throws IOException {
-                                    try {
-                                        JSONObject object = new JSONObject(response
-                                                .body().string());
-                                        int code = object.getInt("code");
-                                        if (code == 200) {
-                                            Intent intent = new Intent(StartActivity.this, HomeActivity.class);
-                                            intent.putExtra(ConstantValues.KEY_TOKEN, token);
-                                            intent.putExtra(ConstantValues.KEY_USER_TYPE, object.getString("msg"));
-                                            startActivity(intent);
-                                            finish();
-                                        } else {
-                                            if (code == 402) {
-                                                ConstantValues.removeToken(StartActivity.this);
-                                            }
-                                            final String msg = object.getString("msg");
-                                            runOnUiThread(new Runnable() {
-                                                @Override
-                                                public void run() {
-                                                    Toast.makeText(StartActivity.this,
-                                                            msg, Toast.LENGTH_SHORT).show();
-                                                }
-                                            });
-                                        }
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
-                                    }
-                                }
-                            });
-                }
-            }).start();
-        }
-    }
 }

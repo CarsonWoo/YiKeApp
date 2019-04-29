@@ -1,6 +1,8 @@
 package com.example.carson.yikeapp.Views.Discuss;
 
+import android.app.AlertDialog;
 import android.content.Intent;
+import android.os.Build;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
@@ -8,7 +10,10 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.util.Log;
+import android.view.Display;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -21,7 +26,9 @@ import com.example.carson.yikeapp.R;
 import com.example.carson.yikeapp.Utils.AnimationUtils;
 import com.example.carson.yikeapp.Utils.ConstantValues;
 import com.example.carson.yikeapp.Utils.HttpUtils;
+import com.example.carson.yikeapp.Views.ArchRivalTextView;
 import com.example.carson.yikeapp.Views.HtmlTextView;
+import com.example.carson.yikeapp.Views.Message.ChatWindowActivity;
 import com.jude.swipbackhelper.SwipeBackHelper;
 
 import org.json.JSONException;
@@ -30,7 +37,10 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.Iterator;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.FormBody;
@@ -199,6 +209,9 @@ public class ExpDetailActivity extends AppCompatActivity implements View.OnClick
                 .setSwipeRelateOffset(300)
                 .setSwipeEdgePercent(0.15f)
                 .setClosePercent(0.5f);
+
+        //设置头像点击显示简介
+        headView.setOnClickListener(this);
 
         btnFollow.setOnClickListener(this);
 
@@ -376,7 +389,199 @@ public class ExpDetailActivity extends AppCompatActivity implements View.OnClick
             case R.id.btn_more_info:
                 Snackbar.make(ibtnComment, "删除本帖子吗", Snackbar.LENGTH_SHORT).show();
                 break;
+            case R.id.civ_exp_detail:
+                onHeadViewClicked();
+                break;
         }
+    }
+
+    private void onHeadViewClicked(){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                OkHttpClient client = null;
+                try {
+                    client = HttpUtils.getUnsafeOkHttpClient();
+                } catch (NoSuchAlgorithmException e) {
+                    e.printStackTrace();
+                } catch (KeyManagementException e) {
+                    e.printStackTrace();
+                }
+                FormBody.Builder builder = new FormBody.Builder();
+                builder.add(ConstantValues.KEY_TOKEN, token);
+                builder.add(ConstantValues.KEY_PART_LIST_ID, userId);
+//                Log.i(TAG, userID);
+                HttpUtils.sendRequest(client, ConstantValues.URL_GET_TARGET_USER_INFO,
+                        builder, new Callback() {
+                            @Override
+                            public void onFailure(Call call, IOException e) {
+                                e.printStackTrace();
+                            }
+
+                            @Override
+                            public void onResponse(Call call, Response response) throws IOException {
+                                try {
+                                    JSONObject object = new JSONObject(response.body().string());
+                                    int code = object.getInt(ConstantValues.KEY_CODE);
+                                    final ArrayList<String> datas = new ArrayList<>();
+                                    if (code == 200) {
+                                        JSONObject detailObj = object.getJSONObject("msg");
+                                        Iterator iterator = detailObj.keys();
+                                        while (iterator.hasNext()) {
+                                            String key = (String) iterator.next();
+                                            datas.add(detailObj.getString(key));
+                                        }
+//                                        Log.i(TAG, "responseName = " + datas.get(0));
+                                        runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                showInfoDialog(datas, userId);
+                                            }
+                                        });
+                                    }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        });
+            }
+        }).start();
+    }
+
+    private void showInfoDialog(final ArrayList<String> datas, final String userID) {
+        AlertDialog.Builder dialogBuilder =
+                new AlertDialog.Builder(this);
+        final AlertDialog dialog = dialogBuilder.create();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            View dialogView = LayoutInflater.from(this)
+                    .inflate(R.layout.dialog_show_target_user, null);
+            CircleImageView head = dialogView
+                    .findViewById(R.id.civ_dialog_show_target);
+            ArchRivalTextView userName = dialogView
+                    .findViewById(R.id.artv_dialog_name);
+            TextView info = dialogView
+                    .findViewById(R.id.tv_dialog_info);
+            Button btnFollow = dialogView
+                    .findViewById(R.id.btn_dialog_follow);
+            Button btnChat = dialogView
+                    .findViewById(R.id.btn_dialog_chat);
+            ImageView back = dialogView
+                    .findViewById(R.id.iv_dialog_back);
+            Glide.with(this).load(datas.get(1))
+                    .into(head);
+            if (ConstantValues.followIdList.contains(userID)) {
+                //已关注该用户
+                btnFollow.setEnabled(false);
+                btnFollow.setClickable(false);
+                btnFollow.setText("已关注");
+//                btnFollow.setTextColor(Color.GRAY);
+            }
+            if (ConstantValues.getCachedUserId(this).equals(userID)) {
+                btnFollow.setEnabled(false);
+                btnFollow.setClickable(false);
+                btnChat.setEnabled(false);
+                btnChat.setClickable(false);
+                btnFollow.setVisibility(View.GONE);
+                btnChat.setVisibility(View.GONE);
+            }
+            userName.setText(datas.get(0));
+            info.setText(datas.get(2));
+            back.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.dismiss();
+                }
+            });
+            dialog.setView(dialogView);
+            dialog.show();
+            WindowManager m = getWindowManager();
+            //获取屏幕的宽高
+            Display d = m.getDefaultDisplay();
+            //获取当前对话框的宽高
+            WindowManager.LayoutParams p = dialog.getWindow()
+                    .getAttributes();
+            p.height = (int) (d.getHeight() * 0.7);
+            p.width = (int) (d.getWidth() * 0.8);
+            dialog.getWindow().setAttributes(p);
+            btnChat.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent toChat = new Intent(ExpDetailActivity.this,
+                            ChatWindowActivity.class);
+                    toChat.putExtra(ConstantValues
+                            .KEY_CHAT_WIN_USERNAME, datas.get(0))
+                            .putExtra(ConstantValues.KEY_CHAT_WIN_USER_ID, userID);
+                    startActivity(toChat);
+                    overridePendingTransition(R.anim.ani_right_get_into,
+                            R.anim.ani_left_sign_out);
+                }
+            });
+            btnFollow.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    doFollow(userID, dialog);
+                }
+            });
+        }
+    }
+
+    private void doFollow(final String userId, final AlertDialog dialog) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                OkHttpClient client = null;
+                try {
+                    client = HttpUtils.getUnsafeOkHttpClient();
+                } catch (NoSuchAlgorithmException e) {
+                    e.printStackTrace();
+                } catch (KeyManagementException e) {
+                    e.printStackTrace();
+                }
+                FormBody.Builder builder = new FormBody.Builder();
+                builder.add(ConstantValues.KEY_TOKEN, token);
+                builder.add("id", userId);
+                HttpUtils.sendRequest(client, ConstantValues.URL_FOLLOW, builder,
+                        new Callback() {
+                            @Override
+                            public void onFailure(Call call, IOException e) {
+
+                            }
+
+                            @Override
+                            public void onResponse(Call call, Response response) throws IOException {
+                                try {
+                                    final JSONObject object = new JSONObject(response.body().string());
+                                    int code = object.getInt(ConstantValues.KEY_CODE);
+                                    if (code == 200) {
+                                        runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                Toast.makeText(ExpDetailActivity.this, "关注成功",
+                                                        Toast.LENGTH_SHORT).show();
+                                                dialog.dismiss();
+                                                ConstantValues.followIdList.add(userId);
+                                            }
+                                        });
+                                    } else {
+                                        runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                try {
+                                                    Toast.makeText(ExpDetailActivity.this, object.getString("msg"),
+                                                            Toast.LENGTH_SHORT).show();
+                                                } catch (JSONException e) {
+                                                    e.printStackTrace();
+                                                }
+                                            }
+                                        });
+                                    }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        });
+            }
+        }).start();
     }
 
     @Override

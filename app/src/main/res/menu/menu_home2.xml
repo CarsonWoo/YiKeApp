@@ -2,12 +2,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.example.carson.yikeapp.Views.Home.HomeActivity">
-    <item
-        android:id="@+id/action_scan"
-        android:icon="@drawable/ic_maximize"
-        android:orderInCategory="100"
-        android:title="@string/action_scan"
-        app:showAsAction="always" />
 
     <item
         android:title="@string/my_store"

@@ -14,7 +14,7 @@
     <string name="partner">约伴同行</string>
     <string name="question">互助问答</string>
     <string name="yike_diary">义客日记</string>
-    <string name="collect">收藏攻略</string>
+    <string name="collect">收藏</string>
     <string name="textDemo_1">非985、211的本二学生怎样才能尽快提升自己并去英国留学？</string>
     <string name="textDemo_2">你需要根据你自身的情况才能做进一步的选择和规划。虽然你的学校优势不大，但可以通过gpa</string>
     <string name="textDemo_3">美国</string>
@@ -173,6 +173,7 @@
 \t\t4、本协议最终解释权归义客所有，义客保留随时根据本条协议变更本《服务条款》的权利。如果我们变更本《服务条款》，我们将在义客平台上发布更新后的《服务条款》，并在《服务条款》顶端注明“最后变更日期”。如果您不同意更改后的《服务条款》，您可终止本协议，即刻生效并停止使用义客的所有服务。\n\n
     </string>
     <string name="my_store">我的民宿</string>
+    <string name="like">点赞</string>
 
     <string-array name="option_message">
         <item>删除该聊天</item>

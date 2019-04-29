@@ -106,6 +106,10 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                 finish();
                 break;
             case R.id.btn_send_check_number:
+                if(etPhone.getText().length()==0){
+                    Toast.makeText(this,"请输入手机号码",Toast.LENGTH_SHORT).show();
+                    break;
+                }
                 new Thread(new Runnable() {
                     @Override
                     public void run() {

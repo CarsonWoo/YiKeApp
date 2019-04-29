@@ -63,8 +63,6 @@
     <TextView
         android:id="@+id/tv_discuss_rv_item_ex_collect"
         android:clickable="true"
-        android:layout_marginLeft="95dp"
-        android:layout_toRightOf="@id/tv_discuss_rv_item_ex_likes"
         android:textColor="#e26323"
         android:layout_marginTop="11dp"
         android:textSize="9.6sp"
@@ -73,7 +71,23 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:focusable="true"
-        android:layout_marginStart="95dp"
-        android:layout_toEndOf="@id/tv_discuss_rv_item_ex_likes" />
+        android:layout_toLeftOf="@+id/tv_discuss_rv_item_ex_like"
+        android:layout_toStartOf="@+id/tv_discuss_rv_item_ex_like"
+        android:layout_marginRight="10dp"/>
+
+
+    <TextView
+        android:id="@+id/tv_discuss_rv_item_ex_like"
+        android:clickable="true"
+        android:textColor="#e26323"
+        android:layout_marginTop="11dp"
+        android:textSize="9.6sp"
+        android:text="@string/like"
+        android:layout_below="@id/tv_discuss_rv_item_ex_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:focusable="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 
 </RelativeLayout>

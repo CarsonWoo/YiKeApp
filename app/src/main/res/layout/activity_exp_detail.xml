@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -9,10 +8,10 @@
     tools:context="com.example.carson.yikeapp.Views.Discuss.ExpDetailActivity">
 
     <android.support.design.widget.AppBarLayout
-        android:background="@android:color/white"
         android:id="@+id/appbar_exp_detail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@android:color/white"
         app:elevation="0dp">
 
         <android.support.v7.widget.Toolbar
@@ -22,164 +21,164 @@
             app:layout_scrollFlags="scroll|enterAlways|snap"
             app:navigationIcon="@drawable/ic_back_black">
 
-            <LinearLayout
-                android:layout_marginStart="100dp"
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginLeft="100dp"
                 android:orientation="horizontal">
 
                 <TextView
-                android:textColor="@android:color/black"
-                android:text="攻略"
-                android:textSize="18sp"
-                android:layout_gravity="center"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="攻略"
+                    android:textColor="@android:color/black"
+                    android:textSize="18sp"
+                    android:layout_marginLeft="100dp"/>
 
                 <ImageView
                     android:id="@+id/btn_more_info"
-                    android:layout_marginLeft="130dp"
-                    app:srcCompat="@drawable/ic_more_info"
-                    android:layout_gravity="center"
                     android:layout_width="24dp"
-                    android:layout_height="24dp" />
+                    android:layout_height="24dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_gravity="center"
+                    android:layout_marginRight="10dp"
+                    app:srcCompat="@drawable/ic_more_info" />
 
-            </LinearLayout>
-
-
+            </RelativeLayout>
 
         </android.support.v7.widget.Toolbar>
 
     </android.support.design.widget.AppBarLayout>
-    
+
     <android.support.v4.widget.NestedScrollView
         android:id="@+id/sv_exp_detail"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        android:scrollbars="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:scrollbars="vertical"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
-            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
             <LinearLayout
-                android:background="@android:color/white"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp">
+                android:layout_marginBottom="5dp"
+                android:background="@android:color/white">
 
                 <TextView
                     android:id="@+id/tv_exp_detail_title"
-                    android:layout_marginTop="10dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_marginLeft="15dp"
+                    android:layout_marginTop="10dp"
                     android:layout_marginRight="15dp"
-                    android:textColor="@android:color/black"
-                    android:textStyle="bold"
-                    android:textSize="18sp"
                     android:lineSpacingMultiplier="1.2"
                     android:text="非985、211的本二学生怎样才能尽快提升自己并去英国留学?"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:textColor="@android:color/black"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
 
             </LinearLayout>
 
             <LinearLayout
-                android:background="#99f2f0f0"
                 android:layout_width="match_parent"
-                android:layout_height="8dp" />
+                android:layout_height="8dp"
+                android:background="#99f2f0f0" />
 
             <RelativeLayout
-                android:background="@android:color/white"
-                android:layout_marginBottom="50dp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="50dp"
+                android:background="@android:color/white">
 
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/civ_exp_detail"
                     android:layout_width="55dp"
                     android:layout_height="55dp"
                     android:layout_margin="15dp"
-                    app:srcCompat="@drawable/ic_loader"/>
+                    app:srcCompat="@drawable/ic_loader" />
 
                 <TextView
                     android:id="@+id/tv_exp_detail_name"
-                    android:layout_marginTop="15dp"
-                    android:textSize="18sp"
-                    android:textColor="@android:color/black"
-                    android:textStyle="bold"
-                    android:text="Hank"
-                    android:layout_toRightOf="@id/civ_exp_detail"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:layout_toRightOf="@id/civ_exp_detail"
+                    android:text="Hank"
+                    android:textColor="@android:color/black"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
 
                 <TextView
-                    android:textSize="12sp"
                     android:id="@+id/tv_exp_detail_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/tv_exp_detail_name"
                     android:layout_toRightOf="@id/civ_exp_detail"
                     android:text="2018-2-27"
-                    android:layout_below="@id/tv_exp_detail_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:textSize="12sp" />
 
                 <TextView
                     android:id="@+id/tv_exp_detail_like_num"
-                    android:text="377"
-                    android:textSize="12sp"
-                    android:layout_toRightOf="@id/tv_exp_detail_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_below="@id/tv_exp_detail_name"
                     android:layout_marginLeft="10dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_toRightOf="@id/tv_exp_detail_date"
+                    android:text="377"
+                    android:textSize="12sp" />
 
                 <TextView
-                    android:textSize="12sp"
-                    android:layout_toRightOf="@id/tv_exp_detail_like_num"
-                    android:layout_below="@id/tv_exp_detail_name"
-                    android:text="赞同"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/tv_exp_detail_name"
+                    android:layout_toRightOf="@id/tv_exp_detail_like_num"
+                    android:text="赞同"
+                    android:textSize="12sp" />
 
                 <Button
                     android:id="@+id/btn_follow_exp_detail"
-                    android:layout_alignParentEnd="true"
-                    android:layout_marginRight="10dp"
-                    android:text="关注"
-                    android:layout_below="@id/tv_exp_detail_name"
-                    android:background="@drawable/bg_button_style1"
-                    android:textColor="#e26323"
-                    android:textSize="9.5sp"
                     android:layout_width="35.6dp"
                     android:layout_height="17.6dp"
-                    android:layout_alignParentRight="true" />
+                    android:layout_below="@id/tv_exp_detail_name"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="10dp"
+                    android:background="@drawable/bg_button_style1"
+                    android:text="关注"
+                    android:textColor="#e26323"
+                    android:textSize="9.5sp" />
 
                 <View
-                    android:layout_below="@id/civ_exp_detail"
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
+                    android:layout_below="@id/civ_exp_detail"
                     android:background="#dedede" />
 
                 <com.example.carson.yikeapp.Views.HtmlTextView
-                    android:lineSpacingMultiplier="1.15"
-                    android:textSize="18sp"
-                    android:layout_marginLeft="15dp"
-                    android:layout_marginRight="15dp"
-                    android:layout_marginTop="15dp"
-                    android:layout_below="@id/civ_exp_detail"
                     android:id="@+id/tv_exp_detail_content"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/civ_exp_detail"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginRight="15dp"
+                    android:lineSpacingMultiplier="1.15"
+                    android:textSize="18sp" />
 
                 <ImageView
                     android:id="@+id/image_view_exp_detail"
-                    android:layout_marginStart="25dp"
-                    android:layout_marginEnd="25dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_below="@id/tv_exp_detail_content"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/tv_exp_detail_content"
+                    android:layout_marginStart="25dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="25dp" />
 
             </RelativeLayout>
 
@@ -188,13 +187,13 @@
     </android.support.v4.widget.NestedScrollView>
 
     <LinearLayout
-        app:layout_anchor="@id/sv_exp_detail"
-        app:layout_anchorGravity="bottom"
+        android:layout_width="match_parent"
+        android:layout_height="43dp"
+        android:layout_alignParentBottom="true"
         android:isScrollContainer="true"
         android:orientation="vertical"
-        android:layout_alignParentBottom="true"
-        android:layout_width="match_parent"
-        android:layout_height="43dp">
+        app:layout_anchor="@id/sv_exp_detail"
+        app:layout_anchorGravity="bottom">
 
         <View
             android:layout_width="match_parent"
@@ -202,75 +201,75 @@
             android:background="#dbdbdb" />
 
         <LinearLayout
-            android:background="@android:color/white"
-            android:layout_marginTop="1dp"
-            android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_marginTop="1dp"
+            android:background="@android:color/white"
+            android:orientation="horizontal">
 
             <LinearLayout
-                android:orientation="vertical"
-                android:gravity="center"
                 android:layout_width="0dp"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:layout_height="match_parent">
+                android:gravity="center"
+                android:orientation="vertical">
 
                 <ImageButton
-                    android:layout_marginTop="3dp"
                     android:id="@+id/ibtn_exp_agree"
-                    android:background="@drawable/ic_unlike"
                     android:layout_width="24dp"
-                    android:layout_height="22dp" />
+                    android:layout_height="22dp"
+                    android:layout_marginTop="3dp"
+                    android:background="@drawable/ic_unlike" />
 
                 <TextView
                     android:id="@+id/tv_exp_detail_is_like"
-                    android:text="赞同"
-                    android:textSize="12.6sp"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:text="赞同"
+                    android:textSize="12.6sp" />
 
             </LinearLayout>
 
             <LinearLayout
-                android:orientation="vertical"
-                android:gravity="center"
                 android:layout_width="0dp"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:layout_height="match_parent">
+                android:gravity="center"
+                android:orientation="vertical">
 
                 <ImageButton
                     android:id="@+id/ibtn_exp_collect"
-                    android:background="@drawable/ic_collect_un"
                     android:layout_width="25dp"
-                    android:layout_height="25dp" />
+                    android:layout_height="25dp"
+                    android:background="@drawable/ic_collect_un" />
 
                 <TextView
                     android:id="@+id/tv_exp_detail_is_collect"
-                    android:text="收藏"
-                    android:textSize="12.6sp"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:text="收藏"
+                    android:textSize="12.6sp" />
 
             </LinearLayout>
 
             <LinearLayout
-                android:orientation="vertical"
-                android:gravity="center"
                 android:layout_width="0dp"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:layout_height="match_parent">
+                android:gravity="center"
+                android:orientation="vertical">
 
                 <ImageButton
                     android:id="@+id/ibtn_exp_comment"
-                    android:background="@drawable/ic_comment_gray"
                     android:layout_width="25dp"
-                    android:layout_height="25dp" />
+                    android:layout_height="25dp"
+                    android:background="@drawable/ic_comment_gray" />
 
                 <TextView
-                    android:text="评论"
-                    android:textSize="12.6sp"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:text="评论"
+                    android:textSize="12.6sp" />
 
             </LinearLayout>
 

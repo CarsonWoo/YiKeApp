@@ -24,11 +24,13 @@ public class DiscussItemExperienceRVAdapter extends RecyclerView.Adapter<Discuss
    private final FragmentExp.OnFragmentInteractionListener mListener;
    private final ArrayList<ExperienceItem.ExpItem> itemSelected = new ArrayList<>();
    private final OnCollectClickListener collectListener;
+   private final OnLikeClickListener likeClickListener;
 
     public DiscussItemExperienceRVAdapter(FragmentExp.OnFragmentInteractionListener listener,
-                                          OnCollectClickListener collectListener) {
+                                          OnCollectClickListener collectListener,OnLikeClickListener likeClickListener) {
         mListener = listener;
         this.collectListener = collectListener;
+        this.likeClickListener = likeClickListener;
     }
 
     @Override
@@ -57,6 +59,7 @@ public class DiscussItemExperienceRVAdapter extends RecyclerView.Adapter<Discuss
         holder.btnTag.setText(mValues.get(position).tag);
         holder.tvLike.setText(mValues.get(position).likeNum + "赞");
 
+
         holder.tvCollect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -65,6 +68,18 @@ public class DiscussItemExperienceRVAdapter extends RecyclerView.Adapter<Discuss
                             .show();
                 } else {
                     collectListener.onCollectClick(v, holder.item.id);
+                }
+            }
+        });
+
+        holder.tvlike.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (holder.item.isCollect == 1) {
+                    Toast.makeText(holder.itemView.getContext(), "您已经点赞过了", Toast.LENGTH_SHORT)
+                            .show();
+                } else {
+                    likeClickListener.onLikeClick(v, holder.item.id);
                 }
             }
         });
@@ -90,7 +105,7 @@ public class DiscussItemExperienceRVAdapter extends RecyclerView.Adapter<Discuss
 
     public class DiscussVH extends RecyclerView.ViewHolder {
 
-        TextView tvTitle, tvContent, tvDate, tvLike, tvCollect;
+        TextView tvTitle, tvContent, tvDate, tvLike, tvCollect,tvlike;
 
         View itemView;
 
@@ -106,6 +121,7 @@ public class DiscussItemExperienceRVAdapter extends RecyclerView.Adapter<Discuss
             tvDate = itemView.findViewById(R.id.tv_discuss_rv_item_ex_date);
             tvLike = itemView.findViewById(R.id.tv_discuss_rv_item_ex_likes);
             tvCollect = itemView.findViewById(R.id.tv_discuss_rv_item_ex_collect);
+            tvlike = itemView.findViewById(R.id.tv_discuss_rv_item_ex_like);
 
             btnTag = itemView.findViewById(R.id.btn_discuss_rv_item_ex_tag);
 
@@ -114,6 +130,10 @@ public class DiscussItemExperienceRVAdapter extends RecyclerView.Adapter<Discuss
 
     public interface OnCollectClickListener {
         void onCollectClick(View v, String id);
+    }
+
+    public interface OnLikeClickListener {
+        void onLikeClick(View v, String id);
     }
 
 }
